@@ -13,10 +13,231 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Header Files\UI_Object">
+      <UniqueIdentifier>{0f0788d3-3059-4e5f-80dc-c985082a8e3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI_System">
+      <UniqueIdentifier>{d080f78c-4d0e-4f7e-8285-873ea3060cc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI_Scene">
+      <UniqueIdentifier>{28c33f2e-32ea-4419-805d-5f0bff17f900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Flow">
+      <UniqueIdentifier>{0728d1d3-aff8-496f-8d1d-f6df8fda010b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI_Scene">
+      <UniqueIdentifier>{11276b74-31dd-4ade-bda2-394f8860e86c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI_System">
+      <UniqueIdentifier>{f3d2c5f6-6ad1-4b64-b6d3-6256a0165605}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI_Object">
+      <UniqueIdentifier>{73f655af-d91b-44db-b043-ccbb0e843ab6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Flow">
+      <UniqueIdentifier>{1290da90-9b7f-483b-b237-854e10007394}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Library">
+      <UniqueIdentifier>{143278d1-7e39-42f8-a2ff-5e8a84f7acfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Library\zlib">
+      <UniqueIdentifier>{3d8bb560-814c-4b33-ad99-3f998d1a4e0e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Library">
+      <UniqueIdentifier>{ad8d27d0-1929-4692-bb3e-d973790b6a8e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="include\zlib\adler32.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\compress.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\crc32.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\deflate.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\gzclose.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\gzlib.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\gzread.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\gzwrite.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\infback.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\inffast.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\inflate.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\inftrees.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\ioapi.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\iowin32.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\mztools.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\trees.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\uncompr.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\unzip.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\zip.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="include\zlib\zutil.c">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files\UI_System</Filter>
+    </ClCompile>
+    <ClCompile Include="Transition.cpp">
+      <Filter>Source Files\UI_System</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Source Files\UI_System</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadTexture.cpp">
+      <Filter>Source Files\UI_System</Filter>
+    </ClCompile>
+    <ClCompile Include="han2unicode.cpp">
+      <Filter>Source Files\UI_System</Filter>
+    </ClCompile>
+    <ClCompile Include="Color.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="ZipManager.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Source Files\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="MainScene.cpp">
+      <Filter>Source Files\UI_Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Flow.cpp">
+      <Filter>Source Files\Flow</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\crc32.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\crypt.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\deflate.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\gzguts.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\inffast.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\inffixed.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\inflate.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\inftrees.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\ioapi.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\iowin32.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\mztools.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\trees.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\unzip.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\zconf.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\zip.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\zlib.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="include\zlib\zutil.h">
+      <Filter>Source Files\Library\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="Color.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="Log.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="ZipManager.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>Header Files\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="MainScene.h">
+      <Filter>Header Files\UI_Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="han2unicode.h">
+      <Filter>Header Files\UI_System</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadTexture.h">
+      <Filter>Header Files\UI_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Header Files\UI_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Transition.h">
+      <Filter>Header Files\UI_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files\UI_System</Filter>
+    </ClInclude>
+    <ClInclude Include="Flow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
