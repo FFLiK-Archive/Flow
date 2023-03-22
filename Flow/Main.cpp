@@ -23,6 +23,7 @@ int main(int argc, char *argv[]) {
 			break;
 		}
 	}
+
 	delete win;
 	SDL_Quit();
 	return 0;
