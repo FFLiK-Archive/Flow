@@ -13,30 +13,57 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\Flow">
+      <UniqueIdentifier>{ec3e7f1a-5943-440c-987a-6a90faa2749e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Flow">
+      <UniqueIdentifier>{61c41d50-6ac2-4135-9043-6355907e2d25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utilities">
+      <UniqueIdentifier>{f4e1b511-c096-4141-ba48-b76fa7683c9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Utilities">
+      <UniqueIdentifier>{6161dbd2-6e57-48ab-bb5c-ccc5c72b9370}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Flow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Branch.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Flow</Filter>
     </ClCompile>
-    <ClCompile Include="Node.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="Flow.cpp">
+      <Filter>Source Files\Flow</Filter>
+    </ClCompile>
+    <ClCompile Include="History.cpp">
+      <Filter>Source Files\Flow</Filter>
+    </ClCompile>
+    <ClCompile Include="FileIO.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="Jsoncpp.cpp">
+      <Filter>Source Files\Utilities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Flow.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Branch.h">
+      <Filter>Header Files\Flow</Filter>
+    </ClInclude>
+    <ClInclude Include="Flow.h">
+      <Filter>Header Files\Flow</Filter>
+    </ClInclude>
+    <ClInclude Include="History.h">
+      <Filter>Header Files\Flow</Filter>
+    </ClInclude>
+    <ClInclude Include="FileIO.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Node.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="Log.h">
+      <Filter>Header Files\Utilities</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
