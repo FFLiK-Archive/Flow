@@ -21,4 +21,10 @@ public:
 
 	//Open Folder and Get Absolute Path as string
 	static std::string OpenFolderName();
+
+	//Save File as String (or Binary Data)
+	static int SaveFile(std::string path, std::string value);
+
+	//Save File as JSON
+	static int SaveFile(std::string path, Json::Value &value);
 };

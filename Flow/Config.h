@@ -1,26 +1,46 @@
 #pragma once
 
+// Build Type Values
+#define Flow_Auto 0
+#define Flow_Windows 1
+#define Flow_MacOS 2
+
+// Build Mode Values
+#define Flow_Debug 0
+#define Flow_Release 1
+
 // ===== Config Setting Zone =====
 
-// Build Type : window or mac
-#define FlowBuildType window
+// Build Type : Flow_Windows or Flow_MacOS or Flow_Auto
+#define FlowBuildType Flow_Auto
 
-// Build Mode : debug, release
-#define FlowBuildMode debug
+// Build Mode : Flow_Debug, Flow_Release
+#define FlowBuildMode Flow_Debug
 
 // Version Information
 #define FlowVersion "v 0.1"
 
 // ===============================
 
+// ====== Available Values =======
+// WIN_BUILD or MAC_BUILD
+// DEBUG or RELEASE
 
-// WINDOW_BUILD or MAC_BUILD value
-#if FlowBuildType == window
-#define WINDOW_BUILD true
+// WIN_BUILD or MAC_BUILD value
+#if FlowBuildType == Windows
+#define WIN_BUILD true
 #define MAC_BUILD false
-#else
-#define WINDOW_BUILD false
+#elif FlowBuildType == MacOS
+#define WIN_BUILD false
 #define MAC_BUILD true
+#else
+#if _WIN32
+#define WIN_BUILD true
+#define MAC_BUILD false
+#elif __APPLE__
+#define WIN_BUILD false
+#define MAC_BUILD true
+#endif
 #endif
 
 // DEBUG or RELEASE value

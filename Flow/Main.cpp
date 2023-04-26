@@ -1,7 +1,8 @@
 #include <iostream>
-#include "Log.h"
-#include "FileIO.h"
+#include "Flow.h"
 
 int main(int argc, char *argv[]) {
-	FileIO::OpenFolderName();
+	Flow flow;
+	flow.CreateFlow(FLOW_FOLDER_STORAGE);
+	return 0;
 }

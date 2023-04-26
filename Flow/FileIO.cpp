@@ -71,7 +71,7 @@ static int CALLBACK BrowseFolderCallback(
 }
 
 std::string FileIO::OpenFolderName() {
-	#if WINDOW_BUILD
+	#if WIN_BUILD
 	BROWSEINFO   bi;
 	LPITEMIDLIST  idl;
 	TCHAR szPathname[MAX_PATH] = { 0, };
@@ -99,4 +99,23 @@ std::string FileIO::OpenFolderName() {
 	Log::Debug("FileIO", "OpenFileName", "You should define this function for MAC BUILD");
 	return "";
 	#endif
+	return "";
+}
+
+int FileIO::SaveFile(std::string path, std::string value) {
+	std::ofstream fout;
+	fout.open(path, std::ios::out | std::ios::binary);
+	if (fout.is_open()) {
+		fout.write(value.c_str(), value.size());
+		fout.close();
+	}
+	return 0;
+}
+
+int FileIO::SaveFile(std::string path, Json::Value &value) {
+	Json::StreamWriterBuilder builder;
+	std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
+	std::ofstream outputFileStream(path);
+	writer->write(value, &outputFileStream);
+	return 0;
 }

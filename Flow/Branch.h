@@ -2,25 +2,32 @@
 #include <vector>
 #include <string>
 #include "History.h"
-using BranchID = unsigned int;
+#include "UUID.h"
+using BranchID = UUIDv4::UUID;
+
+using Time = time_t;
 
 // Branch Management Class
 class Branch {
 private:
-	BranchID id; // Unique id of branch (Main Branch : Always 0)
-
-	std::vector<BranchID> parent_brach_id;
-	std::vector<BranchID> child_branch_id;
 	History history;
-
 	std::string file_path; // Absolute file path of the branch file (path//[NAME].flow)
 
+	// Branch File Data
+	BranchID id; // Unique id of branch
+	std::string name;
+	Time last_commit_time;
+	
 public:
 	Branch();
 	~Branch();
 
+	void CreateBranch(std::string branch_path);
+	
 	int LoadBranch(std::string path); // Open Branch File
 	int SaveBranch(); // Save Branch File
 
-	const int GetBranchID() const;
+	const BranchID GetBranchID() const;
+
+	void ChangeName(std::string name);
 };
