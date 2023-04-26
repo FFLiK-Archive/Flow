@@ -44,6 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -136,6 +137,7 @@
     <ClCompile Include="History.cpp" />
     <ClCompile Include="Jsoncpp.cpp" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="ProtableFileDialogs.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Branch.h" />

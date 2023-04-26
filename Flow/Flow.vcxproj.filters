@@ -45,6 +45,9 @@
     <ClCompile Include="Jsoncpp.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="ProtableFileDialogs.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Branch.h">
