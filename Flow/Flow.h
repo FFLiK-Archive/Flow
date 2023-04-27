@@ -20,14 +20,16 @@ private:
 	FlowStorageType storage_type; // Folder or File
 	std::vector<BranchID> branch_id_list; // Branch ID list
 
+	void Init();
+
 public:
 	Flow();
 	~Flow();
 
-	int CreateFlow(FlowStorageType type);
+	int CreateFlow(FlowStorageType type); //Create Flow File (return 0 : Succeed, 1 : Failed)
 
-	int LoadFlow(); //Open Flow File
-	int SaveFlow(); //Save Flow File
+	int LoadFlow(); //Open Flow File (return 0 : Succeed, 1 : Failed)
+	int SaveFlow(); //Save Flow File (return 0 : Succeed, 1 : Failed)
 
 	Branch* operator[](BranchID& id); // Get Branch with id
 

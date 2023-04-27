@@ -103,8 +103,9 @@ namespace UUIDv4 {
 	 */
 	class UUID {
 	public:
-		UUID()
-		{}
+		UUID(){
+
+		}
 
 		UUID(const UUID& other) {
 			__m128i x = _mm_load_si128((__m128i*)other.data);
