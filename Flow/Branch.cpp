@@ -30,7 +30,7 @@ int Branch::CreateBranch(std::string branch_path) {
 	branch["BranchID"] = this->id.str();
 	branch["LastCommitTime"] = this->last_commit_time;
 	branch["Name"] = this->name;
-	branch["Origin"]
+	branch["Origin"];
 
 	this->history.CreateHistory(branch_path + this->id.str() + ".history");
 
