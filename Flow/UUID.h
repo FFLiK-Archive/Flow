@@ -20,6 +20,8 @@ Copyright (c) 2018 Xavier "Crashoz" Launey
 
 #include "endianness.h"
 
+#define NULL_ID (UUIDv4::UUID::fromStrFactory("00000000-0000-0000-0000-000000000000"))
+
 namespace UUIDv4 {
 
 	/*

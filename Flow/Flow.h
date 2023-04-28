@@ -20,8 +20,6 @@ private:
 	FlowStorageType storage_type; // Folder or File
 	std::vector<BranchID> branch_id_list; // Branch ID list
 
-	void Init();
-
 public:
 	Flow();
 	~Flow();

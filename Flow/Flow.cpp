@@ -2,11 +2,11 @@
 #include "FileIO.h"
 #include "json/json.h"
 #include <filesystem>
+#include "Log.h"
 using namespace std;
-#define NULL_ID ((char*)"00000000-0000-0000-0000-000000000000")
 
-void Flow::Init() {
-	this->id = UUIDv4::UUID::fromStrFactory(NULL_ID);
+Flow::Flow() {
+	this->id = NULL_ID;
 	this->name = "";
 	this->storage_type = FLOW_FILE_STORAGE;
 	this->branch_id_list.clear();
@@ -14,17 +14,17 @@ void Flow::Init() {
 	this->file_path = "";
 }
 
-Flow::Flow() {
-	this->Init();
-}
-
 Flow::~Flow() {
 }
 
 int Flow::CreateFlow(FlowStorageType type) {
-	this->Init();
+	if (this->id == NULL_ID) {
+		Log::Debug("Flow", "CreateFlow", "Flow has already assigned");
+		return 1;
+	}
+
 	string origin_path;
-	switch(type) {
+	switch (type) {
 	case FLOW_FILE_STORAGE:
 		origin_path = FileIO::OpenFileName();
 		break;
@@ -65,12 +65,15 @@ int Flow::CreateFlow(FlowStorageType type) {
 }
 
 int Flow::LoadFlow() {
+	if (this->id == NULL_ID) {
+		Log::Debug("Flow", "LoadFlow", "Flow has already assigned");
+		return 1;
+	}
 	string flow_path = FileIO::OpenFlowFile();
 	if (flow_path.empty())
 		return 1;
-	this->Init();
 	this->file_path = flow_path;
-	while (flow_path.back() != '\\') 
+	while (flow_path.back() != '\\')
 		flow_path.pop_back();
 	Json::Value flow = FileIO::GetJsonFile(this->file_path);
 	this->id.bytes((char*)flow["FlowID"].asString().c_str());
@@ -80,7 +83,7 @@ int Flow::LoadFlow() {
 		string id = flow["BranchList"][i].asString();
 		this->branch_id_list.push_back(BranchID(id));
 		Branch branch;
-		branch.LoadBranch(flow_path + id + ".branch");
+		branch.LoadBranch(flow_path + id);
 		this->branch_table[this->branch_id_list.back().hash()] = branch;
 	}
 	return 0;

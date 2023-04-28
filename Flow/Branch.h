@@ -17,17 +17,18 @@ private:
 	BranchID id; // Unique id of branch
 	std::string name;
 	Time last_commit_time;
+	BranchID origin;
 	
 public:
 	Branch();
 	~Branch();
 
-	void CreateBranch(std::string branch_path);
+	int CreateBranch(std::string branch_path);
 	
-	int LoadBranch(std::string path); // Open Branch File
+	int LoadBranch(std::string path); // Open Branch File (without Extension)
 	int SaveBranch(); // Save Branch File
 
 	const BranchID GetBranchID() const;
 
-	void ChangeName(std::string name);
+	int ChangeName(std::string name);
 };
