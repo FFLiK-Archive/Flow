@@ -3,15 +3,15 @@
 #include <string>
 #include "History.h"
 #include "UUID.h"
-using BranchID = UUIDv4::UUID;
 
-using Time = time_t;
+using BranchID = UUIDv4::UUID;
 
 // Branch Management Class
 class Branch {
 private:
-	History history;
+	std::vector<History> history;
 	std::string file_path; // Absolute file path of the branch file (path//[NAME].flow)
+	std::string *target_path;
 
 	// Branch File Data
 	BranchID id; // Unique id of branch
@@ -23,12 +23,14 @@ public:
 	Branch();
 	~Branch();
 
-	int CreateBranch(std::string branch_path);
+	int CreateBranch(std::string branch_path, std::string name, BranchID& origin, std::string* target);
 	
-	int LoadBranch(std::string path); // Open Branch File (without Extension)
+	int LoadBranch(std::string path, std::string* target); // Open Branch File (without Extension)
 	int SaveBranch(); // Save Branch File
 
 	const BranchID GetBranchID() const;
 
 	int ChangeName(std::string name);
+
+	int Commit();
 };

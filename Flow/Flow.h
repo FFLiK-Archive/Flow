@@ -4,19 +4,20 @@
 #include "Branch.h"
 #include "UUID.h"
 
-using FlowID = UUIDv4::UUID;
-
 enum FlowStorageType { FLOW_FILE_STORAGE = 0, FLOW_FOLDER_STORAGE = 1 };
+
+using FlowID = UUIDv4::UUID;
 
 // Flow Main Class
 class Flow {
 private:
-	std::map<size_t, Branch> branch_table; // Branch table with key (branch_table[key] = Branch)
+	std::map<BranchID, Branch> branch_table; // Branch table with key (branch_table[key] = Branch)
 	std::string file_path; // Absolute file path of the flow file (path//[NAME].flow)
 	
 	// Flow File Data
 	FlowID id; // Unique id of Flow project (UUID)
-	std::string name; // Path of the target to store
+	std::string name; // Name of the flow
+	std::string target_path;
 	FlowStorageType storage_type; // Folder or File
 	std::vector<BranchID> branch_id_list; // Branch ID list
 
@@ -35,4 +36,3 @@ public:
 	int Replace(BranchID& branch1, BranchID& branch2); // Replace branch1 to branch2
 	int Delete(BranchID& branch); // Delete brach
 };
-

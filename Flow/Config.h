@@ -51,3 +51,5 @@
 #define DEBUG false
 #define RELEASE true
 #endif
+
+using Time = time_t;

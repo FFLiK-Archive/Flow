@@ -2,6 +2,7 @@
 #include "FileIO.h"
 #include "json/json.h"
 #include <filesystem>
+#include <CkZip.h>
 #include "Log.h"
 using namespace std;
 
@@ -18,7 +19,7 @@ Flow::~Flow() {
 }
 
 int Flow::CreateFlow(FlowStorageType type) {
-	if (this->id == NULL_ID) {
+	if (this->id != NULL_ID) {
 		Log::Debug("Flow", "CreateFlow", "Flow has already assigned");
 		return 1;
 	}
@@ -39,6 +40,7 @@ int Flow::CreateFlow(FlowStorageType type) {
 	UUIDv4::UUIDGenerator<std::mt19937_64> uuidGenerator;
 	string header_path = origin_path;
 
+	this->target_path = origin_path;
 	this->name = "";
 	while (header_path.back() != '\\') {
 		this->name = header_path.back() + this->name;
@@ -49,23 +51,32 @@ int Flow::CreateFlow(FlowStorageType type) {
 	this->id = uuidGenerator.getUUID();
 	filesystem::create_directory(header_path + this->name + ".flowdata");
 	Branch main_branch;
-	main_branch.CreateBranch(header_path + this->name + ".flowdata\\");
+	BranchID null = NULL_ID;
+	main_branch.CreateBranch(header_path + this->name + ".flowdata\\", "Main", null, &this->target_path);
 	this->branch_id_list.push_back(main_branch.GetBranchID());
-	this->branch_table[main_branch.GetBranchID().hash()] = main_branch;
+	this->branch_table[main_branch.GetBranchID()] = main_branch;
 
 	Json::Value flow;
 	flow["FlowID"] = this->id.str();
 	flow["Name"] = this->name;
+	flow["TargetPath"] = this->target_path;
 	flow["StorageType"] = this->storage_type;
 	for (int i = 0; i < this->branch_id_list.size(); i++) {
 		flow["BranchList"].append(this->branch_id_list[i].str());
 	}
 	FileIO::SaveFile(this->file_path, flow);
+
+	CkZip zip;
+	zip.NewZip((header_path + this->name + ".flowdata\\data.dat").c_str());
+	zip.put_OemCodePage(65001);
+	zip.AppendFiles((this->target_path + "\\*").c_str(), true);
+	zip.WriteZipAndClose();
 	return 0;
 }
 
 int Flow::LoadFlow() {
-	if (this->id == NULL_ID) {
+	Log::Debug("Flow", "LoadFlow", "Load Start");
+	if (this->id != NULL_ID) {
 		Log::Debug("Flow", "LoadFlow", "Flow has already assigned");
 		return 1;
 	}
@@ -78,23 +89,34 @@ int Flow::LoadFlow() {
 	Json::Value flow = FileIO::GetJsonFile(this->file_path);
 	this->id.bytes((char*)flow["FlowID"].asString().c_str());
 	this->name = flow["Name"].asString();
+	this->target_path = flow["TargetPath"].asString();
 	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
 	for (int i = 0; i < flow["BranchList"].size(); i++) {
 		string id = flow["BranchList"][i].asString();
 		this->branch_id_list.push_back(BranchID(id));
 		Branch branch;
-		branch.LoadBranch(flow_path + id);
-		this->branch_table[this->branch_id_list.back().hash()] = branch;
+		branch.LoadBranch(flow_path + this->name + ".flowdata\\" + id, &this->target_path);
+		this->branch_table[this->branch_id_list.back()] = branch;
 	}
 	return 0;
 }
 
 int Flow::SaveFlow() {
+	Json::Value flow;
+	flow["FlowID"] = this->id.str();
+	flow["Name"] = this->name;
+	flow["TargetPath"] = this->target_path;
+	flow["StorageType"] = this->storage_type;
+	for (int i = 0; i < this->branch_id_list.size(); i++) {
+		this->branch_table[this->branch_id_list[i]].SaveBranch();
+		flow["BranchList"].append(this->branch_id_list[i].str());
+	}
+	FileIO::SaveFile(this->file_path, flow);
 	return 0;
 }
 
 Branch* Flow::operator[](BranchID& id) {
-	return nullptr;
+	return &(this->branch_table[id]);
 }
 
 int Flow::Merge(BranchID& branch1, BranchID& branch2) {
