@@ -2,6 +2,8 @@
 #include "FileIO.h"
 #include "UUID.h"
 #include "Log.h"
+#include <chrono>
+using namespace std;
 
 History::History() {
 	this->id = NULL_ID;
@@ -13,7 +15,7 @@ History::History() {
 History::~History() {
 }
 
-int History::CreateHistory(std::string path, HistoryType type, std::string title, std::string description) {
+int History::CreateHistory(HistoryType type, std::string title, std::string description) {
 	if (this->id != NULL_ID) {
 		Log::Debug("History", "CreateHistory", "History has already assigned");
 		return 1;
@@ -23,6 +25,7 @@ int History::CreateHistory(std::string path, HistoryType type, std::string title
 	this->title = title;
 	this->description = description;
 	this->id = uuidGenerator.getUUID();
+	this->time = chrono::system_clock::to_time_t(chrono::system_clock::now());
 	return 0;
 }
 
@@ -33,6 +36,7 @@ int History::LoadHistory(Json::Value data) {
 	}
 	this->title = data["Title"].asString();
 	this->description = data["Description"].asString();
+	this->time = data["Time"].asLargestUInt();
 	this->type = static_cast<HistoryType>(data["Type"].asInt());
 	this->id = UUIDv4::UUID::fromStrFactory(data["HistoryID"].asString().c_str());
     return 0;
@@ -44,5 +48,6 @@ Json::Value History::SaveHistory() {
 	data["Description"] = this->description;
 	data["Type"] = (int)this->type;
 	data["HistoryID"] = this->id.str();
+	data["Time"] = this->time;
     return data;
 }

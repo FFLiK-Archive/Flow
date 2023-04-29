@@ -38,5 +38,7 @@ public:
 	bool CheckChanged();
 
 	std::vector<FileLog> GetChange();
-	int Commit();
+	int Commit(std::string title, std::string description);
+	int Revert(int n);
+	int Delete(int n);
 };

@@ -15,11 +15,12 @@ public:
 	std::string description;
 	HistoryID id;
 	HistoryType type;
+	Time time;
 
 	History();
 	~History();
 
-	int CreateHistory(std::string path, HistoryType type, std::string title, std::string description); //Create History (return 0 : Succeed, 1 : Failed)
+	int CreateHistory( HistoryType type, std::string title, std::string description); //Create History (return 0 : Succeed, 1 : Failed)
 
 	int LoadHistory(Json::Value data); //Read History (return 0 : Succeed, 1 : Failed)
 	Json::Value SaveHistory(); //Save History

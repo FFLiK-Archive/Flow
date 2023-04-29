@@ -105,10 +105,8 @@ std::string FileIO::OpenFolderName() {
 int FileIO::SaveFile(std::string path, std::string value) {
 	std::ofstream fout;
 	fout.open(path, std::ios::out | std::ios::binary);
-	if (fout.is_open()) {
-		fout.write(value.c_str(), value.size());
-		fout.close();
-	}
+	fout.write(value.c_str(), value.size());
+	fout.close();
 	return 0;
 }
 

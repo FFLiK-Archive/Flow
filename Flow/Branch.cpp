@@ -3,6 +3,7 @@
 #include <chrono>
 #include <filesystem>
 #include "Log.h"
+#include <CkZip.h>
 using namespace std;
 
 Branch::Branch() {
@@ -111,11 +112,60 @@ std::vector<FileLog> Branch::GetChange() {
 	return this->meta.GetChange();
 }
 
-int Branch::Commit() {
+int Branch::Commit(std::string title, std::string description) {
 	if (this->id == NULL_ID) {
 		Log::Debug("Branch", "Commit", "Branch is empty");
 		return 1;
 	}
+	CkZip zip;
+	string path = this->file_path;
+	while (path.back() != '\\')
+		path.pop_back();
+
+	filesystem::rename(path + "data.dat", path + "old.dat");
+
+	zip.NewZip((path + "data.dat").c_str());
+	zip.put_OemCodePage(65001);
+	zip.AppendFiles((*(this->target_path) + "\\*").c_str(), true);
+	zip.WriteZipAndClose();
+
+
+	FILE* file;
+	fopen_s(&file, (path + "data.dat").c_str(), "rb");
+	string data_bin = "";
+	while (feof(file) == 0)
+		data_bin += fgetc(file);
+	fclose(file);
+	fopen_s(&file, (path + "old.dat").c_str(), "rb");
+	string old_bin = "";
+	while (feof(file) == 0)
+		old_bin += fgetc(file);
+	fclose(file);
+
+	int i;
+	string history_bin = "";
+	for (i = 0; i < data_bin.size() && i < old_bin.size(); i++) {
+		history_bin = data_bin[i] ^ old_bin[i];
+	}
+	while (i < data_bin.size()) history_bin += data_bin[i++];
+	while (i < old_bin.size()) history_bin += old_bin[i++];
+
+	History his;
+	his.CreateHistory(COMMIT, title, description);
+	this->last_commit_time = his.time;
+	string history_save_path = this->history_path + "\\";
+	FileIO::SaveFile(history_save_path + "delta", history_bin);
+	
+	zip.NewZip((history_save_path + his.id.str()).c_str());
+	zip.put_OemCodePage(65001);
+	zip.AppendFiles((history_save_path + "delta").c_str(), false);
+	zip.WriteZipAndClose();
+
+	filesystem::remove(path + "old.dat");
+	filesystem::remove(history_save_path + "delta");
+
+	this->history.push_back(his);
+	this->SaveBranch();
 	return 0;
 }
 

@@ -1,4 +1,9 @@
 ﻿  Scanning sources for module dependencies...
-  Metadata.cpp
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Metadata.cpp(59,20): warning C4018: '<': signed/unsigned mismatch
+  Branch.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(65,20): warning C4018: '<': signed/unsigned mismatch
+  Flow.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(94,20): warning C4018: '<': signed/unsigned mismatch
+  History.cpp
+  Main.cpp
+  Generating Code...
   Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Debug\Flow.exe
