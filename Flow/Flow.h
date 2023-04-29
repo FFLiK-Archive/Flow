@@ -35,4 +35,6 @@ public:
 	int Merge(BranchID& branch1, BranchID& branch2); // Merge branch1 and branch2
 	int Replace(BranchID& branch1, BranchID& branch2); // Replace branch1 to branch2
 	int Delete(BranchID& branch); // Delete brach
+
+	const std::vector<BranchID>& GetBranchIDList() const;
 };

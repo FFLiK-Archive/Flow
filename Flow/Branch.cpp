@@ -36,12 +36,14 @@ int Branch::CreateBranch(std::string branch_path, std::string name, BranchID& or
 	branch["Name"] = this->name;
 	branch["Origin"] = this->origin.str();
 	branch["History"] = Json::arrayValue;
+
+	this->history_path = branch_path + this->id.str() + ".history";
 	
-	filesystem::create_directory(branch_path + this->id.str() + ".history");
-
-
-
+	filesystem::create_directory(this->history_path);
+	
 	FileIO::SaveFile(this->file_path, branch);
+
+	this->meta.CreateMetadata(this->history_path, this->target_path);
 	return 0;
 }
 
@@ -50,12 +52,13 @@ int Branch::LoadBranch(std::string path, std::string* target) {
 		Log::Debug("Branch", "LoadBranch", "Branch has already assigned");
 		return 1;
 	}
+	this->history_path = path + ".history";
 	this->file_path = path + ".branch";
 	Json::Value branch = FileIO::GetJsonFile(this->file_path);
-	this->id.bytes((char*)branch["BranchID"].asString().c_str());
+	this->id = UUIDv4::UUID::fromStrFactory(branch["BranchID"].asString().c_str());
 	this->name = branch["Name"].asString();
 	this->last_commit_time = branch["LastCommitTime"].asLargestUInt();
-	this->origin.bytes((char*)branch["Origin"].asString().c_str());
+	this->origin = UUIDv4::UUID::fromStrFactory(branch["Origin"].asString().c_str());
 	this->target_path = target;
 	Json::Value hst = branch["History"];
 	for (int i = 0; i < hst.size(); i++) {
@@ -63,10 +66,15 @@ int Branch::LoadBranch(std::string path, std::string* target) {
 		h.LoadHistory(hst[i]);
 		this->history.push_back(h);
 	}
+	this->meta.LoadMetadata(this->history_path, this->target_path);
 	return 0;
 }
 
 int Branch::SaveBranch() {
+	if (this->id == NULL_ID) {
+		Log::Debug("Branch", "SaveBranch", "Branch is empty");
+		return 1;
+	}
 	Json::Value branch;
 	branch["BranchID"] = this->id.str();
 	branch["LastCommitTime"] = this->last_commit_time;
@@ -77,6 +85,7 @@ int Branch::SaveBranch() {
 		branch["History"].append(this->history[i].SaveHistory());
 	}
 	FileIO::SaveFile(this->file_path, branch);
+	this->meta.SaveMetadata();
 	return 0;
 }
 
@@ -89,7 +98,24 @@ int Branch::ChangeName(std::string name) {
 	return 0;
 }
 
-int Branch::Commit() {
+bool Branch::CheckChanged() {
+	if (this->id == NULL_ID) {
+		Log::Debug("Branch", "CheckChanged", "Branch is empty");
+		return false;
+	}
+	//Log::Flow(this->meta.GetChange().size());
+	return !this->meta.GetChange().empty();
+}
 
+std::vector<FileLog> Branch::GetChange() {
+	return this->meta.GetChange();
+}
+
+int Branch::Commit() {
+	if (this->id == NULL_ID) {
+		Log::Debug("Branch", "Commit", "Branch is empty");
+		return 1;
+	}
 	return 0;
 }
+

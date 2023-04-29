@@ -34,7 +34,7 @@ int History::LoadHistory(Json::Value data) {
 	this->title = data["Title"].asString();
 	this->description = data["Description"].asString();
 	this->type = static_cast<HistoryType>(data["Type"].asInt());
-	this->id.bytes((char*)data["HistoryID"].asString().c_str());
+	this->id = UUIDv4::UUID::fromStrFactory(data["HistoryID"].asString().c_str());
     return 0;
 }
 

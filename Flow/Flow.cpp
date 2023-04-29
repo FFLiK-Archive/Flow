@@ -87,7 +87,7 @@ int Flow::LoadFlow() {
 	while (flow_path.back() != '\\')
 		flow_path.pop_back();
 	Json::Value flow = FileIO::GetJsonFile(this->file_path);
-	this->id.bytes((char*)flow["FlowID"].asString().c_str());
+	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
 	this->name = flow["Name"].asString();
 	this->target_path = flow["TargetPath"].asString();
 	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
@@ -102,6 +102,10 @@ int Flow::LoadFlow() {
 }
 
 int Flow::SaveFlow() {
+	if (this->id != NULL_ID) {
+		Log::Debug("Flow", "SaveFlow", "Flow is empty");
+		return 1;
+	}
 	Json::Value flow;
 	flow["FlowID"] = this->id.str();
 	flow["Name"] = this->name;
@@ -116,6 +120,10 @@ int Flow::SaveFlow() {
 }
 
 Branch* Flow::operator[](BranchID& id) {
+	if (this->id == NULL_ID) {
+		Log::Debug("Flow", "operator[]", "Flow is empty");
+		return nullptr;
+	}
 	return &(this->branch_table[id]);
 }
 
@@ -129,4 +137,8 @@ int Flow::Replace(BranchID& branch1, BranchID& branch2) {
 
 int Flow::Delete(BranchID& branch) {
 	return 0;
+}
+
+const std::vector<BranchID>& Flow::GetBranchIDList() const {
+	return this->branch_id_list;
 }

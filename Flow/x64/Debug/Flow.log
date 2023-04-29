@@ -1,13 +1,4 @@
 ﻿  Scanning sources for module dependencies...
-  Branch.cpp
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(61,20): warning C4018: '<': signed/unsigned mismatch
-  Flow.cpp
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(55,13): error C2660: 'Branch::CreateBranch': function does not take 3 arguments
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.h(26,6): message : see declaration of 'Branch::CreateBranch'
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(55,13): message : while trying to match the argument list '(std::basic_string<char,std::char_traits<char>,std::allocator<char>>, const char [5], BranchID)'
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(94,20): warning C4018: '<': signed/unsigned mismatch
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(98,9): error C2660: 'Branch::LoadBranch': function does not take 1 arguments
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.h(28,6): message : see declaration of 'Branch::LoadBranch'
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(98,9): message : while trying to match the argument list '(std::basic_string<char,std::char_traits<char>,std::allocator<char>>)'
-  Main.cpp
-  Generating Code...
+  Metadata.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Metadata.cpp(59,20): warning C4018: '<': signed/unsigned mismatch
+  Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Debug\Flow.exe
