@@ -6,6 +6,67 @@
 #include <CkZip.h>
 using namespace std;
 
+int Branch::Reverter(int index) {
+	History his = this->history[index];
+	string path = this->history_path + "\\" + his.id.str();
+	CkZip zip;
+	zip.OpenZip(path.c_str());
+	zip.UnzipInto(this->history_path.c_str());
+	zip.CloseZip();
+
+	string delta = FileIO::OpenFile(this->history_path + "\\delta");
+
+	filesystem::remove(this->history_path + "\\delta");
+
+	path = this->file_path;
+	while (path.back() != '\\')
+		path.pop_back();
+	path += "data.dat";
+
+	string data = FileIO::OpenFile(path);
+
+	while (data.size() < delta.size()) data += '\0';
+	while (data.size() > delta.size()) delta += '\0';
+	for (int i = 0; i < data.size(); i++) {
+		data[i] ^= delta[i];
+	}
+	while (data.size() > this->history[index].size) data.pop_back();
+
+	FileIO::SaveFile(path, data);
+	return 0;
+}
+
+int Branch::Commmiter(string old, string dat, HistoryType type, string title, string description) {
+	string old_bin = FileIO::OpenFile(old);
+	string data_bin = FileIO::OpenFile(dat);
+
+	int i;
+	string history_bin = "";
+	for (i = 0; i < data_bin.size() && i < old_bin.size(); i++) {
+		history_bin += data_bin[i] ^ old_bin[i];
+	}
+	while (i < data_bin.size()) history_bin += data_bin[i++];
+	while (i < old_bin.size()) history_bin += old_bin[i++];
+
+	History his;
+	his.CreateHistory(type, title, description, old_bin.size());
+	this->last_commit_time = his.time;
+	string history_save_path = this->history_path + "\\";
+	FileIO::SaveFile(history_save_path + "delta", history_bin);
+
+	CkZip zip;
+	zip.NewZip((history_save_path + his.id.str()).c_str());
+	zip.put_OemCodePage(65001);
+	zip.AppendFiles((history_save_path + "delta").c_str(), false);
+	zip.WriteZipAndClose();
+
+	filesystem::remove(old);
+	filesystem::remove(history_save_path + "delta");
+
+	this->history.push_back(his);
+	return 0;
+}
+
 Branch::Branch() {
 	this->id = NULL_ID;
 	this->file_path = "";
@@ -126,46 +187,61 @@ int Branch::Commit(std::string title, std::string description) {
 
 	zip.NewZip((path + "data.dat").c_str());
 	zip.put_OemCodePage(65001);
-	zip.AppendFiles((*(this->target_path) + "\\*").c_str(), true);
-	zip.WriteZipAndClose();
-
-
-	FILE* file;
-	fopen_s(&file, (path + "data.dat").c_str(), "rb");
-	string data_bin = "";
-	while (feof(file) == 0)
-		data_bin += fgetc(file);
-	fclose(file);
-	fopen_s(&file, (path + "old.dat").c_str(), "rb");
-	string old_bin = "";
-	while (feof(file) == 0)
-		old_bin += fgetc(file);
-	fclose(file);
-
-	int i;
-	string history_bin = "";
-	for (i = 0; i < data_bin.size() && i < old_bin.size(); i++) {
-		history_bin = data_bin[i] ^ old_bin[i];
+	if (filesystem::is_directory(*this->target_path)) {
+		zip.AppendFiles((*(this->target_path) + "\\*").c_str(), true);
 	}
-	while (i < data_bin.size()) history_bin += data_bin[i++];
-	while (i < old_bin.size()) history_bin += old_bin[i++];
-
-	History his;
-	his.CreateHistory(COMMIT, title, description);
-	this->last_commit_time = his.time;
-	string history_save_path = this->history_path + "\\";
-	FileIO::SaveFile(history_save_path + "delta", history_bin);
-	
-	zip.NewZip((history_save_path + his.id.str()).c_str());
-	zip.put_OemCodePage(65001);
-	zip.AppendFiles((history_save_path + "delta").c_str(), false);
+	else {
+		zip.AppendFiles((*(this->target_path)).c_str(), true);
+	}
 	zip.WriteZipAndClose();
 
-	filesystem::remove(path + "old.dat");
-	filesystem::remove(history_save_path + "delta");
-
-	this->history.push_back(his);
+	this->Commmiter(path + "old.dat", path + "data.dat", COMMIT, title, description);
 	this->SaveBranch();
+	return 0;
+}
+
+int Branch::Revert(int n) {
+	if (this->id == NULL_ID) {
+		Log::Debug("Branch", "Revert", "Branch is empty");
+		return 1;
+	}
+	if (n > this->history.size() || n < 0) {
+		Log::Debug("Branch", "Revert", "There's not enough history");
+		return 1;
+	}
+
+	string path = this->file_path;
+	while (path.back() != '\\')
+		path.pop_back();
+	filesystem::copy(path + "data.dat", path + "old.dat", filesystem::copy_options::overwrite_existing);
+
+	for (int i = 0; i < n; i++) {
+		this->Reverter(this->history.size() - i - 1);
+	}
+
+	this->Commmiter(path + "old.dat", path + "data.dat", REVERT, "Revert", this->history[this->history.size() - 1].title + "~" + this->history[this->history.size() - n - 1].title);
+	this->SaveBranch();
+
+	if(filesystem::is_directory(*this->target_path)) {
+		filesystem::remove_all(*this->target_path);
+
+		CkZip zip;
+		zip.OpenZip((path + "data.dat").c_str());
+		zip.Unzip(this->target_path->c_str());
+		zip.CloseZip();
+	}
+	else {
+		filesystem::remove(*this->target_path);
+
+		string save = *this->target_path;
+		while (save.back() != '\\') save.pop_back();
+		//path.pop_back();
+
+		CkZip zip;
+		zip.OpenZip((path + "data.dat").c_str());
+		zip.Unzip(save.c_str());
+		zip.CloseZip();
+	}
 	return 0;
 }
 

@@ -15,7 +15,7 @@ History::History() {
 History::~History() {
 }
 
-int History::CreateHistory(HistoryType type, std::string title, std::string description) {
+int History::CreateHistory(HistoryType type, std::string title, std::string description, unsigned long long int size) {
 	if (this->id != NULL_ID) {
 		Log::Debug("History", "CreateHistory", "History has already assigned");
 		return 1;
@@ -26,6 +26,7 @@ int History::CreateHistory(HistoryType type, std::string title, std::string desc
 	this->description = description;
 	this->id = uuidGenerator.getUUID();
 	this->time = chrono::system_clock::to_time_t(chrono::system_clock::now());
+	this->size = size;
 	return 0;
 }
 
@@ -39,6 +40,7 @@ int History::LoadHistory(Json::Value data) {
 	this->time = data["Time"].asLargestUInt();
 	this->type = static_cast<HistoryType>(data["Type"].asInt());
 	this->id = UUIDv4::UUID::fromStrFactory(data["HistoryID"].asString().c_str());
+	this->size = data["Size"].asLargestUInt();
     return 0;
 }
 
@@ -49,5 +51,6 @@ Json::Value History::SaveHistory() {
 	data["Type"] = (int)this->type;
 	data["HistoryID"] = this->id.str();
 	data["Time"] = this->time;
+	data["Size"] = this->size;
     return data;
 }

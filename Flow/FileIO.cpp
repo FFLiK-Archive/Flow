@@ -102,11 +102,24 @@ std::string FileIO::OpenFolderName() {
 	return "";
 }
 
+std::string FileIO::OpenFile(std::string path) {
+	FILE* file;
+	fopen_s(&file, path.c_str(), "rb");
+	string data_bin = "";
+	while (feof(file) == 0)
+		data_bin += fgetc(file);
+	fclose(file);
+	data_bin.pop_back();
+	return data_bin;
+}
+
 int FileIO::SaveFile(std::string path, std::string value) {
-	std::ofstream fout;
-	fout.open(path, std::ios::out | std::ios::binary);
-	fout.write(value.c_str(), value.size());
-	fout.close();
+	FILE* f;
+	fopen_s(&f, path.c_str(), "wb");
+	for (int i = 0; i < value.size(); i++) {
+		fputc(value[i], f);
+	}
+	fclose(f);
 	return 0;
 }
 

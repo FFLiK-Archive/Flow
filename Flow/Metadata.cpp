@@ -5,6 +5,18 @@
 using namespace std;
 
 void Metadata::Search(string path) {
+	if (!filesystem::is_directory(path)) {
+		auto modifyTime = filesystem::last_write_time(path); // 파일의 수정 시간
+		auto systemTime = std::chrono::clock_cast<std::chrono::system_clock>(modifyTime);
+		Time time = std::chrono::system_clock::to_time_t(systemTime);
+		unsigned long long int filesize = filesystem::file_size(path);
+		Data d;
+		d.path = path;
+		d.last_write_time = time;
+		d.file_size = filesize;
+		this->current_data.push_back(d);
+		return;
+	}
 	filesystem::directory_iterator itr(path);
 	while (itr != filesystem::end(itr)) {
 		const filesystem::directory_entry& entry = *itr;

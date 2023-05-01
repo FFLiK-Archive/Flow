@@ -21,6 +21,9 @@ private:
 	std::string name;
 	Time last_commit_time;
 	BranchID origin;
+
+	int Reverter(int index);
+	int Commmiter(std::string old, std::string dat, HistoryType type, std::string title, std::string description);
  
 public:
 	Branch();
@@ -39,6 +42,6 @@ public:
 
 	std::vector<FileLog> GetChange();
 	int Commit(std::string title, std::string description);
-	int Revert(int n);
+	int Revert(int n = 0);
 	int Delete(int n);
 };
