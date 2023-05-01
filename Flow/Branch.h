@@ -38,10 +38,10 @@ public:
 
 	int ChangeName(std::string name);
 
-	bool CheckChanged();
-
+	// General Branch Internal Functions
+	bool CheckChanged(); 
 	std::vector<FileLog> GetChange();
 	int Commit(std::string title, std::string description);
 	int Revert(int n = 0);
-	int Delete(int n);
+	int Delete(int n = 0);
 };

@@ -12,16 +12,9 @@ int main(int argc, char *argv[]) {
 
 	BranchID id = flow.GetBranchIDList()[0];
 	
-	Metadata::PrintLog(flow[id]->GetChange());
-	flow[id]->Revert(1);
-	Metadata::PrintLog(flow[id]->GetChange());
+	flow[id]->Delete();
 
 	//flow[id]->Commit("Test", "");
-
-	/*
-	for (int i = 0; i < 50; i++) {
-		flow[id]->Commit("Test" + to_string(i), "This is the Test Commit!");
-	}
-	*/
+	Metadata::PrintLog(flow[id]->GetChange());
 	return 0;
 }

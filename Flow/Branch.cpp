@@ -212,7 +212,7 @@ int Branch::Revert(int n) {
 		Log::Debug("Branch", "Revert", "Branch is empty");
 		return 1;
 	}
-	if (n > this->history.size() || n < 0) {
+	if (n >= this->history.size() || n < 0) {
 		Log::Debug("Branch", "Revert", "There's not enough history");
 		return 1;
 	}
@@ -250,6 +250,33 @@ int Branch::Revert(int n) {
 		zip.CloseZip();
 	}
 	this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
+	return 0;
+}
+
+int Branch::Delete(int n) {
+	if (this->id == NULL_ID) {
+		Log::Debug("Branch", "Delete", "Branch is empty");
+		return 1;
+	}
+	if (n >= this->history.size() || n < 0) {
+		Log::Debug("Branch", "Delete", "There's not enough history");
+		return 1;
+	}
+	History delete_target = this->history[this->history.size() - 1 - n];
+	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".history");
+	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".metadata");
+	this->history.erase(this->history.begin() + this->history.size() - 1 - n);
+	this->SaveBranch();
+	if (this->history.empty()) {
+		string path = this->file_path;
+		while (path.back() != '\\')
+			path.pop_back();
+		filesystem::remove(path + "data.dat");
+		this->meta.SetEmpty(this->target_path);
+	}
+	else if(n == 0) {
+		this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
+	}
 	return 0;
 }
 
