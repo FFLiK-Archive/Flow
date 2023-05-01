@@ -13,7 +13,8 @@ class Flow {
 private:
 	std::map<BranchID, Branch> branch_table; // Branch table with key (branch_table[key] = Branch)
 	std::string file_path; // Absolute file path of the flow file (path//[NAME].flow)
-	
+	BranchID activated_branch_id;
+
 	// Flow File Data
 	FlowID id; // Unique id of Flow project (UUID)
 	std::string name; // Name of the flow
@@ -32,9 +33,13 @@ public:
 
 	Branch* operator[](BranchID& id); // Get Branch with id
 
+	int CreateSubBranch(BranchID& branch, std::string name, BranchID& origin);
 	int Merge(BranchID& branch1, BranchID& branch2); // Merge branch1 and branch2
 	int Replace(BranchID& branch1, BranchID& branch2); // Replace branch1 to branch2
-	int Delete(BranchID& branch); // Delete brach
+	int Delete(BranchID& branch); // Delete 
+
+	int ActivateBranch(BranchID& branch);
+	Branch* GetActivatedBranch();
 
 	const std::vector<BranchID>& GetBranchIDList() const;
 };

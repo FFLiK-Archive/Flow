@@ -44,4 +44,6 @@ public:
 	int Commit(std::string title, std::string description);
 	int Revert(int n = 0);
 	int Delete(int n = 0);
+
+	int Activate();
 };

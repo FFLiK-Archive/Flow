@@ -21,7 +21,7 @@ int Branch::Reverter(int index) {
 	path = this->file_path;
 	while (path.back() != '\\')
 		path.pop_back();
-	path += "data.dat";
+	path += this->id.str() + ".dat";
 
 	string data = FileIO::OpenFile(path);
 
@@ -189,9 +189,9 @@ int Branch::Commit(std::string title, std::string description) {
 	while (path.back() != '\\')
 		path.pop_back();
 
-	filesystem::rename(path + "data.dat", path + "old.dat");
+	filesystem::rename(path + this->id.str()  + ".dat", path + this->id.str() + ".old");
 
-	zip.NewZip((path + "data.dat").c_str());
+	zip.NewZip((path + this->id.str() + ".dat").c_str());
 	zip.put_OemCodePage(65001);
 	if (filesystem::is_directory(*this->target_path)) {
 		zip.AppendFiles((*(this->target_path) + "\\*").c_str(), true);
@@ -201,7 +201,7 @@ int Branch::Commit(std::string title, std::string description) {
 	}
 	zip.WriteZipAndClose();
 
-	this->Commmiter(path + "old.dat", path + "data.dat", COMMIT, title, description);
+	this->Commmiter(path + this->id.str() + ".old", path + this->id.str() + ".dat", COMMIT, title, description);
 	this->SaveBranch();
 	this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
 	return 0;
@@ -220,20 +220,20 @@ int Branch::Revert(int n) {
 	string path = this->file_path;
 	while (path.back() != '\\')
 		path.pop_back();
-	filesystem::copy(path + "data.dat", path + "old.dat", filesystem::copy_options::overwrite_existing);
+	filesystem::copy(path + this->id.str() + ".dat", path + this->id.str() + ".old", filesystem::copy_options::overwrite_existing);
 
 	for (int i = 0; i < n; i++) {
 		this->Reverter(this->history.size() - i - 1);
 	}
 
-	this->Commmiter(path + "old.dat", path + "data.dat", REVERT, "Revert", this->history[this->history.size() - 1].title + "~" + this->history[this->history.size() - n - 1].title);
+	this->Commmiter(path + this->id.str() + ".old", path + this->id.str() + ".dat", REVERT, "Revert", this->history[this->history.size() - 1].title + "~" + this->history[this->history.size() - n - 1].title);
 	this->SaveBranch();
 
 	if(filesystem::is_directory(*this->target_path)) {
 		filesystem::remove_all(*this->target_path);
 
 		CkZip zip;
-		zip.OpenZip((path + "data.dat").c_str());
+		zip.OpenZip((path + this->id.str() + ".dat").c_str());
 		zip.Unzip(this->target_path->c_str());
 		zip.CloseZip();
 	}
@@ -245,7 +245,7 @@ int Branch::Revert(int n) {
 		//path.pop_back();
 
 		CkZip zip;
-		zip.OpenZip((path + "data.dat").c_str());
+		zip.OpenZip((path + this->id.str() + ".dat").c_str());
 		zip.Unzip(save.c_str());
 		zip.CloseZip();
 	}
@@ -262,6 +262,7 @@ int Branch::Delete(int n) {
 		Log::Debug("Branch", "Delete", "There's not enough history");
 		return 1;
 	}
+
 	History delete_target = this->history[this->history.size() - 1 - n];
 	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".history");
 	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".metadata");
@@ -271,11 +272,43 @@ int Branch::Delete(int n) {
 		string path = this->file_path;
 		while (path.back() != '\\')
 			path.pop_back();
-		filesystem::remove(path + "data.dat");
+		filesystem::remove(path + this->id.str() + ".dat");
 		this->meta.SetEmpty(this->target_path);
 	}
 	else if(n == 0) {
 		this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
+	}
+	return 0;
+}
+
+int Branch::Activate() {
+	if (this->id == NULL_ID) {
+		Log::Debug("Branch", "Activate", "Branch is empty");
+		return 1;
+	}
+
+	string path = this->file_path;
+	while (path.back() != '\\')
+		path.pop_back();
+	if(filesystem::is_directory(*this->target_path)) {
+		filesystem::remove_all(*this->target_path);
+
+		CkZip zip;
+		zip.OpenZip((path + this->id.str() + ".dat").c_str());
+		zip.Unzip(this->target_path->c_str());
+		zip.CloseZip();
+	}
+	else {
+		filesystem::remove(*this->target_path);
+
+		string save = *this->target_path;
+		while (save.back() != '\\') save.pop_back();
+		//path.pop_back();
+
+		CkZip zip;
+		zip.OpenZip((path + this->id.str() + ".dat").c_str());
+		zip.Unzip(save.c_str());
+		zip.CloseZip();
 	}
 	return 0;
 }

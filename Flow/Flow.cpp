@@ -13,6 +13,7 @@ Flow::Flow() {
 	this->branch_id_list.clear();
 	this->branch_table.clear();
 	this->file_path = "";
+	this->activated_branch_id = NULL_ID;
 }
 
 Flow::~Flow() {
@@ -55,22 +56,30 @@ int Flow::CreateFlow(FlowStorageType type) {
 	main_branch.CreateBranch(header_path + this->name + ".flowdata\\", "Main", null, &this->target_path);
 	this->branch_id_list.push_back(main_branch.GetBranchID());
 	this->branch_table[main_branch.GetBranchID()] = main_branch;
+	this->activated_branch_id = main_branch.GetBranchID();
 
 	Json::Value flow;
 	flow["FlowID"] = this->id.str();
 	flow["Name"] = this->name;
 	flow["TargetPath"] = this->target_path;
 	flow["StorageType"] = this->storage_type;
+	flow["ActivatedBranchID"] = this->activated_branch_id.str();
 	for (int i = 0; i < this->branch_id_list.size(); i++) {
 		flow["BranchList"].append(this->branch_id_list[i].str());
 	}
 	FileIO::SaveFile(this->file_path, flow);
 
 	CkZip zip;
-	zip.NewZip((header_path + this->name + ".flowdata\\data.dat").c_str());
+	zip.NewZip((header_path + this->name + ".flowdata\\" + main_branch.GetBranchID().str() + ".dat").c_str());
 	zip.put_OemCodePage(65001);
-	zip.AppendFiles((this->target_path + "\\*").c_str(), true);
+	if (this->storage_type == FLOW_FOLDER_STORAGE) {
+		zip.AppendFiles((this->target_path + "\\*").c_str(), true);
+	}
+	else {
+		zip.AppendFiles(this->target_path.c_str(), true);
+	}
 	zip.WriteZipAndClose();
+
 	return 0;
 }
 
@@ -91,6 +100,7 @@ int Flow::LoadFlow() {
 	this->name = flow["Name"].asString();
 	this->target_path = flow["TargetPath"].asString();
 	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
+	this->activated_branch_id = UUIDv4::UUID::fromStrFactory(flow["ActivatedBranchID"].asString().c_str());
 	for (int i = 0; i < flow["BranchList"].size(); i++) {
 		string id = flow["BranchList"][i].asString();
 		this->branch_id_list.push_back(BranchID(id));
@@ -111,6 +121,7 @@ int Flow::SaveFlow() {
 	flow["Name"] = this->name;
 	flow["TargetPath"] = this->target_path;
 	flow["StorageType"] = this->storage_type;
+	flow["ActivatedBranchID"] = this->activated_branch_id.str();
 	for (int i = 0; i < this->branch_id_list.size(); i++) {
 		this->branch_table[this->branch_id_list[i]].SaveBranch();
 		flow["BranchList"].append(this->branch_id_list[i].str());
@@ -127,6 +138,30 @@ Branch* Flow::operator[](BranchID& id) {
 	return &(this->branch_table[id]);
 }
 
+int Flow::CreateSubBranch(BranchID& branch, std::string name, BranchID& origin) {
+	Branch sub_branch;
+	string header_path = this->target_path;
+	while (header_path.back() != '\\') {
+		this->name = header_path.back() + this->name;
+		header_path.pop_back();
+	}
+	sub_branch.CreateBranch(header_path + this->name + ".flowdata\\", "Main", branch, &this->target_path);
+	this->branch_id_list.push_back(sub_branch.GetBranchID());
+	this->branch_table[sub_branch.GetBranchID()] = sub_branch;
+
+	CkZip zip;
+	zip.NewZip((header_path + this->name + ".flowdata\\" + sub_branch.GetBranchID().str() + ".dat").c_str());
+	zip.put_OemCodePage(65001);
+	if (this->storage_type == FLOW_FOLDER_STORAGE) {
+		zip.AppendFiles((this->target_path + "\\*").c_str(), true);
+	}
+	else {
+		zip.AppendFiles(this->target_path.c_str(), true);
+	}
+	zip.WriteZipAndClose();
+	return 0;
+}
+
 int Flow::Merge(BranchID& branch1, BranchID& branch2) {
 	return 0;
 }
@@ -137,6 +172,19 @@ int Flow::Replace(BranchID& branch1, BranchID& branch2) {
 
 int Flow::Delete(BranchID& branch) {
 	return 0;
+}
+
+int Flow::ActivateBranch(BranchID& branch) {
+	this->activated_branch_id = branch;
+	this->GetActivatedBranch()->Activate();
+	return 0;
+}
+
+Branch* Flow::GetActivatedBranch() {
+	if (this->activated_branch_id == NULL_ID) {
+		return nullptr;
+	}
+	return (*this)[this->activated_branch_id];
 }
 
 const std::vector<BranchID>& Flow::GetBranchIDList() const {

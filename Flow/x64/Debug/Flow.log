@@ -1,3 +1,10 @@
 ﻿  Scanning sources for module dependencies...
+  Branch.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(129,20): warning C4018: '<': signed/unsigned mismatch
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(226,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+  Flow.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(104,20): warning C4018: '<': signed/unsigned mismatch
   Main.cpp
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Debug\Flow.exe
