@@ -34,6 +34,10 @@ public:
 	int LoadMetadata(std::string path, std::string* target_path);
 	int SaveMetadata();
 
+	int SetEmpty(std::string* target_path);
+
 	std::vector<FileLog> GetChange();
+
+	static void PrintLog(std::vector<FileLog> log);
 };
 

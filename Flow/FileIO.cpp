@@ -25,7 +25,7 @@ std::string FileIO::Location(std::string name, std::string pos) {
 }
 
 Json::Value FileIO::GetJsonFile(std::string location) {
-	Log::Debug("FileManager", "GetJsonFile", "Location : ", location);
+	Log::Debug("FileIO", "GetJsonFile", "Location : ", location);
 	Json::Value root;
 	Json::CharReaderBuilder reader;
 	ifstream is(location, ifstream::binary);

@@ -5,6 +5,9 @@
 using namespace std;
 
 void Metadata::Search(string path) {
+	if (!filesystem::exists(path)) {
+		return;
+	}
 	if (!filesystem::is_directory(path)) {
 		auto modifyTime = filesystem::last_write_time(path); // 파일의 수정 시간
 		auto systemTime = std::chrono::clock_cast<std::chrono::system_clock>(modifyTime);
@@ -46,7 +49,7 @@ Metadata::~Metadata() {
 
 int Metadata::CreateMetadata(std::string path, std::string* target_path) {
 	this->target_path = target_path;
-	this->file_path = path + "\\metadata";
+	this->file_path = path;
 	Json::Value meta;
 	meta["Metadata"] = Json::arrayValue;
 	this->current_data.clear();
@@ -65,7 +68,7 @@ int Metadata::CreateMetadata(std::string path, std::string* target_path) {
 
 int Metadata::LoadMetadata(std::string path, std::string* target_path) {
 	this->target_path = target_path;
-	this->file_path = path + "\\metadata";
+	this->file_path = path;
 	Json::Value meta = FileIO::GetJsonFile(this->file_path);
 	this->current_data.clear();
 	for (int i = 0; i < meta["Metadata"].size(); i++) {
@@ -89,6 +92,13 @@ int Metadata::SaveMetadata() {
 		meta["Metadata"].append(data);
 	}
 	FileIO::SaveFile(this->file_path, meta);
+	return 0;
+}
+
+int Metadata::SetEmpty(std::string* target_path) {
+	this->target_path = target_path;
+	this->file_path = "";
+	this->current_data.clear();
 	return 0;
 }
 
@@ -126,10 +136,28 @@ std::vector<FileLog> Metadata::GetChange() {
 		}
 		if (add) {
 			FileLog f;
-			f.path = this->current_data[i].path;
+			f.path = prev[i].path;
 			f.type = FileLog::DELETED;
 			log.push_back(f);
 		}
 	}
+	this->current_data = prev;
 	return log;
+}
+
+void Metadata::PrintLog(std::vector<FileLog> log) {
+	Log::System("<Change Log>");
+	for (int i = 0; i < log.size(); i++) {
+		switch (log[i].type) {
+		case FileLog::ADDED:
+			Log::System("Added : ", log[i].path);
+			break;
+		case FileLog::DELETED:
+			Log::System("Deleted : ", log[i].path);
+			break;
+		case FileLog::MODIFIED:
+			Log::System("Modified : ", log[i].path);
+			break;
+		}
+	}
 }

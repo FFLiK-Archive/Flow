@@ -8,7 +8,7 @@ using namespace std;
 
 int Branch::Reverter(int index) {
 	History his = this->history[index];
-	string path = this->history_path + "\\" + his.id.str();
+	string path = this->history_path + "\\" + his.id.str() + ".history";
 	CkZip zip;
 	zip.OpenZip(path.c_str());
 	zip.UnzipInto(this->history_path.c_str());
@@ -53,9 +53,12 @@ int Branch::Commmiter(string old, string dat, HistoryType type, string title, st
 	this->last_commit_time = his.time;
 	string history_save_path = this->history_path + "\\";
 	FileIO::SaveFile(history_save_path + "delta", history_bin);
+	Metadata metadata;
+	metadata.CreateMetadata(history_save_path + his.id.str() + ".metadata", this->target_path);
+	metadata.SaveMetadata();
 
 	CkZip zip;
-	zip.NewZip((history_save_path + his.id.str()).c_str());
+	zip.NewZip((history_save_path + his.id.str() + ".history").c_str());
 	zip.put_OemCodePage(65001);
 	zip.AppendFiles((history_save_path + "delta").c_str(), false);
 	zip.WriteZipAndClose();
@@ -128,7 +131,12 @@ int Branch::LoadBranch(std::string path, std::string* target) {
 		h.LoadHistory(hst[i]);
 		this->history.push_back(h);
 	}
-	this->meta.LoadMetadata(this->history_path, this->target_path);
+	if (this->history.empty()) {
+		this->meta.SetEmpty(this->target_path);
+	}
+	else {
+		this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
+	}
 	return 0;
 }
 
@@ -147,7 +155,6 @@ int Branch::SaveBranch() {
 		branch["History"].append(this->history[i].SaveHistory());
 	}
 	FileIO::SaveFile(this->file_path, branch);
-	this->meta.SaveMetadata();
 	return 0;
 }
 
@@ -165,7 +172,6 @@ bool Branch::CheckChanged() {
 		Log::Debug("Branch", "CheckChanged", "Branch is empty");
 		return false;
 	}
-	//Log::Flow(this->meta.GetChange().size());
 	return !this->meta.GetChange().empty();
 }
 
@@ -197,6 +203,7 @@ int Branch::Commit(std::string title, std::string description) {
 
 	this->Commmiter(path + "old.dat", path + "data.dat", COMMIT, title, description);
 	this->SaveBranch();
+	this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
 	return 0;
 }
 
@@ -242,6 +249,7 @@ int Branch::Revert(int n) {
 		zip.Unzip(save.c_str());
 		zip.CloseZip();
 	}
+	this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
 	return 0;
 }
 
