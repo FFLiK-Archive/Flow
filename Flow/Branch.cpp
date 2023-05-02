@@ -162,6 +162,10 @@ const BranchID Branch::GetBranchID() const {
 	return this->id;
 }
 
+const BranchID Branch::GetOriginBranchID() const {
+    return this->origin;
+}
+
 int Branch::ChangeName(std::string name) {
 	this->name = name;
 	return 0;
@@ -202,7 +206,6 @@ int Branch::Commit(std::string title, std::string description) {
 	zip.WriteZipAndClose();
 
 	this->Commmiter(path + this->id.str() + ".old", path + this->id.str() + ".dat", COMMIT, title, description);
-	this->SaveBranch();
 	this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
 	return 0;
 }
@@ -227,7 +230,6 @@ int Branch::Revert(int n) {
 	}
 
 	this->Commmiter(path + this->id.str() + ".old", path + this->id.str() + ".dat", REVERT, "Revert", this->history[this->history.size() - 1].title + "~" + this->history[this->history.size() - n - 1].title);
-	this->SaveBranch();
 
 	if(filesystem::is_directory(*this->target_path)) {
 		filesystem::remove_all(*this->target_path);
@@ -267,7 +269,7 @@ int Branch::Delete(int n) {
 	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".history");
 	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".metadata");
 	this->history.erase(this->history.begin() + this->history.size() - 1 - n);
-	this->SaveBranch();
+
 	if (this->history.empty()) {
 		string path = this->file_path;
 		while (path.back() != '\\')

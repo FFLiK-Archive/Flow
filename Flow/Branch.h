@@ -35,6 +35,7 @@ public:
 	int SaveBranch(); // Save Branch File
 
 	const BranchID GetBranchID() const;
+	const BranchID GetOriginBranchID() const;
 
 	int ChangeName(std::string name);
 

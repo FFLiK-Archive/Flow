@@ -33,10 +33,10 @@ public:
 
 	Branch* operator[](BranchID& id); // Get Branch with id
 
-	int CreateSubBranch(BranchID& branch, std::string name, BranchID& origin);
-	int Merge(BranchID& branch1, BranchID& branch2); // Merge branch1 and branch2
-	int Replace(BranchID& branch1, BranchID& branch2); // Replace branch1 to branch2
-	int Delete(BranchID& branch); // Delete 
+	int CreateSubBranch(std::string name);
+	int Merge(BranchID& target_branch); // Merge activated_branch to target_branch
+	int Replace(BranchID& target_branch); // Replace target_branch to activated_branch
+	int DeleteBranch(); // Delete activated_branch
 
 	int ActivateBranch(BranchID& branch);
 	Branch* GetActivatedBranch();
