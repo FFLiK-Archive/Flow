@@ -151,6 +151,7 @@ int Flow::Merge(BranchID& target_branch) {
 }
 
 int Flow::Replace(BranchID& target_branch) {
+
 	return 0;
 }
 

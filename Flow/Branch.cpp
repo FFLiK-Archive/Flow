@@ -229,7 +229,7 @@ int Branch::Revert(int n) {
 		this->Reverter(this->history.size() - i - 1);
 	}
 
-	this->Commmiter(path + this->id.str() + ".old", path + this->id.str() + ".dat", REVERT, "Revert", this->history[this->history.size() - 1].title + "~" + this->history[this->history.size() - n - 1].title);
+	this->Commmiter(path + this->id.str() + ".old", path + this->id.str() + ".dat", REVERT, "Revert", this->history[this->history.size() - 1].title + " ~ " + this->history[this->history.size() - n - 1].title);
 
 	if(filesystem::is_directory(*this->target_path)) {
 		filesystem::remove_all(*this->target_path);
@@ -263,6 +263,48 @@ int Branch::Delete(int n) {
 	if (n >= this->history.size() || n < 0) {
 		Log::Debug("Branch", "Delete", "There's not enough history");
 		return 1;
+	}
+
+	if (this->history.size() - n > 0 && n > 0) {
+		int index = this->history.size() - n;
+		int prev_index = this->history.size() - 1 - n;
+		
+		//1. Delta Merge
+		CkZip zip;
+		
+		string path = this->history_path + "\\" + this->history[prev_index].id.str() + ".history";
+		zip.OpenZip(path.c_str());
+		zip.UnzipInto(this->history_path.c_str());
+		zip.CloseZip();
+		string old_bin = FileIO::OpenFile(this->history_path + "\\delta");
+		filesystem::remove(this->history_path + "\\delta");
+
+		path = this->history_path + "\\" + this->history[index].id.str() + ".history";
+		zip.OpenZip(path.c_str());
+		zip.UnzipInto(this->history_path.c_str());
+		zip.CloseZip();
+		string data_bin = FileIO::OpenFile(this->history_path + "\\delta");
+		filesystem::remove(this->history_path + "\\delta");
+		
+		int i;
+		string history_bin = "";
+		for (i = 0; i < data_bin.size() && i < old_bin.size(); i++) {
+			history_bin += data_bin[i] ^ old_bin[i];
+		}
+		while (i < data_bin.size()) history_bin += data_bin[i++];
+		while (i < old_bin.size()) history_bin += old_bin[i++];
+
+		string history_save_path = this->history_path + "\\";
+		FileIO::SaveFile(history_save_path + "delta", history_bin);
+
+		zip.NewZip((history_save_path + this->history[index].id.str() + ".history").c_str());
+		zip.put_OemCodePage(65001);
+		zip.AppendFiles((history_save_path + "delta").c_str(), false);
+		zip.WriteZipAndClose();
+		filesystem::remove(history_save_path + "delta");
+
+		//2. Size Update
+		this->history[index].size = this->history[prev_index].size;
 	}
 
 	History delete_target = this->history[this->history.size() - 1 - n];
