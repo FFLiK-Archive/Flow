@@ -47,4 +47,5 @@ public:
 	int Delete(int n = 0);
 
 	int Activate();
+	int SaveCache();
 };

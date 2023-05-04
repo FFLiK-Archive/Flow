@@ -135,18 +135,14 @@ int Flow::CreateSubBranch(std::string name) {
 	sub_branch.CreateBranch(header_path + this->name + ".flowdata\\", name, original_id, &this->target_path);
 	this->branch_id_list.push_back(sub_branch.GetBranchID());
 	this->branch_table[sub_branch.GetBranchID()] = sub_branch;
-
+	filesystem::copy((header_path + this->name + ".flowdata\\" + original_id.str() + ".dat"), (header_path + this->name + ".flowdata\\" + sub_branch.GetBranchID().str() + ".dat"), filesystem::copy_options::overwrite_existing);
 	BranchID sub_id = sub_branch.GetBranchID();
 	this->ActivateBranch(sub_id);
-
-	CkZip zip;
-	zip.NewZip((header_path + this->name + ".flowdata\\" + sub_branch.GetBranchID().str() + ".dat").c_str());
-	zip.put_OemCodePage(65001);
-	zip.WriteZipAndClose();
 	return 0;
 }
 
 int Flow::Merge(BranchID& target_branch) {
+
 	return 0;
 }
 
@@ -168,8 +164,6 @@ int Flow::DeleteBranch() {
 	}
 	this->branch_id_list.erase(del_i_iter);
 
-
-	//수정필요
 	BranchID branch_del_id = this->activated_branch_id;
 	this->activated_branch_id = this->GetActivatedBranch()->GetOriginBranchID();
 	
@@ -185,6 +179,10 @@ int Flow::DeleteBranch() {
 }
 
 int Flow::ActivateBranch(BranchID& branch) {
+	if (branch == this->activated_branch_id) {
+		return 0;
+	}
+	this->GetActivatedBranch()->SaveCache();
 	this->activated_branch_id = branch;
 	this->GetActivatedBranch()->Activate();
 	return 0;

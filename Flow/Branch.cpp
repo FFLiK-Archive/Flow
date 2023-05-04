@@ -334,13 +334,22 @@ int Branch::Activate() {
 	string path = this->file_path;
 	while (path.back() != '\\')
 		path.pop_back();
+
+	CkZip zip;
+	
 	if(filesystem::is_directory(*this->target_path)) {
 		filesystem::remove_all(*this->target_path);
-
-		CkZip zip;
-		zip.OpenZip((path + this->id.str() + ".dat").c_str());
-		zip.Unzip(this->target_path->c_str());
-		zip.CloseZip();
+		if(filesystem::exists(path + this->id.str() + ".cache")) {
+			zip.OpenZip((path + this->id.str() + ".cache").c_str());
+			zip.Unzip(this->target_path->c_str());
+			zip.CloseZip();
+			filesystem::remove(path + this->id.str() + ".cache");
+		}
+		else {
+			zip.OpenZip((path + this->id.str() + ".dat").c_str());
+			zip.Unzip(this->target_path->c_str());
+			zip.CloseZip();
+		}
 	}
 	else {
 		filesystem::remove(*this->target_path);
@@ -348,12 +357,41 @@ int Branch::Activate() {
 		string save = *this->target_path;
 		while (save.back() != '\\') save.pop_back();
 		//path.pop_back();
-
-		CkZip zip;
-		zip.OpenZip((path + this->id.str() + ".dat").c_str());
-		zip.Unzip(save.c_str());
-		zip.CloseZip();
+		if (filesystem::exists(path + this->id.str() + ".cache")) {
+			zip.OpenZip((path + this->id.str() + ".cache").c_str());
+			zip.Unzip(save.c_str());
+			zip.CloseZip();
+			filesystem::remove(path + this->id.str() + ".cache");
+		}
+		else {
+			zip.OpenZip((path + this->id.str() + ".dat").c_str());
+			zip.Unzip(save.c_str());
+			zip.CloseZip();
+		}
 	}
+	return 0;
+}
+
+int Branch::SaveCache() {
+	if (this->id == NULL_ID) {
+		Log::Debug("Branch", "SaveCache", "Branch is empty");
+		return 1;
+	}
+
+	string path = this->file_path;
+	while (path.back() != '\\')
+		path.pop_back();
+
+	CkZip zip;
+	zip.NewZip((path + this->id.str() + ".cache").c_str());
+	zip.put_OemCodePage(65001);
+	if (filesystem::is_directory(*this->target_path)) {
+		zip.AppendFiles((*(this->target_path) + "\\*").c_str(), true);
+	}
+	else {
+		zip.AppendFiles((*(this->target_path)).c_str(), true);
+	}
+	zip.WriteZipAndClose();
 	return 0;
 }
 
