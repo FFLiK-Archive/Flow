@@ -22,6 +22,8 @@ private:
 	FlowStorageType storage_type; // Folder or File
 	std::vector<BranchID> branch_id_list; // Branch ID list
 
+	void Deleter(BranchID id);
+
 public:
 	Flow();
 	~Flow();
@@ -31,14 +33,14 @@ public:
 	int LoadFlow(); //Open Flow File (return 0 : Succeed, 1 : Failed)
 	int SaveFlow(); //Save Flow File (return 0 : Succeed, 1 : Failed)
 
-	Branch* operator[](BranchID& id); // Get Branch with id
+	Branch* operator[](BranchID id); // Get Branch with id
 
 	int CreateSubBranch(std::string name);
-	int Merge(BranchID& target_branch); // Merge activated_branch to target_branch
-	int Replace(BranchID& target_branch); // Replace target_branch to activated_branch
+	int Merge(BranchID target_branch); // Merge target_branch to activated_branch
+	int Replace(BranchID target_branch); // Replace target_branch to activated_branch
 	int DeleteBranch(); // Delete activated_branch
 
-	int ActivateBranch(BranchID& branch);
+	int ActivateBranch(BranchID branch);
 	Branch* GetActivatedBranch();
 
 	const std::vector<BranchID>& GetBranchIDList() const;

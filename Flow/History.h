@@ -5,7 +5,7 @@
 #include "json/json.h"
 #include "Metadata.h"
 
-enum HistoryType { COMMIT, REVERT };
+enum HistoryType { COMMIT, REVERT, REPLACE };
 
 using HistoryID = UUIDv4::UUID;
 
