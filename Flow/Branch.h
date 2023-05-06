@@ -22,20 +22,19 @@ private:
 	Time last_commit_time;
 	BranchID origin;
 
-	int Reverter(int index);
-	int Commmiter(std::string old, std::string dat, HistoryType type, std::string title, std::string description);
  
 public:
 	Branch();
 	~Branch();
 
-	int CreateBranch(std::string branch_path, std::string name, BranchID& origin, std::string* target);
+	int CreateBranch(std::string branch_path, std::string name, BranchID origin, std::string* target);
 	
 	int LoadBranch(std::string path, std::string* target); // Open Branch File (without Extension)
 	int SaveBranch(); // Save Branch File
 
 	const BranchID GetBranchID() const;
 	const BranchID GetOriginBranchID() const;
+	const std::string GetName() const;
 
 	int ChangeName(std::string name);
 
@@ -48,4 +47,7 @@ public:
 
 	int Activate();
 	int SaveCache();
+
+	int Commmiter(std::string old, std::string dat, HistoryType type, std::string title, std::string description);
+	int Reverter(int index);
 };
