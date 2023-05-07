@@ -51,6 +51,9 @@
     <ClCompile Include="Metadata.cpp">
       <Filter>Source Files\Flow</Filter>
     </ClCompile>
+    <ClCompile Include="Log.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Branch.h">

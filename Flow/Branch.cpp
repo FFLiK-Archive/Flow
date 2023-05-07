@@ -90,7 +90,7 @@ Branch::~Branch() {
 
 int Branch::CreateBranch(std::string branch_path, std::string name, BranchID &origin, std::string* target) {
 	if (this->id != NULL_ID) {
-		Log::Debug("Branch", "CreateBranch", "Branch has already assigned");
+		Log::Error(L"Branch has already assigned - Fatal");
 		return 1;
 	}
 
@@ -121,7 +121,7 @@ int Branch::CreateBranch(std::string branch_path, std::string name, BranchID &or
 
 int Branch::LoadBranch(std::string path, std::string* target) {
 	if (this->id != NULL_ID) {
-		Log::Debug("Branch", "LoadBranch", "Branch has already assigned");
+		Log::Error(L"Branch has already assigned - Fatal");
 		return 1;
 	}
 	this->history_path = path + ".history";
@@ -149,7 +149,7 @@ int Branch::LoadBranch(std::string path, std::string* target) {
 
 int Branch::SaveBranch() {
 	if (this->id == NULL_ID) {
-		Log::Debug("Branch", "SaveBranch", "Branch is empty");
+		Log::Error(L"Branch is empty - Fatal");
 		return 1;
 	}
 	Json::Value branch;
@@ -188,7 +188,7 @@ Time Branch::GetLastCommitTime() const {
 
 bool Branch::CheckChanged() {
 	if (this->id == NULL_ID) {
-		Log::Debug("Branch", "CheckChanged", "Branch is empty");
+		Log::Error(L"Branch is empty - Fatal");
 		return false;
 	}
 	return !this->meta.GetChange().empty();
@@ -200,7 +200,7 @@ std::vector<FileLog> Branch::GetChange() {
 
 int Branch::Commit(std::string title, std::string description) {
 	if (this->id == NULL_ID) {
-		Log::Debug("Branch", "Commit", "Branch is empty");
+		Log::Error(L"Branch is empty - Fatal");
 		return 1;
 	}
 	CkZip zip;
@@ -227,11 +227,11 @@ int Branch::Commit(std::string title, std::string description) {
 
 int Branch::Revert(int n) {
 	if (this->id == NULL_ID) {
-		Log::Debug("Branch", "Revert", "Branch is empty");
+		Log::Error(L"Branch is empty - Fatal");
 		return 1;
 	}
 	if (n >= this->history.size() || n < 0) {
-		Log::Debug("Branch", "Revert", "There's not enough history");
+		Log::Error(L"There's not enough history - Fatal");
 		return 1;
 	}
 
@@ -272,11 +272,11 @@ int Branch::Revert(int n) {
 
 int Branch::Delete(int n) {
 	if (this->id == NULL_ID) {
-		Log::Debug("Branch", "Delete", "Branch is empty");
+		Log::Error(L"Branch is empty - Fatal");
 		return 1;
 	}
 	if (n >= this->history.size() || n < 0) {
-		Log::Debug("Branch", "Delete", "There's not enough history");
+		Log::Error(L"There's not enough history - Fatal");
 		return 1;
 	}
 
@@ -342,7 +342,7 @@ int Branch::Delete(int n) {
 
 int Branch::Activate() {
 	if (this->id == NULL_ID) {
-		Log::Debug("Branch", "Activate", "Branch is empty");
+		Log::Error(L"Branch is empty - Fatal");
 		return 1;
 	}
 
@@ -389,7 +389,7 @@ int Branch::Activate() {
 
 int Branch::SaveCache() {
 	if (this->id == NULL_ID) {
-		Log::Debug("Branch", "SaveCache", "Branch is empty");
+		Log::Error(L"Branch is empty - Fatal");
 		return 1;
 	}
 

@@ -33,8 +33,9 @@ Json::Value FileIO::GetJsonFile(std::string location) {
 	auto bret = Json::parseFromStream(reader, is, &root, &errorMessage);
 
 	if (bret == false) {
-		cout << "Error to parse JSON file !!!" << endl;
-		cout << "Details : " << errorMessage << endl;
+		Log::Error(L"Error to parse JSON file - Fatal");
+		Log::DebugFree("Error to parse JSON file !!!");
+		Log::DebugFree("Details :", errorMessage);
 	}
 
 	return root;

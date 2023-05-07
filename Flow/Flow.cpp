@@ -9,7 +9,7 @@ using namespace std;
 void Flow::Deleter(BranchID &id) {
 	auto del_i_iter = find(this->branch_id_list.begin(), this->branch_id_list.end(), id);
 	if (del_i_iter == this->branch_id_list.end()) {
-		Log::Debug("Flow", "Delete", "Cannot find Activated Branch in branch_id_list -> Fatal Error");
+		Log::Error(L"Cannot find Activated Branch in branch_id_list - Fatal");
 		return;
 	}
 	this->branch_id_list.erase(del_i_iter);
@@ -40,7 +40,7 @@ Flow::~Flow() {
 
 int Flow::CreateFlow(FlowStorageType type) {
 	if (this->id != NULL_ID) {
-		Log::Debug("Flow", "CreateFlow", "Flow has already assigned");
+		Log::Error(L"Flow has already assigned - Fatal");
 		return 1;
 	}
 	Log::Debug("Flow", "CreateFlow");
@@ -87,7 +87,7 @@ int Flow::CreateFlow(FlowStorageType type) {
 
 int Flow::LoadFlow() {
 	if (this->id != NULL_ID) {
-		Log::Debug("Flow", "LoadFlow", "Flow has already assigned");
+		Log::Error(L"Flow has already assigned - Fatal");
 		return 1;
 	}
 	Log::Debug("Flow", "LoadFlow");
@@ -144,7 +144,7 @@ std::string Flow::GetFlowPath() {
 
 Branch* Flow::operator[](BranchID &id) {
 	if (this->id == NULL_ID) {
-		Log::Debug("Flow", "operator[]", "Flow is empty");
+		Log::Error(L"Flow is empty - Fatal");
 		return nullptr;
 	}
 	return &(this->branch_table[id]);
@@ -193,12 +193,12 @@ void FileSearch(string path, vector<string> &files, int remove_size) {
 
 int Flow::Merge(BranchID &target_branch) {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
-		Log::Debug("Flow", "Replace", "Main Branch cannot be merged");
+		Log::Error(L"Main Branch cannot be merged");
 		return 1;
 	}
 
 	if (this->GetActivatedBranch()->CheckChanged()) {
-		Log::Debug("Flow", "Replace", "You must commit first");
+		Log::Error(L"You must commit first");
 		return 1;
 	}
 
@@ -282,12 +282,12 @@ int Flow::Merge(BranchID &target_branch) {
 
 int Flow::Replace(BranchID &target_branch) {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
-		Log::Debug("Flow", "Replace", "Main Branch cannot be merged");
+		Log::Error(L"Main Branch cannot be replaced");
 		return 1;
 	}
 
 	if (this->GetActivatedBranch()->CheckChanged()) {
-		Log::Debug("Flow", "Replace", "You must commit first");
+		Log::Error(L"You must commit first");
 		return 1;
 	}
 	
@@ -305,7 +305,7 @@ int Flow::Replace(BranchID &target_branch) {
 
 int Flow::DeleteBranch() {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
-		Log::Debug("Flow", "Delete", "Main Branch cannot be deleted");
+		Log::Error(L"Main Branch cannot be deleted");
 		return 1;
 	}
 	
@@ -338,7 +338,7 @@ int Flow::ActivateBranch(BranchID &branch) {
 
 Branch* Flow::GetActivatedBranch() {
 	if (this->activated_branch_id == NULL_ID) {
-		Log::Debug("Flow", "GetActivatedBranch", "Activated Branch does not exist");
+		Log::Error(L"Activated Branch does not exist - Fatal");
 		return nullptr;
 	}
 	return (*this)[this->activated_branch_id];

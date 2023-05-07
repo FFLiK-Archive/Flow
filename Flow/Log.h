@@ -45,4 +45,6 @@ public:
 		if (sizeof...(args)) Log::Print(args...);
 		else std::cout << std::endl;
 	}
+
+	static void Error(std::wstring message);
 };
