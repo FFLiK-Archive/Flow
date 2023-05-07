@@ -94,22 +94,7 @@ int Flow::LoadFlow() {
 	string flow_path = FileIO::OpenFlowFile();
 	if (flow_path.empty())
 		return 1;
-	this->file_path = flow_path;
-	while (flow_path.back() != '\\')
-		flow_path.pop_back();
-	Json::Value flow = FileIO::GetJsonFile(this->file_path);
-	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
-	this->name = flow["Name"].asString();
-	this->target_path = flow["TargetPath"].asString();
-	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
-	this->activated_branch_id = UUIDv4::UUID::fromStrFactory(flow["ActivatedBranchID"].asString().c_str());
-	for (int i = 0; i < flow["BranchList"].size(); i++) {
-		BranchID id = UUIDv4::UUID::fromStrFactory(flow["BranchList"][i].asString().c_str());
-		this->branch_id_list.push_back(id);
-		Branch branch;
-		branch.LoadBranch(flow_path + this->name + ".flowdata\\" + id.str(), &this->target_path);
-		this->branch_table[this->branch_id_list.back()] = branch;
-	}
+	this->LoadWithPath(flow_path);
 	return 0;
 }
 
@@ -131,6 +116,30 @@ int Flow::SaveFlow() {
 	}
 	FileIO::SaveFile(this->file_path, flow);
 	return 0;
+}
+
+int Flow::LoadWithPath(std::string flow_path) {
+	this->file_path = flow_path;
+	while (flow_path.back() != '\\')
+		flow_path.pop_back();
+	Json::Value flow = FileIO::GetJsonFile(this->file_path);
+	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
+	this->name = flow["Name"].asString();
+	this->target_path = flow["TargetPath"].asString();
+	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
+	this->activated_branch_id = UUIDv4::UUID::fromStrFactory(flow["ActivatedBranchID"].asString().c_str());
+	for (int i = 0; i < flow["BranchList"].size(); i++) {
+		BranchID id = UUIDv4::UUID::fromStrFactory(flow["BranchList"][i].asString().c_str());
+		this->branch_id_list.push_back(id);
+		Branch branch;
+		branch.LoadBranch(flow_path + this->name + ".flowdata\\" + id.str(), &this->target_path);
+		this->branch_table[this->branch_id_list.back()] = branch;
+	}
+	return 0;
+}
+
+std::string Flow::GetFlowPath() {
+	return this->file_path;
 }
 
 Branch* Flow::operator[](BranchID &id) {
@@ -337,4 +346,21 @@ Branch* Flow::GetActivatedBranch() {
 
 const std::vector<BranchID>& Flow::GetBranchIDList() const {
 	return this->branch_id_list;
+}
+
+int Flow::PrintBranch() {
+	for (int i = 0; i < this->branch_id_list.size(); i++) {
+		string id = this->branch_id_list[i].str();
+		Branch branch = this->branch_table[this->branch_id_list[i]];
+		string name = branch.GetName();
+		string org_id = branch.GetOriginBranchID().str();
+		Time lct = branch.GetLastCommitTime();
+		Log::Flow(id, name, org_id, lct);
+	}
+	return 0;
+}
+
+int Flow::ChangeBranchName(BranchID& id, std::string name) {
+	this->branch_table[id].ChangeName(name);
+	return 0;
 }

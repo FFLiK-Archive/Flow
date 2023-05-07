@@ -35,6 +35,7 @@ public:
 	BranchID GetBranchID() const;
 	BranchID GetOriginBranchID() const;
 	std::string GetName() const;
+	Time GetLastCommitTime() const;
 
 	int ChangeName(std::string name);
 
@@ -50,4 +51,6 @@ public:
 
 	int Commmiter(std::string old, std::string dat, HistoryType type, std::string title, std::string description);
 	int Reverter(int index);
+
+	int PrintHistory();
 };

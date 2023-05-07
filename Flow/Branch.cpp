@@ -36,6 +36,13 @@ int Branch::Reverter(int index) {
 	return 0;
 }
 
+int Branch::PrintHistory() {
+	for (int i = 0; i < this->history.size(); i++) {
+		Log::Flow(this->history[i].title, this->history[i].description, this->history[i].time);
+	}
+	return 0;
+}
+
 int Branch::Commmiter(string old, string dat, HistoryType type, string title, string description) {
 	string old_bin = FileIO::OpenFile(old);
 	string data_bin = FileIO::OpenFile(dat);
@@ -173,6 +180,10 @@ int Branch::ChangeName(std::string name) {
 
 std::string Branch::GetName() const {
 	return this->name;
+}
+
+Time Branch::GetLastCommitTime() const {
+	return this->last_commit_time;
 }
 
 bool Branch::CheckChanged() {
