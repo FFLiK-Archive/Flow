@@ -6,25 +6,23 @@
 #include "Log.h"
 using namespace std;
 
-void Flow::Deleter(BranchID id) {
-	auto del_i_iter = find(this->branch_id_list.begin(), this->branch_id_list.end(), this->activated_branch_id);
+void Flow::Deleter(BranchID &id) {
+	auto del_i_iter = find(this->branch_id_list.begin(), this->branch_id_list.end(), id);
 	if (del_i_iter == this->branch_id_list.end()) {
 		Log::Debug("Flow", "Delete", "Cannot find Activated Branch in branch_id_list -> Fatal Error");
 		return;
 	}
 	this->branch_id_list.erase(del_i_iter);
 
-	BranchID branch_del_id = this->activated_branch_id;
-	this->activated_branch_id = this->GetActivatedBranch()->GetOriginBranchID();
-
+	BranchID branch_del_id = id;
 	this->branch_table.erase(branch_del_id);
-	this->GetActivatedBranch()->Activate();
 
 	string path = this->target_path + ".flowdata\\" + branch_del_id.str();
 
 	filesystem::remove(path + ".branch");
 	filesystem::remove_all(path + ".history");
 	filesystem::remove(path + ".dat");
+	filesystem::remove(path + ".cache");
 }
 
 Flow::Flow() {
@@ -74,7 +72,8 @@ int Flow::CreateFlow(FlowStorageType type) {
 	this->id = uuidGenerator.getUUID();
 	filesystem::create_directory(header_path + this->name + ".flowdata");
 	Branch main_branch;
-	main_branch.CreateBranch(header_path + this->name + ".flowdata\\", "Main", NULL_ID, &this->target_path);
+	BranchID nullid = NULL_ID;
+	main_branch.CreateBranch(header_path + this->name + ".flowdata\\", "Main", nullid, &this->target_path);
 	this->branch_id_list.push_back(main_branch.GetBranchID());
 	this->branch_table[main_branch.GetBranchID()] = main_branch;
 	this->activated_branch_id = main_branch.GetBranchID();
@@ -134,7 +133,7 @@ int Flow::SaveFlow() {
 	return 0;
 }
 
-Branch* Flow::operator[](BranchID id) {
+Branch* Flow::operator[](BranchID &id) {
 	if (this->id == NULL_ID) {
 		Log::Debug("Flow", "operator[]", "Flow is empty");
 		return nullptr;
@@ -150,13 +149,13 @@ int Flow::CreateSubBranch(std::string name) {
 		header_path.pop_back();
 	}
 	BranchID original_id = this->GetActivatedBranch()->GetBranchID();
-	this->GetActivatedBranch()->Activate();
 
 	sub_branch.CreateBranch(header_path + this->name + ".flowdata\\", name, original_id, &this->target_path);
 	this->branch_id_list.push_back(sub_branch.GetBranchID());
 	this->branch_table[sub_branch.GetBranchID()] = sub_branch;
 	filesystem::copy((header_path + this->name + ".flowdata\\" + original_id.str() + ".dat"), (header_path + this->name + ".flowdata\\" + sub_branch.GetBranchID().str() + ".dat"), filesystem::copy_options::overwrite_existing);
-	this->ActivateBranch(sub_branch.GetBranchID());
+	BranchID id = sub_branch.GetBranchID();
+	this->ActivateBranch(id);
 	return 0;
 }
 
@@ -183,7 +182,7 @@ void FileSearch(string path, vector<string> &files, int remove_size) {
 	}
 }
 
-int Flow::Merge(BranchID target_branch) {
+int Flow::Merge(BranchID &target_branch) {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
 		Log::Debug("Flow", "Replace", "Main Branch cannot be merged");
 		return 1;
@@ -225,7 +224,7 @@ int Flow::Merge(BranchID target_branch) {
 		total_files.push_back(make_pair(origin_files[i], "origin"));
 	}
 	for (int i = 0; i < target_files.size(); i++) {
-		auto pos = find(total_files.begin(), total_files.end(), make_pair(target_files[i], "origin"));
+		auto pos = find(total_files.begin(), total_files.end(), make_pair(target_files[i], (string)"origin"));
 		if (pos == total_files.end()) {
 			total_files.push_back(make_pair(target_files[i], "target"));
 		}
@@ -272,7 +271,7 @@ int Flow::Merge(BranchID target_branch) {
 	return 0;
 }
 
-int Flow::Replace(BranchID target_branch) {
+int Flow::Replace(BranchID &target_branch) {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
 		Log::Debug("Flow", "Replace", "Main Branch cannot be merged");
 		return 1;
@@ -291,6 +290,7 @@ int Flow::Replace(BranchID target_branch) {
 	string target_dat = header_path + this->name + ".flowdata\\" + this->branch_table[target_branch].GetBranchID().str();
 	string origin_dat = header_path + this->name + ".flowdata\\" + this->GetActivatedBranch()->GetBranchID().str();
 	this->branch_table[target_branch].Commmiter(target_dat + ".dat", origin_dat + ".dat", REPLACE, "Replace", "From \"" + this->GetActivatedBranch()->GetName()) + "\" Branch";
+	filesystem::copy(origin_dat + ".dat", target_dat + ".dat");
 	return 0;
 }
 
@@ -302,7 +302,9 @@ int Flow::DeleteBranch() {
 	
 	vector<BranchID> to_delete;
 	to_delete.push_back(this->GetActivatedBranch()->GetBranchID());
-	while (to_delete.empty()) {
+	BranchID id = this->GetActivatedBranch()->GetOriginBranchID();
+	this->ActivateBranch(id);
+	while (!to_delete.empty()) {
 		BranchID target = to_delete.back();
 		to_delete.pop_back();
 		this->Deleter(target);
@@ -315,7 +317,7 @@ int Flow::DeleteBranch() {
 	return 0;
 }
 
-int Flow::ActivateBranch(BranchID branch) {
+int Flow::ActivateBranch(BranchID &branch) {
 	if (branch == this->activated_branch_id) {
 		return 0;
 	}

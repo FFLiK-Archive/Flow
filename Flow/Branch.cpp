@@ -81,7 +81,7 @@ Branch::Branch() {
 Branch::~Branch() {
 }
 
-int Branch::CreateBranch(std::string branch_path, std::string name, BranchID origin, std::string* target) {
+int Branch::CreateBranch(std::string branch_path, std::string name, BranchID &origin, std::string* target) {
 	if (this->id != NULL_ID) {
 		Log::Debug("Branch", "CreateBranch", "Branch has already assigned");
 		return 1;
@@ -158,11 +158,11 @@ int Branch::SaveBranch() {
 	return 0;
 }
 
-const BranchID Branch::GetBranchID() const {
+BranchID Branch::GetBranchID() const {
 	return this->id;
 }
 
-const BranchID Branch::GetOriginBranchID() const {
+BranchID Branch::GetOriginBranchID() const {
     return this->origin;
 }
 
@@ -171,7 +171,7 @@ int Branch::ChangeName(std::string name) {
 	return 0;
 }
 
-const std::string Branch::GetName() const {
+std::string Branch::GetName() const {
 	return this->name;
 }
 

@@ -9,10 +9,13 @@ int main(int argc, char *argv[]) {
 	
 	flow.LoadFlow();
 
-	BranchID id = flow.GetBranchIDList()[0];
+	BranchID id = flow.GetBranchIDList()[1];
+	BranchID replace_id = flow.GetBranchIDList()[3];
 	flow.ActivateBranch(id);
+	flow.Replace(replace_id);
 	//flow.GetActivatedBranch()->Commit("Commit", "");
-	//flow.CreateSubBranch("Sub Branch");
+	//flow.CreateSubBranch("Sub Sub Sub Branch");
+	//flow.GetActivatedBranch()->ChangeName("Sub Sub Branch");
 	//flow.GetActivatedBranch()->Revert(1);
 
 	flow.SaveFlow();

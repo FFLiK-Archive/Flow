@@ -27,14 +27,14 @@ public:
 	Branch();
 	~Branch();
 
-	int CreateBranch(std::string branch_path, std::string name, BranchID origin, std::string* target);
+	int CreateBranch(std::string branch_path, std::string name, BranchID &origin, std::string* target);
 	
 	int LoadBranch(std::string path, std::string* target); // Open Branch File (without Extension)
 	int SaveBranch(); // Save Branch File
 
-	const BranchID GetBranchID() const;
-	const BranchID GetOriginBranchID() const;
-	const std::string GetName() const;
+	BranchID GetBranchID() const;
+	BranchID GetOriginBranchID() const;
+	std::string GetName() const;
 
 	int ChangeName(std::string name);
 
@@ -42,7 +42,7 @@ public:
 	bool CheckChanged(); 
 	std::vector<FileLog> GetChange();
 	int Commit(std::string title, std::string description);
-	int Revert(int n = 0);
+	int Revert(int n = 0);									  
 	int Delete(int n = 0);
 
 	int Activate();
