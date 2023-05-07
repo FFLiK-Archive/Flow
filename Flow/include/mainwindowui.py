@@ -1,19 +1,17 @@
 import sys
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QHBoxLayout, QLabel, QListView,
-    QMainWindow, QMenuBar, QPushButton, QSizePolicy,
-    QStatusBar, QVBoxLayout, QWidget)
+from PyQt6.QtCore import *
+from PyQt6.QtGui import *
+from PyQt6.QtWidgets import *
+from mainwindowui import *
+from firstpageui import *
+from filetypeselecter import *
 
-class Ui_MainWindow(object):
+
+
+class Ui_MainWindow(QMainWindow):
     def __init__(self, MainWindow):
-        if not MainWindow.objectName():
-            MainWindow.setObjectName(u"MainWindow")
+        super()
+        
         MainWindow.resize(1168, 728)
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
@@ -35,18 +33,30 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.verticalLayout_2 = QVBoxLayout()
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.label_5 = QLabel(self.centralwidget)
-        self.label_5.setObjectName(u"label_5")
+        self.BranchLabel = QLabel(self.centralwidget)
+        self.BranchLabel.setObjectName(u"BranchLabel")
 
-        self.verticalLayout_2.addWidget(self.label_5)
+        self.verticalLayout_2.addWidget(self.BranchLabel)
 
-        self.listView_2 = QListView(self.centralwidget)
-        self.listView_2.setObjectName(u"listView_2")
+        self.BranchList = QListWidget(self.centralwidget)
+        self.BranchList.setObjectName(u"BranchList")
+        ###############
+        self.BranchList.addItem("hello")
+        self.BranchList.addItem("who")
+        self.BranchList.addItem("the")
+        self.BranchList.addItem("fuck")
+        self.BranchList.addItem("are")
+        self.BranchList.addItem("you")
 
-        self.verticalLayout_2.addWidget(self.listView_2)
+        self.verticalLayout_2.addWidget(self.BranchList)
 
+
+        #################
         self.NewSubBranchButton = QPushButton(self.centralwidget)
         self.NewSubBranchButton.setObjectName(u"NewSubBranchButton")
+        self.NewSubBranchButton.setCheckable(False)
+        self.NewSubBranchButton.setFlat(False)
+        self.NewSubBranchButton.clicked.connect(self.NewSubBranchButtonClicked)
 
         self.verticalLayout_2.addWidget(self.NewSubBranchButton)
 
@@ -80,10 +90,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_3.addWidget(self.HistoryLabel)
 
-        self.listView = QListView(self.centralwidget)
-        self.listView.setObjectName(u"listView")
+        self.HistoryList = QListWidget(self.centralwidget)
+        self.HistoryList.setObjectName(u"HistoryList")
 
-        self.verticalLayout_3.addWidget(self.listView)
+        self.verticalLayout_3.addWidget(self.HistoryList)
 
         self.CommitButton = QPushButton(self.centralwidget)
         self.CommitButton.setObjectName(u"CommitButton")
@@ -100,10 +110,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.ChangeLogLabel)
 
-        self.listView_3 = QListView(self.centralwidget)
-        self.listView_3.setObjectName(u"listView_3")
+        self.ChangeLogList = QListWidget(self.centralwidget)
+        self.ChangeLogList.setObjectName(u"ChangeLogList")
 
-        self.verticalLayout_4.addWidget(self.listView_3)
+        self.verticalLayout_4.addWidget(self.ChangeLogList)
 
 
         self.horizontalLayout.addLayout(self.verticalLayout_4)
@@ -122,13 +132,16 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1168, 27))
+        self.menubar.setGeometry(QRect(0, 0, 1168, 37))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+
+        self.NewSubBranchButton.setDefault(False)
+
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -137,7 +150,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.Logo.setText(QCoreApplication.translate("MainWindow", u"Flow", None))
         self.ProjectNameLabel.setText(QCoreApplication.translate("MainWindow", u"Project Name", None))
-        self.label_5.setText(QCoreApplication.translate("MainWindow", u"TextLabel", None))
+        self.BranchLabel.setText(QCoreApplication.translate("MainWindow", u"Branch", None))
         self.NewSubBranchButton.setText(QCoreApplication.translate("MainWindow", u"New Sub Branch", None))
         self.MergeButton.setText(QCoreApplication.translate("MainWindow", u"Merge", None))
         self.ReplaceButton.setText(QCoreApplication.translate("MainWindow", u"Replace", None))
@@ -148,6 +161,6 @@ class Ui_MainWindow(object):
         self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
     # retranslateUi
 
-
-
+    def NewSubBranchButtonClicked(self):
+        print("NewSubBranch Button clicked!")
 
