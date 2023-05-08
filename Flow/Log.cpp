@@ -11,6 +11,7 @@ void Log::Error(std::wstring message) {
 	}
 	if (message.find(L"Fatal") != std::string::npos) {
 		MessageBox(NULL, message.c_str(), L"Flow", MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+		exit(-1);
 	}
 	else {
 		std::cout << "\a";

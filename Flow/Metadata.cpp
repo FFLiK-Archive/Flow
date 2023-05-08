@@ -14,6 +14,7 @@ void Metadata::Search(string path) {
 		Time time = std::chrono::system_clock::to_time_t(systemTime);
 		unsigned long long int filesize = filesystem::file_size(path);
 		Data d;
+		path.erase(path.begin(), path.begin() + this->target_path->size());
 		d.path = path;
 		d.last_write_time = time;
 		d.file_size = filesize;
@@ -145,17 +146,17 @@ std::vector<FileLog> Metadata::GetChange() {
 	return log;
 }
 
-void Metadata::PrintLog(std::vector<FileLog> log) {
+void Metadata::PrintLog(std::vector<FileLog> log, std::string name) {
 	for (int i = 0; i < log.size(); i++) {
 		switch (log[i].type) {
 		case FileLog::ADDED:
-			Log::Flow(log[i].path, "added");
+			Log::Flow(name + log[i].path, "added");
 			break;
 		case FileLog::DELETED:
-			Log::Flow(log[i].path, "deleted");
+			Log::Flow(name + log[i].path, "deleted");
 			break;
 		case FileLog::MODIFIED:
-			Log::Flow(log[i].path, "modified");
+			Log::Flow(name + log[i].path, "modified");
 			break;
 		}
 	}

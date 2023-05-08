@@ -203,6 +203,10 @@ int Branch::Commit(std::string title, std::string description) {
 		Log::Error(L"Branch is empty - Fatal");
 		return 1;
 	}
+	if (!this->CheckChanged()) {
+		Log::Error(L"There is no change\nPlease refresh the change log if you have changed");
+		return 1;
+	}
 	CkZip zip;
 	string path = this->file_path;
 	while (path.back() != '\\')

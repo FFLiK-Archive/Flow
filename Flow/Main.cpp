@@ -37,14 +37,17 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Getter
-	if (cmd == "get_branch") {
+	if (cmd == "get_name") {
+		Log::Flow(flow.GetName());
+	}
+	else if (cmd == "get_branch") {
 		flow.PrintBranch();
 	}
 	else if (cmd == "get_activated_branch") {
 		Log::Flow(flow.GetActivatedBranch()->GetBranchID().str());
 	}
 	else if (cmd == "get_change_log") {
-		Metadata::PrintLog(flow.GetActivatedBranch()->GetChange());
+		Metadata::PrintLog(flow.GetActivatedBranch()->GetChange(), flow.GetName());
 	}
 	else if (cmd == "get_history") {
 		flow.GetActivatedBranch()->PrintHistory();

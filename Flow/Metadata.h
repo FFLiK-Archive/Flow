@@ -38,6 +38,6 @@ public:
 
 	std::vector<FileLog> GetChange();
 
-	static void PrintLog(std::vector<FileLog> log);
+	static void PrintLog(std::vector<FileLog> log, std::string name);
 };
 
