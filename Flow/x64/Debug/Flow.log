@@ -1,8 +1,4 @@
 ﻿  Scanning sources for module dependencies...
-  Flow.cpp
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(106,20): warning C4018: '<': signed/unsigned mismatch
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(219,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(220,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(269,140): warning C4552: '+': result of expression not used
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(292,159): warning C4552: '+': result of expression not used
+  Main.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(32,9): warning C4101: 'f': unreferenced local variable
   Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Debug\Flow.exe

@@ -32,7 +32,7 @@ int History::CreateHistory(HistoryType type, std::string title, std::string desc
 
 int History::LoadHistory(Json::Value data) {
 	if (this->id != NULL_ID) {
-		Log::Debug("History", "CreateHistory", "History has already assigned");
+		Log::Error(L"History has already assigned - Fatal");
 		return 1;
 	}
 	this->title = data["Title"].asString();

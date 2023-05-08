@@ -146,17 +146,16 @@ std::vector<FileLog> Metadata::GetChange() {
 }
 
 void Metadata::PrintLog(std::vector<FileLog> log) {
-	Log::System("<Change Log>");
 	for (int i = 0; i < log.size(); i++) {
 		switch (log[i].type) {
 		case FileLog::ADDED:
-			Log::System("Added : ", log[i].path);
+			Log::Flow(log[i].path, "added");
 			break;
 		case FileLog::DELETED:
-			Log::System("Deleted : ", log[i].path);
+			Log::Flow(log[i].path, "deleted");
 			break;
 		case FileLog::MODIFIED:
-			Log::System("Modified : ", log[i].path);
+			Log::Flow(log[i].path, "modified");
 			break;
 		}
 	}

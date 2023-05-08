@@ -9,7 +9,7 @@ using namespace std;
 void Flow::Deleter(BranchID &id) {
 	auto del_i_iter = find(this->branch_id_list.begin(), this->branch_id_list.end(), id);
 	if (del_i_iter == this->branch_id_list.end()) {
-		Log::Debug("Flow", "Delete", "Cannot find Activated Branch in branch_id_list -> Fatal Error");
+		Log::Error(L"Cannot find Activated Branch in branch_id_list - Fatal");
 		return;
 	}
 	this->branch_id_list.erase(del_i_iter);
@@ -40,7 +40,7 @@ Flow::~Flow() {
 
 int Flow::CreateFlow(FlowStorageType type) {
 	if (this->id != NULL_ID) {
-		Log::Debug("Flow", "CreateFlow", "Flow has already assigned");
+		Log::Error(L"Flow has already assigned - Fatal");
 		return 1;
 	}
 	Log::Debug("Flow", "CreateFlow");
@@ -87,29 +87,14 @@ int Flow::CreateFlow(FlowStorageType type) {
 
 int Flow::LoadFlow() {
 	if (this->id != NULL_ID) {
-		Log::Debug("Flow", "LoadFlow", "Flow has already assigned");
+		Log::Error(L"Flow has already assigned - Fatal");
 		return 1;
 	}
 	Log::Debug("Flow", "LoadFlow");
 	string flow_path = FileIO::OpenFlowFile();
 	if (flow_path.empty())
 		return 1;
-	this->file_path = flow_path;
-	while (flow_path.back() != '\\')
-		flow_path.pop_back();
-	Json::Value flow = FileIO::GetJsonFile(this->file_path);
-	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
-	this->name = flow["Name"].asString();
-	this->target_path = flow["TargetPath"].asString();
-	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
-	this->activated_branch_id = UUIDv4::UUID::fromStrFactory(flow["ActivatedBranchID"].asString().c_str());
-	for (int i = 0; i < flow["BranchList"].size(); i++) {
-		BranchID id = UUIDv4::UUID::fromStrFactory(flow["BranchList"][i].asString().c_str());
-		this->branch_id_list.push_back(id);
-		Branch branch;
-		branch.LoadBranch(flow_path + this->name + ".flowdata\\" + id.str(), &this->target_path);
-		this->branch_table[this->branch_id_list.back()] = branch;
-	}
+	this->LoadWithPath(flow_path);
 	return 0;
 }
 
@@ -133,9 +118,33 @@ int Flow::SaveFlow() {
 	return 0;
 }
 
+int Flow::LoadWithPath(std::string flow_path) {
+	this->file_path = flow_path;
+	while (flow_path.back() != '\\')
+		flow_path.pop_back();
+	Json::Value flow = FileIO::GetJsonFile(this->file_path);
+	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
+	this->name = flow["Name"].asString();
+	this->target_path = flow["TargetPath"].asString();
+	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
+	this->activated_branch_id = UUIDv4::UUID::fromStrFactory(flow["ActivatedBranchID"].asString().c_str());
+	for (int i = 0; i < flow["BranchList"].size(); i++) {
+		BranchID id = UUIDv4::UUID::fromStrFactory(flow["BranchList"][i].asString().c_str());
+		this->branch_id_list.push_back(id);
+		Branch branch;
+		branch.LoadBranch(flow_path + this->name + ".flowdata\\" + id.str(), &this->target_path);
+		this->branch_table[this->branch_id_list.back()] = branch;
+	}
+	return 0;
+}
+
+std::string Flow::GetFlowPath() {
+	return this->file_path;
+}
+
 Branch* Flow::operator[](BranchID &id) {
 	if (this->id == NULL_ID) {
-		Log::Debug("Flow", "operator[]", "Flow is empty");
+		Log::Error(L"Flow is empty - Fatal");
 		return nullptr;
 	}
 	return &(this->branch_table[id]);
@@ -184,12 +193,12 @@ void FileSearch(string path, vector<string> &files, int remove_size) {
 
 int Flow::Merge(BranchID &target_branch) {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
-		Log::Debug("Flow", "Replace", "Main Branch cannot be merged");
+		Log::Error(L"Main Branch cannot be merged");
 		return 1;
 	}
 
 	if (this->GetActivatedBranch()->CheckChanged()) {
-		Log::Debug("Flow", "Replace", "You must commit first");
+		Log::Error(L"You must commit first");
 		return 1;
 	}
 
@@ -273,12 +282,12 @@ int Flow::Merge(BranchID &target_branch) {
 
 int Flow::Replace(BranchID &target_branch) {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
-		Log::Debug("Flow", "Replace", "Main Branch cannot be merged");
+		Log::Error(L"Main Branch cannot be replaced");
 		return 1;
 	}
 
 	if (this->GetActivatedBranch()->CheckChanged()) {
-		Log::Debug("Flow", "Replace", "You must commit first");
+		Log::Error(L"You must commit first");
 		return 1;
 	}
 	
@@ -296,7 +305,7 @@ int Flow::Replace(BranchID &target_branch) {
 
 int Flow::DeleteBranch() {
 	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
-		Log::Debug("Flow", "Delete", "Main Branch cannot be deleted");
+		Log::Error(L"Main Branch cannot be deleted");
 		return 1;
 	}
 	
@@ -329,7 +338,7 @@ int Flow::ActivateBranch(BranchID &branch) {
 
 Branch* Flow::GetActivatedBranch() {
 	if (this->activated_branch_id == NULL_ID) {
-		Log::Debug("Flow", "GetActivatedBranch", "Activated Branch does not exist");
+		Log::Error(L"Activated Branch does not exist - Fatal");
 		return nullptr;
 	}
 	return (*this)[this->activated_branch_id];
@@ -337,4 +346,21 @@ Branch* Flow::GetActivatedBranch() {
 
 const std::vector<BranchID>& Flow::GetBranchIDList() const {
 	return this->branch_id_list;
+}
+
+int Flow::PrintBranch() {
+	for (int i = 0; i < this->branch_id_list.size(); i++) {
+		string id = this->branch_id_list[i].str();
+		Branch branch = this->branch_table[this->branch_id_list[i]];
+		string name = branch.GetName();
+		string org_id = branch.GetOriginBranchID().str();
+		Time lct = branch.GetLastCommitTime();
+		Log::Flow(id, name, org_id, lct);
+	}
+	return 0;
+}
+
+int Flow::ChangeBranchName(BranchID& id, std::string name) {
+	this->branch_table[id].ChangeName(name);
+	return 0;
 }
