@@ -15,7 +15,7 @@
 #define FlowBuildType Flow_Auto
 
 // Build Mode : Flow_Debug, Flow_Release
-#define FlowBuildMode Flow_Debug
+#define FlowBuildMode Flow_Release
 
 // Version Information
 #define FlowVersion "v 0.1"
