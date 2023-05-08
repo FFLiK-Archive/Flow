@@ -3,16 +3,21 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
-from mainwindowui import *
+from mainui import *
 from firstpageui import *
-from filetypeselecter import *
+
 
 
 class Ui_ChooseDialog(QMainWindow):
     def __init__(self):
-        super().__init__()
-        self.resize(1168, 728)
-        # self.verticalLayoutWidget = QWidget(ChooseDialog)
+        super(Ui_ChooseDialog, self).__init__()
+
+        self.third_window = mainui.Ui_MainWindow()
+
+
+
+        self.resize(300, 400)
+        self.verticalLayoutWidget = QWidget()
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
         self.verticalLayoutWidget.setGeometry(QRect(470, 280, 218, 80))
         self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
@@ -40,11 +45,10 @@ class Ui_ChooseDialog(QMainWindow):
 
 
         self.verticalLayout.addLayout(self.horizontalLayout)
+        self.setCentralWidget(self.verticalLayoutWidget)
+        self.retranslateUi(self)
 
-
-        self.retranslateUi(ChooseDialog)
-
-        QMetaObject.connectSlotsByName(ChooseDialog)
+        QMetaObject.connectSlotsByName(self)
     # setupUi
 
     def retranslateUi(self, ChooseDialogue):
@@ -55,12 +59,16 @@ class Ui_ChooseDialog(QMainWindow):
     # retranslateUi
 
     def FileButtonClicked(self):
-        #Actions to do when the file button is clicked
+        # Actions to do when the file button is clicked
         print("File Button clicked!")
+        self.third_window.show()
+        self.hide()
 
     def FolderButtonClicked(self):
-        #Actions to do when the folder button is clicked
+        # Actions to do when the folder button is clicked
         print("Folder Button clicked!")
+        self.third_window.show()
+        self.hide()
 
 
 
