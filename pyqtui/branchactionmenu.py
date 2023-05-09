@@ -7,18 +7,24 @@ from PyQt6.QtWidgets import *
 import happyhappyhappy
 import branchselection
 from branchselection import *
+import conflictdialog
+import branchselectionforreplace
+import newsubdialog
 
-import mainui
+
 
 class branch_menu(QMainWindow):
-    def __init__(self, parent):
+    def __init__(self):
         super(branch_menu, self).__init__()
 
         self.fuckyeah = happyhappyhappy.happy()
+        self.brepsel = branchselectionforreplace.branch_selection()
 
-        self.parent:mainui.Ui_MainWindow = parent
+        self.r = newsubdialog.newsubDialog()
 
         self.bselection = branchselection.branch_selection()
+
+        self.cd = conflictdialog.conflictDialog()
 
         self.centralwidget = QWidget()
 
@@ -67,9 +73,6 @@ class branch_menu(QMainWindow):
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
-    def hideEvent(self, event):
-        self.parent.setEnabled(True)
-
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -86,7 +89,7 @@ class branch_menu(QMainWindow):
         ###########################
         ###########################
         print("NewSubBranchButtonClicked")
-        self.fuckyeah.show()
+        self.r.show()
         self.hide()
     def MergeButtonClicked(self):
         ###########################
@@ -104,7 +107,7 @@ class branch_menu(QMainWindow):
         ###########################
         ###########################
         print("ReplaceButtonClicked")
-        self.bselection.show()
+        self.brepsel.show()
         self.hide()
     def DeleteButtonClicked(self):
         ###########################

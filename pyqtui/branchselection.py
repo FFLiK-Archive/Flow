@@ -4,6 +4,7 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import happyhappyhappy
+import conflictdialog
 
 
 class branch_selection(QMainWindow):
@@ -11,6 +12,7 @@ class branch_selection(QMainWindow):
         super(branch_selection, self).__init__()
 
         self.fuckyeah = happyhappyhappy.happy()
+        self.cd = conflictdialog.conflictDialog()
 
         self.centralwidget = QWidget()
 
@@ -54,7 +56,7 @@ class branch_selection(QMainWindow):
         ###########################
         ###########################
         print(item.text())
-        self.fuckyeah.show()
+        self.cd.show()
         self.hide()
 
 if __name__ == '__main__':

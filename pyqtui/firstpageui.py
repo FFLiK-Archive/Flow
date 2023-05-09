@@ -6,8 +6,6 @@ from PyQt6.QtWidgets import *
 import mainui
 import filetypeselecter
 
-import flow
-
 class Ui_Dialog(QMainWindow):
     def __init__(self):
         super(Ui_Dialog, self).__init__()
@@ -60,6 +58,9 @@ class Ui_Dialog(QMainWindow):
         # Actions to do when the new button is clicked
         ###########################
         ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
         print("New Button clicked!")
         self.second_window.show()
         self.hide()
@@ -67,11 +68,11 @@ class Ui_Dialog(QMainWindow):
     def OpenButtonClicked(self):
         # Actions to do when the Open button is clicked
         ###########################
-        ret = flow.command(['open'])
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
         ###########################
         print("Open Button clicked!")
-        if ret == 0:
-            self.second_window.third_window.SetUIData()
-            self.second_window.third_window.show()
-            self.hide()
+        self.second_window.show()
+        self.hide()
 

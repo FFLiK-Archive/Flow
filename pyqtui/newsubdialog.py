@@ -5,9 +5,9 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
 
-class CommitDialog(QMainWindow):
+class newsubDialog(QMainWindow):
     def __init__(self):
-        super(CommitDialog, self).__init__()
+        super(newsubDialog, self).__init__()
 
         self.centralwidget = QWidget()
 
@@ -26,7 +26,7 @@ class CommitDialog(QMainWindow):
         self.label = QLabel(self.centralwidget)
 
         # Keeping the text of label empty initially.
-        self.label.setText("Please enter a summary and \ndescription for progress storage.")
+        self.label.setText("Please enter a name for the branch.")
         self.verticalLayout.addWidget(self.label)
 
         self.pushButton = QPushButton(self.centralwidget)
@@ -55,26 +55,21 @@ class CommitDialog(QMainWindow):
         _translate = QCoreApplication.translate
 
         if self.bool:
-
             self.hide()
-        else:
-            summary, done1 = QInputDialog.getText(
-                self, 'Input Dialog', 'Enter summary:')
+            self.bool = False
+            self.label.setText("Please enter a name for the branch.")
 
-            description, done2 = QInputDialog.getText(
-                self, 'Input Dialog', 'Enter Description')
+        else:
+            name, done1 = QInputDialog.getText(
+                self, 'Input Dialog', 'Enter name:')
 
             self.bool = True
             self.pushButton.setText(_translate("MainWindow", "Done"))
-            if done1 and done2:
-                # Showing confirmation message along
-                # with information provided by user.
-                self.label.setText('Progress Saved Successfully\nName: '
-                                   + str(summary) + ', Summary: ' + str(description))
+            if done1:
+                self.label.setText('New Branch Added Successfully\nName: '
+                                   + str(name))
 
 
 
 
 
-
-    ################must replace space with _
