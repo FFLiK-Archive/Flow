@@ -93,7 +93,7 @@ int Flow::LoadFlow() {
 	Log::Debug("Flow", "LoadFlow");
 	string flow_path = FileIO::OpenFlowFile();
 	if (flow_path.empty())
-		return 1;
+		exit(1);
 	this->LoadWithPath(flow_path);
 	return 0;
 }

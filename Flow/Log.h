@@ -6,7 +6,7 @@
 class Log {
 private:
 	template<typename T, typename... Ts> static void Print(T arg, Ts... args) {
-		std::cout << arg << " ";
+		std::cout << arg << std::endl;
 		Log::Print(args...);
 	}
 

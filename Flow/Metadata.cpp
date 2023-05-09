@@ -150,13 +150,13 @@ void Metadata::PrintLog(std::vector<FileLog> log, std::string name) {
 	for (int i = 0; i < log.size(); i++) {
 		switch (log[i].type) {
 		case FileLog::ADDED:
-			Log::Flow(name + log[i].path, "added");
+			Log::Flow(name + log[i].path, "Added");
 			break;
 		case FileLog::DELETED:
-			Log::Flow(name + log[i].path, "deleted");
+			Log::Flow(name + log[i].path, "Deleted");
 			break;
 		case FileLog::MODIFIED:
-			Log::Flow(name + log[i].path, "modified");
+			Log::Flow(name + log[i].path, "Modified");
 			break;
 		}
 	}

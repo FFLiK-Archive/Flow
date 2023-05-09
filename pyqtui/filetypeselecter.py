@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import *
 from mainui import *
 from firstpageui import *
 
-
+import subprocess
 
 class Ui_ChooseDialog(QMainWindow):
     def __init__(self):
@@ -61,24 +61,24 @@ class Ui_ChooseDialog(QMainWindow):
     def FileButtonClicked(self):
         # Actions to do when the file button is clicked
         ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
+        proc = subprocess.Popen(['Flow', 'create', 'file'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        proc.wait()
         ###########################
         print("File Button clicked!")
-        self.third_window.show()
-        self.hide()
+        if proc.returncode == 0:
+            self.third_window.show()
+            self.hide()
 
     def FolderButtonClicked(self):
         # Actions to do when the folder button is clicked
         ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
+        proc = subprocess.Popen(['Flow', 'create', 'folder'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+        proc.wait()
         ###########################
         print("Folder Button clicked!")
-        self.third_window.show()
-        self.hide()
+        if proc.returncode == 0:
+            self.third_window.show()
+            self.hide()
 
 
 

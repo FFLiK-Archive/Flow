@@ -20,6 +20,8 @@ int main(int argc, char* argv[]) {
 	Flow flow;
 	string cmd = input.front();
 
+	bool flow_ret = false;
+
 	if (cmd == "version") {
 		Log::Flow(FlowVersion);
 		return 0;
@@ -27,17 +29,17 @@ int main(int argc, char* argv[]) {
 
 	//Open Flow
 	if (cmd == "create") {
-		if (arg(1) == "folder") flow.CreateFlow(FLOW_FOLDER_STORAGE);
-		else if (arg(1) == "file") flow.CreateFlow(FLOW_FILE_STORAGE);
+		if (arg(1) == "folder") flow_ret |= flow.CreateFlow(FLOW_FOLDER_STORAGE);
+		else if (arg(1) == "file") flow_ret |= flow.CreateFlow(FLOW_FILE_STORAGE);
 	}
 	else if (cmd == "open") {
-		flow.LoadFlow();
+		flow_ret |= flow.LoadFlow();
 	}
 	else {
 		FILE* f;
 		string cur_flow_path = FileIO::OpenFile("flow.cur");
 		if (filesystem::exists(cur_flow_path)) {
-			flow.LoadWithPath(cur_flow_path);
+			flow_ret |= flow.LoadWithPath(cur_flow_path);
 		}
 	}
 
@@ -46,7 +48,7 @@ int main(int argc, char* argv[]) {
 		Log::Flow(flow.GetName());
 	}
 	else if (cmd == "get_branch") {
-		flow.PrintBranch();
+		flow_ret |= flow.PrintBranch();
 	}
 	else if (cmd == "get_activated_branch") {
 		Log::Flow(flow.GetActivatedBranch()->GetBranchID().str());
@@ -55,7 +57,7 @@ int main(int argc, char* argv[]) {
 		Metadata::PrintLog(flow.GetActivatedBranch()->GetChange(), flow.GetName());
 	}
 	else if (cmd == "get_history") {
-		flow.GetActivatedBranch()->PrintHistory();
+		flow_ret |= flow.GetActivatedBranch()->PrintHistory();
 	}
 	else if (cmd == "check_changed") {
 		Log::Flow(flow.GetActivatedBranch()->CheckChanged());
@@ -63,42 +65,42 @@ int main(int argc, char* argv[]) {
 
 	// Branch External Command
 	else if (cmd == "create_sub_branch") {
-		flow.CreateSubBranch(arg(1));
+		flow_ret |= flow.CreateSubBranch(arg(1));
 	}
 	else if (cmd == "merge") {
 		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
-		flow.Merge(id);
+		flow_ret |= flow.Merge(id);
 	}
 	else if (cmd == "replace") {
 		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
-		flow.Replace(id);
+		flow_ret |= flow.Replace(id);
 	}
 	else if (cmd == "delete_branch") {
-		flow.DeleteBranch();
+		flow_ret |= flow.DeleteBranch();
 	}
 	else if (cmd == "activate_branch") {
 		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
-		flow.ActivateBranch(id);
+		flow_ret |= flow.ActivateBranch(id);
 	}
 	else if (cmd == "change_name") {
 		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
-		flow.ChangeBranchName(id, arg(2));
+		flow_ret |= flow.ChangeBranchName(id, arg(2));
 	}
 
 	// Branch Internal Command
 	else if (cmd == "commit") {
-		flow.GetActivatedBranch()->Commit(arg(1), arg(2));
+		flow_ret |= flow.GetActivatedBranch()->Commit(arg(1), arg(2));
 	}
 	else if (cmd == "revert") {
-		flow.GetActivatedBranch()->Revert(stoi(arg(1)));
+		flow_ret |= flow.GetActivatedBranch()->Revert(stoi(arg(1)));
 	}
 	else if (cmd == "delete") {
-		flow.GetActivatedBranch()->Delete(stoi(arg(1)));
+		flow_ret |= flow.GetActivatedBranch()->Delete(stoi(arg(1)));
 	}
 
-	flow.SaveFlow();
+	flow_ret |= flow.SaveFlow();
 	FileIO::SaveFile("flow.cur", flow.GetFlowPath());
-	return 0;
+	return (int)flow_ret;
 }
 
 /*
