@@ -7,26 +7,23 @@ from PyQt6.QtWidgets import *
 import happyhappyhappy
 import branchselection
 from branchselection import *
-import conflictdialog
-import branchselectionforreplace
+
 import newsubdialog
 
-
+import mainui
 
 import flow
 
 class branch_menu(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent_):
         super(branch_menu, self).__init__()
 
         self.fuckyeah = happyhappyhappy.happy()
-        self.brepsel = branchselectionforreplace.branch_selection()
 
-        self.r = newsubdialog.newsubDialog()
+        self.parent:mainui.Ui_MainWindow = parent_
+        self.r = newsubdialog.newsubDialog(self.parent)
 
         self.bselection = branchselection.branch_selection(self.parent)
-
-        self.cd = conflictdialog.conflictDialog()
 
         self.centralwidget = QWidget()
 
@@ -82,41 +79,23 @@ class branch_menu(QMainWindow):
         self.RenameButton.setText(_translate("MainWindow", "Rename"))
 
     def NewSubBranchButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("NewSubBranchButtonClicked")
         self.r.show()
-        flow.command(["create_sub_branch", ""])
         #self.fuckyeah.show()
-        self.parent.SetUIData()
         self.hide()
-        self.parent.setEnabled(True)
+
 
     def MergeButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("MergeButtonClicked")
+        self.bselection.SetBranch()
+        self.bselection.SetCommand("merge")
         self.bselection.show()
         self.hide()
 
     def ReplaceButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("ReplaceButtonClicked")
-        self.brepsel.show()
-        self.bselection.SetBranch()
-        self.bselection.SetCommand("replace")
-        self.bselection.show()
-        self.hide()
+        if len(flow.branch_list) > 1:
+            self.bselection.SetBranch()
+            self.bselection.SetCommand("replace")
+            self.bselection.show()
+            self.hide()
 
     def DeleteButtonClicked(self):
         ret = flow.command(["delete_branch"])

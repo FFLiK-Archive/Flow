@@ -220,7 +220,8 @@ void FileSearch(string path, vector<string> &files, int remove_size) {
 			FileSearch(entry.path().string(), files, remove_size);
 		}
 		else {
-			path = path.substr(remove_size);
+			path = entry.path().string();
+			path.erase(path.begin(), path.begin() + remove_size);
 			files.push_back(path);
 		}
 		itr++;
@@ -298,6 +299,137 @@ int Flow::Merge(BranchID &target_branch) {
 			filesystem::copy(target_dat_path + "\\" + total_files[i].first, merge_dat_path + "\\" + total_files[i].first, filesystem::copy_options::overwrite_existing);
 		}
 	}
+
+	string merge_dat = merge_dat_path + "\\merge.dat";
+	zip.NewZip(merge_dat.c_str());
+	string target_path = merge_dat_path + "\\" + this->name;
+	zip.put_OemCodePage(65001);
+	if (filesystem::is_directory(target_path)) {
+		zip.AppendFiles((target_path + "\\*").c_str(), true);
+	}
+	else {
+		zip.AppendFiles(target_path.c_str(), true);
+	}
+	zip.WriteZipAndClose();
+
+	this->branch_table[target_branch].Commmiter(target_dat, merge_dat, REPLACE, "Replace", "From \"" + this->GetActivatedBranch()->GetName()) + "\" Branch";
+	filesystem::remove_all(header_path + this->name + ".flowdata\\" + ".merge_tmp");
+	return 0;
+}
+
+int Flow::Merge_1(BranchID& target_branch) {
+	if (this->GetActivatedBranch()->CheckChanged()) {
+		Log::Error(L"You must commit first");
+		return 1;
+	}
+
+	if (this->GetActivatedBranch()->GetBranchID() == this->branch_table[target_branch].GetBranchID()) {
+		Log::Error(L"The two branches are the same - Fatal");
+		return 1;
+	}
+
+	string header_path = this->target_path;
+	while (header_path.back() != '\\') {
+		header_path.pop_back();
+	}
+
+	string target_dat = header_path + this->name + ".flowdata\\" + this->branch_table[target_branch].GetBranchID().str() + ".dat";
+	string origin_dat = header_path + this->name + ".flowdata\\" + this->GetActivatedBranch()->GetBranchID().str() + ".dat";
+	string target_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\target";
+	string origin_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\origin";
+	string merge_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\merge";
+
+	filesystem::create_directories(target_dat_path);
+	filesystem::create_directories(origin_dat_path);
+	filesystem::create_directories(merge_dat_path);
+	CkZip zip;
+	zip.OpenZip(target_dat.c_str());
+	zip.Unzip(target_dat_path.c_str());
+	zip.CloseZip();
+	zip.OpenZip(origin_dat.c_str());
+	zip.Unzip(origin_dat_path.c_str());
+	zip.CloseZip();
+
+
+	vector<string> origin_files, target_files;
+	FileSearch(target_dat_path, target_files, target_dat_path.size());
+	FileSearch(origin_dat_path, origin_files, origin_dat_path.size());
+
+	vector<pair<string, string>> total_files;
+	for (int i = 0; i < origin_files.size(); i++) {
+		total_files.push_back(make_pair(origin_files[i], "origin"));
+	}
+	for (int i = 0; i < target_files.size(); i++) {
+		auto pos = find(total_files.begin(), total_files.end(), make_pair(target_files[i], (string)"origin"));
+		if (pos == total_files.end()) {
+			total_files.push_back(make_pair(target_files[i], "target"));
+		}
+		else {
+			pos->second = "duplicate";
+		}
+	}
+	sort(total_files.begin(), total_files.end());
+
+	for (int i = 0; i < total_files.size(); i++) {
+		Log::Flow(total_files[i].first, total_files[i].second);
+	}
+	return 0;
+}
+
+int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
+	if (this->GetActivatedBranch()->CheckChanged()) {
+		Log::Error(L"You must commit first");
+		return 1;
+	}
+
+	if (this->GetActivatedBranch()->GetBranchID() == this->branch_table[target_branch].GetBranchID()) {
+		Log::Error(L"The two branches are the same - Fatal");
+		return 1;
+	}
+
+	string header_path = this->target_path;
+	while (header_path.back() != '\\') {
+		header_path.pop_back();
+	}
+
+	string target_dat = header_path + this->name + ".flowdata\\" + this->branch_table[target_branch].GetBranchID().str() + ".dat";
+	string origin_dat = header_path + this->name + ".flowdata\\" + this->GetActivatedBranch()->GetBranchID().str() + ".dat";
+	string target_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\target";
+	string origin_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\origin";
+	string merge_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\merge";
+
+	vector<string> origin_files, target_files;
+	FileSearch(target_dat_path, target_files, target_dat_path.size());
+	FileSearch(origin_dat_path, origin_files, origin_dat_path.size());
+
+	cout << "?";
+
+	vector<pair<string, string>> total_files;
+	for (int i = 0; i < origin_files.size(); i++) {
+		total_files.push_back(make_pair(origin_files[i], "origin"));
+	}
+	for (int i = 0; i < target_files.size(); i++) {
+		auto pos = find(total_files.begin(), total_files.end(), make_pair(target_files[i], (string)"origin"));
+		if (pos == total_files.end()) {
+			total_files.push_back(make_pair(target_files[i], "target"));
+		}
+		else {
+			pos->second = "duplicate";
+		}
+	}
+	sort(total_files.begin(), total_files.end());
+
+
+	for (int i = 0; i < total_files.size(); i++) {
+		if (input[i] == 1) {
+			filesystem::copy(origin_dat_path + "\\" + total_files[i].first, merge_dat_path + "\\" + total_files[i].first, filesystem::copy_options::overwrite_existing);
+		}
+		else if (input[i] == 2) {
+			filesystem::copy(target_dat_path + "\\" + total_files[i].first, merge_dat_path + "\\" + total_files[i].first, filesystem::copy_options::overwrite_existing);
+		}
+	}
+
+	CkZip zip;
 
 	string merge_dat = merge_dat_path + "\\merge.dat";
 	zip.NewZip(merge_dat.c_str());

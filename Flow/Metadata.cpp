@@ -34,6 +34,7 @@ void Metadata::Search(string path) {
 			unsigned long long int filesize = filesystem::file_size(entry.path());
 			Data d;	
 			d.path = entry.path().string();
+			d.path.erase(d.path.begin(), d.path.begin() + this->target_path->size());
 			d.last_write_time = time;
 			d.file_size = filesize;
 			this->current_data.push_back(d);

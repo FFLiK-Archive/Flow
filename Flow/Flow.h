@@ -42,6 +42,8 @@ public:
 
 	int CreateSubBranch(std::string name);
 	int Merge(BranchID& target_branch); // Merge target_branch to activated_branch
+	int Merge_1(BranchID& target_branch); // Merge target_branch to activated_branch
+	int Merge_2(BranchID& target_branch, std::vector<int> input); // Merge target_branch to activated_branch
 	int Replace(BranchID& target_branch); // Replace target_branch to activated_branch
 	int DeleteBranch(); // Delete activated_branch
 	int ActivateBranch(BranchID& branch);

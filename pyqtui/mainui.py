@@ -14,16 +14,15 @@ from commitnamedialog import *
 from branchactionmenu import *
 from historyactionmenu import *
 
-
+import flow
 
 class Ui_MainWindow(QMainWindow):
-
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
 
-        self.storage_dialog = commitnamedialog.CommitDialog()
-        self.bmenu = branchactionmenu.branch_menu()
-        self.hmenu = historyactionmenu.history_menu()
+        self.storage_dialog = commitnamedialog.CommitDialog(self)
+        self.bmenu = branchactionmenu.branch_menu(self)
+        self.hmenu = historyactionmenu.history_menu(self)
 
         # self.br = "err"
         # self.hs = "err"
@@ -58,10 +57,8 @@ class Ui_MainWindow(QMainWindow):
 ###############################################
         self.BranchList = QListWidget(self.centralwidget)
         self.BranchList.setObjectName(u"BranchList")
-        self.BranchList.addItem("Branch1")
-        self.BranchList.addItem("branch2")
-        self.BranchList.addItem("branch3")
-        self.BranchList.itemClicked.connect(self.BranchListClicked)
+        self.BranchList.itemClicked.connect(self.BranchListSelected)
+        self.BranchList.itemDoubleClicked.connect(self.BranchListClicked)
 
         self.verticalLayout_2.addWidget(self.BranchList)
 
@@ -106,10 +103,8 @@ class Ui_MainWindow(QMainWindow):
 ################################
         self.HistoryList = QListWidget(self.centralwidget)
         self.HistoryList.setObjectName(u"HistoryList")
-        self.HistoryList.addItem("history1")
-        self.HistoryList.addItem("history2")
-        self.HistoryList.addItem("history3")
-        self.HistoryList.itemClicked.connect(self.HistoryListClicked)
+        self.HistoryList.itemDoubleClicked.connect(self.HistoryListClicked)
+        self.HistoryList.itemClicked.connect(self.DisableSelecting)
 
         self.verticalLayout_3.addWidget(self.HistoryList)
 
@@ -132,9 +127,7 @@ class Ui_MainWindow(QMainWindow):
 ####################################
         self.ChangeLogList = QListWidget(self.centralwidget)
         self.ChangeLogList.setObjectName(u"ChangeLogList")
-        self.ChangeLogList.addItem("deleted")
-        self.ChangeLogList.addItem("added")
-        self.ChangeLogList.addItem("fucked up")
+        self.ChangeLogList.itemClicked.connect(self.DisableSelecting)
 
         self.verticalLayout_4.addWidget(self.ChangeLogList)
 
@@ -148,10 +141,10 @@ class Ui_MainWindow(QMainWindow):
 
         self.verticalLayout.addLayout(self.horizontalLayout)
 
-        # self.StatusLabel = QLabel(self.centralwidget)
-        # self.StatusLabel.setObjectName(u"StatusLabel")
-        #
-        # self.verticalLayout.addWidget(self.StatusLabel)
+        self.StatusLabel = QLabel(self.centralwidget)
+        self.StatusLabel.setObjectName(u"StatusLabel")
+
+        self.verticalLayout.addWidget(self.StatusLabel)
 
         self.horizontalLayout_9.addLayout(self.verticalLayout)
 
@@ -184,7 +177,7 @@ class Ui_MainWindow(QMainWindow):
         self.CommitButton.setText(QCoreApplication.translate("MainWindow", u"Save Progress", None))
         self.ChangeLogLabel.setText(QCoreApplication.translate("MainWindow", u"Change Log", None))
         self.RefreshButton.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
-        # self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
+        self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
     # retranslateUi
 
     # setting UI values
@@ -232,40 +225,24 @@ class Ui_MainWindow(QMainWindow):
         self.SetUIData()
 
     def BranchListClicked(self, item):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
         print(item.text())
-        # self.br = item
         self.bmenu.show()
-
+        #self.setEnabled(False)
 
     def HistoryListClicked(self, item):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print(item.text())
+        index = self.HistoryList.currentRow()
+        self.hmenu.SetIndex(index)
         self.hmenu.show()
+        #self.setEnabled(False)
 
     def CommitButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
         print("Progress Saved!")
         self.storage_dialog.show()
+        #self.setEnabled(False)
+
 
     def RefreshButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
+        self.SetChangeLog()
         print("Refreshing!")
 
     # def NewSubBranchButtonClicked(self):
@@ -273,7 +250,3 @@ class Ui_MainWindow(QMainWindow):
     #
     # def MergeButtonClicked(self):
     #     print("MergeButtonClicked")
-
-
-
-

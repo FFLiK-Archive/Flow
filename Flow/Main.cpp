@@ -64,12 +64,24 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Branch External Command
-	else if (cmd == "create_sub_branch") {
+	if (cmd == "create_sub_branch") {
 		flow_ret |= flow.CreateSubBranch(arg(1));
 	}
 	else if (cmd == "merge") {
 		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
 		flow_ret |= flow.Merge(id);
+	}
+	else if (cmd == "merge_1") {
+		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
+		flow_ret |= flow.Merge_1(id);
+	}
+	else if (cmd == "merge_2") {
+		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
+		vector<int> vec;
+		for (int i = 2; i < input.size(); i++) {
+			vec.push_back(stoi(arg(i)));
+		}
+		flow_ret |= flow.Merge_2(id, vec);
 	}
 	else if (cmd == "replace") {
 		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());

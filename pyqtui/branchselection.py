@@ -10,12 +10,16 @@ import mainui
 
 import flow
 
+import subprocess
+
 class branch_selection(QMainWindow):
     def __init__(self, parent):
         super(branch_selection, self).__init__()
 
         self.fuckyeah = happyhappyhappy.happy()
-        self.cd = conflictdialog.conflictDialog()
+        self.cd = conflictdialog.conflictDialog(parent)
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.centralwidget = QWidget()
 
@@ -70,11 +74,14 @@ class branch_selection(QMainWindow):
         ###########################
         ###########################
         print(item.text())
-        self.cd.show()
         if self.cmd == "replace":
             flow.command(["replace", self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID]])
             self.parent.setEnabled(True)
         elif self.cmd == "merge":
+            change_log, ret = flow.command(["merge_1", self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID]], 2)
+            self.cd.set_change(change_log)
+            self.cd.SetID(self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID])
+            self.cd.show()
             pass
         #self.fuckyeah.show()
         self.hide()
