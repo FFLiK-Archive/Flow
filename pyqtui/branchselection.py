@@ -6,23 +6,28 @@ from PyQt6.QtWidgets import *
 import happyhappyhappy
 import conflictdialog
 
+import mainui
+
+import flow
+
+import subprocess
 
 class branch_selection(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent):
         super(branch_selection, self).__init__()
-        with open(
-                file="./style.txt", mode="r"
-        ) as f:
-            self.setStyleSheet(f.read())
+
         self.fuckyeah = happyhappyhappy.happy()
-        self.cd = conflictdialog.conflictDialog()
+        self.cd = conflictdialog.conflictDialog(parent)
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.centralwidget = QWidget()
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.resize(300, 400)
         self.verticalLayoutWidget = QWidget()
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        # self.verticalLayoutWidget.setStyleSheet('background-color: #FFFFFF;')
         self.verticalLayoutWidget.setGeometry(QRect(100, 100, 100, 100))
         self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -30,24 +35,33 @@ class branch_selection(QMainWindow):
 
         # For displaying confirmation message along with user's info.
         self.label = QLabel(self.centralwidget)
-        self.label.setText("Select a branch.")
+        self.label.setText("Select a branch")
         self.verticalLayout.addWidget(self.label)
 
         self.BranchList = QListWidget(self.centralwidget)
         self.BranchList.setObjectName(u"BranchList")
-        self.BranchList.addItem("Branch1")
-        self.BranchList.addItem("branch2")
-        self.BranchList.addItem("branch3")
         self.BranchList.itemClicked.connect(self.BranchListClicked)
 
         self.verticalLayout.addWidget(self.BranchList)
 
+        self.cmd = ""
 
+        self.cur_branch = []
 
         self.setCentralWidget(self.verticalLayoutWidget)
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
+    def SetBranch(self):
+        self.BranchList.clear()
+        self.cur_branch.clear()
+        for i in range(len(flow.branch_list)):
+            if i != flow.activated_branch:
+                self.cur_branch.append(flow.branch_list[i])
+                self.BranchList.addItem(flow.branch_list[i][flow.BRANCH_NAME])
+
+    def SetCommand(self, cmd):
+        self.cmd = cmd
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
@@ -60,7 +74,16 @@ class branch_selection(QMainWindow):
         ###########################
         ###########################
         print(item.text())
-        self.cd.show()
+        if self.cmd == "replace":
+            flow.command(["replace", self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID]])
+            self.parent.setEnabled(True)
+        elif self.cmd == "merge":
+            change_log, ret = flow.command(["merge_1", self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID]], 2)
+            self.cd.set_change(change_log)
+            self.cd.SetID(self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID])
+            self.cd.show()
+            pass
+        #self.fuckyeah.show()
         self.hide()
 
 if __name__ == '__main__':
