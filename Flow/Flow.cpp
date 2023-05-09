@@ -317,12 +317,7 @@ int Flow::Merge(BranchID &target_branch) {
 }
 
 int Flow::Replace(BranchID &target_branch) {
-	if (this->GetActivatedBranch()->GetOriginBranchID() == NULL_ID) {
-		Log::Error(L"Main Branch cannot be replaced");
-		return 1;
-	}
-
-	if (this->GetActivatedBranch()->CheckChanged()) {
+	if (this->GetActivatedBranch()->CheckChanged() || this->branch_table[target_branch].CheckChanged()) {
 		Log::Error(L"You must commit first");
 		return 1;
 	}

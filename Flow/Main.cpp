@@ -83,8 +83,8 @@ int main(int argc, char* argv[]) {
 		flow_ret |= flow.ActivateBranch(id);
 	}
 	else if (cmd == "change_name") {
-		BranchID id = UUIDv4::UUID::fromStrFactory(arg(1).c_str());
-		flow_ret |= flow.ChangeBranchName(id, arg(2));
+		BranchID id = flow.GetActivatedBranch()->GetBranchID();
+		flow_ret |= flow.ChangeBranchName(id, arg(1));
 	}
 
 	// Branch Internal Command

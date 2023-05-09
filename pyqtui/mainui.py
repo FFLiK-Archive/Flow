@@ -187,6 +187,50 @@ class Ui_MainWindow(QMainWindow):
         # self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
     # retranslateUi
 
+    # setting UI values
+    def SetUIData(self):
+        self.SetBranchList()
+        self.SetChangeLog()
+        self.SetHistoryList()
+
+    def SetBranchList(self):
+        self.BranchList.clear()
+        flow.branch_list, ret = flow.command(["get_branch"], 4)
+        if ret: return
+        for i in range(len(flow.branch_list)):
+            self.BranchList.addItem(flow.branch_list[i][1])
+
+        data, ret = flow.command(["get_activated_branch"], 1)
+        if ret: return
+        for i in range(0, len(flow.branch_list)):
+            if flow.branch_list[i][flow.BRANCH_ID] == data[0][0]:
+                self.BranchList.item(i).setSelected(True)
+                flow.activated_branch = i
+                break
+
+    def SetHistoryList(self):
+        self.HistoryList.clear()
+        flow.history_list, ret = flow.command(['get_history'], 3)
+        if ret: return
+        for i in range(0, len(flow.history_list)):
+            self.HistoryList.addItem(flow.history_list[i][0])
+    
+    def SetChangeLog(self):
+        self.ChangeLogList.clear()
+        flow.change_log, ret = flow.command(['get_change_log'], 2)
+        if ret: return
+        for i in range(len(flow.change_log)):
+            self.ChangeLogList.addItem(flow.change_log[i][0] + " : " + flow.change_log[i][1])
+
+    def DisableSelecting(self, item):
+        item.setSelected(False)
+
+    def BranchListSelected(self, item):
+        index = self.BranchList.currentRow()
+        ret = flow.command(['activate_branch', flow.branch_list[index][flow.BRANCH_ID]])
+        if ret: return
+        self.SetUIData()
+
     def BranchListClicked(self, item):
         ###########################
         ###########################
