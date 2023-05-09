@@ -364,7 +364,7 @@ int Flow::DeleteBranch() {
 
 int Flow::ActivateBranch(BranchID &branch) {
 	if (branch == this->activated_branch_id) {
-		return 0;
+		return 1;
 	}
 	this->GetActivatedBranch()->SaveCache();
 	this->activated_branch_id = branch;

@@ -6,7 +6,7 @@ from PyQt6.QtWidgets import *
 import mainui
 import filetypeselecter
 
-import subprocess
+import flow
 
 class Ui_Dialog(QMainWindow):
     def __init__(self):
@@ -67,11 +67,10 @@ class Ui_Dialog(QMainWindow):
     def OpenButtonClicked(self):
         # Actions to do when the Open button is clicked
         ###########################
-        proc = subprocess.Popen(['Flow', 'open'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        proc.wait()
+        ret = flow.command(['open'])
         ###########################
         print("Open Button clicked!")
-        if proc.returncode == 0:
+        if ret == 0:
             self.second_window.third_window.SetUIData()
             self.second_window.third_window.show()
             self.hide()

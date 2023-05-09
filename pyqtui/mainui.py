@@ -14,14 +14,9 @@ from commitnamedialog import *
 from branchactionmenu import *
 from historyactionmenu import *
 
-import subprocess
+import flow
 
 class Ui_MainWindow(QMainWindow):
-    
-    branch_list = []
-    history_list = []
-    change_log = []
-
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
 
@@ -62,7 +57,8 @@ class Ui_MainWindow(QMainWindow):
 ###############################################
         self.BranchList = QListWidget(self.centralwidget)
         self.BranchList.setObjectName(u"BranchList")
-        self.BranchList.itemClicked.connect(self.BranchListClicked)
+        self.BranchList.itemClicked.connect(self.BranchListSelected)
+        self.BranchList.itemDoubleClicked.connect(self.BranchListClicked)
 
         self.verticalLayout_2.addWidget(self.BranchList)
 
@@ -107,7 +103,8 @@ class Ui_MainWindow(QMainWindow):
 ################################
         self.HistoryList = QListWidget(self.centralwidget)
         self.HistoryList.setObjectName(u"HistoryList")
-        self.HistoryList.itemClicked.connect(self.HistoryListClicked)
+        self.HistoryList.itemDoubleClicked.connect(self.HistoryListClicked)
+        self.HistoryList.itemClicked.connect(self.DisableSelecting)
 
         self.verticalLayout_3.addWidget(self.HistoryList)
 
@@ -130,6 +127,7 @@ class Ui_MainWindow(QMainWindow):
 ####################################
         self.ChangeLogList = QListWidget(self.centralwidget)
         self.ChangeLogList.setObjectName(u"ChangeLogList")
+        self.ChangeLogList.itemClicked.connect(self.DisableSelecting)
 
         self.verticalLayout_4.addWidget(self.ChangeLogList)
 
@@ -190,58 +188,47 @@ class Ui_MainWindow(QMainWindow):
 
     def SetBranchList(self):
         self.BranchList.clear()
-        self.branch_list.clear()
-        proc = subprocess.Popen(['Flow', 'get_branch'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        proc.wait()
-        raw = str(proc.stdout.read().decode('utf-8'))
-        data = raw.split('\r\n')
-        while len(data) % 4: data.pop()
-        for i in range(0, len(data), 4):
-            self.branch_list.append([data[i], data[i + 1], data[i + 2], data[i + 3]])
-        for i in range(len(self.branch_list)):
-            self.BranchList.addItem(self.branch_list[i][1])
+        flow.branch_list, ret = flow.command(["get_branch"], 4)
+        if ret: return
+        for i in range(len(flow.branch_list)):
+            self.BranchList.addItem(flow.branch_list[i][1])
+
+        data, ret = flow.command(["get_activated_branch"], 1)
+        if ret: return
+        for i in range(0, len(flow.branch_list)):
+            if flow.branch_list[i][flow.BRANCH_ID] == data[0][0]:
+                self.BranchList.item(i).setSelected(True)
+                break
 
     def SetHistoryList(self):
         self.HistoryList.clear()
-        self.history_list.clear()
-        proc = subprocess.Popen(['Flow', 'get_history'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        proc.wait()
-        raw = str(proc.stdout.read().decode('utf-8'))
-        data = raw.split('\r\n')
-        while len(data) % 3: data.pop()
-        for i in range(0, len(data), 3):
-            self.history_list.append([data[i], data[i + 1], data[i + 2]])
-        for i in range(0, len(self.history_list)):
-            self.HistoryList.addItem(self.history_list[i][0])
+        flow.history_list, ret = flow.command(['get_history'], 3)
+        if ret: return
+        for i in range(0, len(flow.history_list)):
+            self.HistoryList.addItem(flow.history_list[i][0])
     
     def SetChangeLog(self):
         self.ChangeLogList.clear()
-        self.change_log.clear()
-        proc = subprocess.Popen(['Flow', 'get_change_log'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        proc.wait()
-        raw = str(proc.stdout.read().decode('utf-8'))
-        data = raw.split('\r\n')
-        while len(data) % 2: data.pop()
-        for i in range(0, len(data), 2):
-            self.change_log.append([data[i], data[i + 1]])
-        for i in range(len(self.change_log)):
-            self.ChangeLogList.addItem(self.change_log[i][1] + " : " + self.change_log[i][0])
+        flow.change_log, ret = flow.command(['get_change_log'], 2)
+        if ret: return
+        for i in range(len(flow.change_log)):
+            self.ChangeLogList.addItem(flow.change_log[i][0] + " : " + flow.change_log[i][1])
+
+    def DisableSelecting(self, item):
+        item.setSelected(False)
+
+    def BranchListSelected(self, item):
+        index = self.BranchList.currentRow()
+        ret = flow.command(['activate_branch', flow.branch_list[index][flow.BRANCH_ID]])
+        if ret: return
+        self.SetUIData()
 
     def BranchListClicked(self, item):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
         print(item.text())
-        # self.br = item
         self.bmenu.show()
 
 
     def HistoryListClicked(self, item):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
         ###########################
         ###########################
         print(item.text())
@@ -258,9 +245,7 @@ class Ui_MainWindow(QMainWindow):
 
     def RefreshButtonClicked(self):
         ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
+        self.SetChangeLog()
         ###########################
         print("Refreshing!")
 
