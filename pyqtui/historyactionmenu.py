@@ -8,15 +8,17 @@ import happyhappyhappy
 from historyselection import *
 import historyselection
 
+import mainui
+import flow
+
 class history_menu(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent):
         super(history_menu, self).__init__()
 
         self.fuckyeah = happyhappyhappy.happy()
-        with open(
-                file="./style.txt", mode="r"
-        ) as f:
-            self.setStyleSheet(f.read())
+
+        self.parent:mainui.Ui_MainWindow = parent
+
         self.hselection = historyselection.history_selection()
 
         self.centralwidget = QWidget()
@@ -31,7 +33,7 @@ class history_menu(QMainWindow):
 
         # For displaying confirmation message along with user's info.
         self.label = QLabel(self.centralwidget)
-        self.label.setText("Select an action.")
+        self.label.setText("Select an action")
         self.verticalLayout.addWidget(self.label)
 
         self.RevertButton = QPushButton(self.centralwidget)
@@ -42,36 +44,35 @@ class history_menu(QMainWindow):
         self.DeleteButton.clicked.connect(self.DeleteButtonClicked)
         self.verticalLayout.addWidget(self.DeleteButton)
 
-
-
-
         self.setCentralWidget(self.verticalLayoutWidget)
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
+        self.index = -1
+
+    def hideEvent(self, event):
+        self.parent.setEnabled(True)
+
+    def SetIndex(self, index):
+        self.index = index
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.RevertButton.setText(_translate("MainWindow", "Revert"))
         self.DeleteButton.setText(_translate("MainWindow", "Delete"))
 
     def RevertButtonClicked(self):
-        ###########################
-        ###########################
-        #ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("RevertButtonClicked")
-        self.fuckyeah.show()
+        if self.index != -1:
+            flow.command(["revert", str(self.index)])
+        #self.fuckyeah.show()
+        self.parent.SetUIData()
         self.hide()
+
     def DeleteButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("DeleteButtonClicked")
-        self.fuckyeah.show()
+        if self.index != -1:
+            flow.command(["delete", str(self.index)])
+        #self.fuckyeah.show()
+        self.parent.SetUIData()
         self.hide()
 
 if __name__ == '__main__':

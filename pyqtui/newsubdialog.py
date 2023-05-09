@@ -4,16 +4,16 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
+import mainui
+import flow
 
 class newsubDialog(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent):
         super(newsubDialog, self).__init__()
 
         self.centralwidget = QWidget()
-        with open(
-                file="./style.txt", mode="r"
-        ) as f:
-            self.setStyleSheet(f.read())
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.bool = False
         self.resize(300, 200)
@@ -45,7 +45,7 @@ class newsubDialog(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Proceed"))
 
     def takeinputs(self):
@@ -58,7 +58,6 @@ class newsubDialog(QMainWindow):
         _translate = QCoreApplication.translate
 
         if self.bool:
-            self.hide()
             self.bool = False
             self.label.setText("Please enter a name for the branch.")
 
@@ -71,6 +70,11 @@ class newsubDialog(QMainWindow):
             if done1:
                 self.label.setText('New Branch Added Successfully\nName: '
                                    + str(name))
+                
+            flow.command(["create_sub_branch", str(name)])
+            self.parent.SetUIData()
+            self.hide()
+            self.parent.setEnabled(True)
 
 
 

@@ -6,15 +6,14 @@ from PyQt6.QtWidgets import *
 import mainui
 import filetypeselecter
 
+import flow
+
 class Ui_Dialog(QMainWindow):
     def __init__(self):
         super(Ui_Dialog, self).__init__()
 
         self.second_window = filetypeselecter.Ui_ChooseDialog()
-        with open(
-                file="./style.txt", mode="r"
-        ) as f:
-            self.setStyleSheet(f.read())
+
         self.resize(300, 400)
         self.verticalLayoutWidget = QWidget()
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
@@ -50,7 +49,7 @@ class Ui_Dialog(QMainWindow):
 
     # setupUi
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Flow", None))
+        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
         self.logo.setText(QCoreApplication.translate("Dialog", u"Flow", None))
         self.OpenButton.setText(QCoreApplication.translate("Dialog", u"Open", None))
         self.NewButton.setText(QCoreApplication.translate("Dialog", u"New", None))
@@ -61,9 +60,6 @@ class Ui_Dialog(QMainWindow):
         # Actions to do when the new button is clicked
         ###########################
         ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
         print("New Button clicked!")
         self.second_window.show()
         self.hide()
@@ -71,11 +67,11 @@ class Ui_Dialog(QMainWindow):
     def OpenButtonClicked(self):
         # Actions to do when the Open button is clicked
         ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
+        ret = flow.command(['open'])
         ###########################
         print("Open Button clicked!")
-        self.second_window.show()
-        self.hide()
+        if ret == 0:
+            self.second_window.third_window.SetUIData()
+            self.second_window.third_window.show()
+            self.hide()
 
