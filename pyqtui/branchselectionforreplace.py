@@ -10,7 +10,10 @@ import conflictdialog
 class branch_selection(QMainWindow):
     def __init__(self):
         super(branch_selection, self).__init__()
-
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
         self.fuckyeah = happyhappyhappy.happy()
         self.cd = conflictdialog.conflictDialog()
 

@@ -6,13 +6,18 @@ from PyQt6.QtWidgets import *
 from mainui import *
 from firstpageui import *
 
-import subprocess
+
 
 class Ui_ChooseDialog(QMainWindow):
     def __init__(self):
         super(Ui_ChooseDialog, self).__init__()
 
         self.third_window = mainui.Ui_MainWindow()
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
+
 
         self.resize(300, 400)
         self.verticalLayoutWidget = QWidget()
@@ -50,7 +55,7 @@ class Ui_ChooseDialog(QMainWindow):
     # setupUi
 
     def retranslateUi(self, ChooseDialogue):
-        ChooseDialogue.setWindowTitle(QCoreApplication.translate("ChooseDialogue", u"Dialog", None))
+        ChooseDialogue.setWindowTitle(QCoreApplication.translate("ChooseDialogue", u"Flow", None))
         self.label.setText(QCoreApplication.translate("ChooseDialogue", u"Choose the type of your project.", None))
         self.FolderButton.setText(QCoreApplication.translate("ChooseDialogue", u"Folder", None))
         self.FileButton.setText(QCoreApplication.translate("ChooseDialogue", u"File", None))
@@ -59,23 +64,26 @@ class Ui_ChooseDialog(QMainWindow):
     def FileButtonClicked(self):
         # Actions to do when the file button is clicked
         ###########################
-        proc = subprocess.Popen(['Flow', 'create', 'file'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        proc.wait()
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
         ###########################
         print("File Button clicked!")
-        if proc.returncode == 0:
-            self.third_window.SetUIData()
-            self.third_window.show()
-            self.hide()
+        self.third_window.show()
+        self.hide()
 
     def FolderButtonClicked(self):
         # Actions to do when the folder button is clicked
         ###########################
-        proc = subprocess.Popen(['Flow', 'create', 'folder'],stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-        proc.wait()
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
         ###########################
         print("Folder Button clicked!")
-        if proc.returncode == 0:
-            self.third_window.SetUIData()
-            self.third_window.show()
-            self.hide()
+        self.third_window.show()
+        self.hide()
+
+
+
+
+

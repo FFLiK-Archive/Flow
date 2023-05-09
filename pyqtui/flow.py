@@ -7,8 +7,6 @@ BRANCH_NAME = 1
 BRANCH_ORIGIN_ID = 2
 BRANCH_UPDATE_TIME = 3
 
-activated_branch = 0
-
 import subprocess
 
 def command(param, split = 0):

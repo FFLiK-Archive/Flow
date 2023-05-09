@@ -11,7 +11,10 @@ class history_selection(QMainWindow):
         super(history_selection, self).__init__()
 
         self.fuckyeah = happyhappyhappy.happy()
-
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
         self.centralwidget = QWidget()
 
         self.resize(300, 400)
@@ -24,7 +27,7 @@ class history_selection(QMainWindow):
 
         # For displaying confirmation message along with user's info.
         self.label = QLabel(self.centralwidget)
-        self.label.setText("Select a history")
+        self.label.setText("Select a history.")
         self.verticalLayout.addWidget(self.label)
 
         self.historyList = QListWidget(self.centralwidget)
@@ -45,7 +48,7 @@ class history_selection(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
 
     def historyListClicked(self,item):
         ###########################

@@ -7,11 +7,13 @@ import branchselection
 from branchselection import *
 
 
-
 class happy(QMainWindow):
     def __init__(self):
         super(happy, self).__init__()
-
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
         self.centralwidget = QWidget()
 
         self.resize(300, 400)
@@ -31,19 +33,19 @@ class happy(QMainWindow):
         self.doneButton.clicked.connect(self.Clicked)
         self.verticalLayout.addWidget(self.doneButton)
 
-
         self.setCentralWidget(self.verticalLayoutWidget)
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
         self.doneButton.setText(_translate("MainWindow", "Done"))
 
     def Clicked(self):
         print("happydonebuttonClicked")
         self.hide()
+
 
 if __name__ == '__main__':
     # Create the QApplication
