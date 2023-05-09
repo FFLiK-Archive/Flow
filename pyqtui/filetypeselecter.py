@@ -8,6 +8,7 @@ from firstpageui import *
 
 
 
+
 class Ui_ChooseDialog(QMainWindow):
     def __init__(self):
         super(Ui_ChooseDialog, self).__init__()

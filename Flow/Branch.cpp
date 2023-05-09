@@ -44,6 +44,27 @@ int Branch::PrintHistory() {
 }
 
 int Branch::Commmiter(string old, string dat, HistoryType type, string title, string description) {
+	if (filesystem::is_directory(*this->target_path)) {
+		filesystem::remove_all(*this->target_path);
+
+		CkZip zip;
+		zip.OpenZip(dat.c_str());
+		zip.Unzip(this->target_path->c_str());
+		zip.CloseZip();
+	}
+	else {
+		filesystem::remove(*this->target_path);
+
+		string save = *this->target_path;
+		while (save.back() != '\\') save.pop_back();
+		//path.pop_back();
+
+		CkZip zip;
+		zip.OpenZip(dat.c_str());
+		zip.Unzip(save.c_str());
+		zip.CloseZip();
+	}
+	
 	string old_bin = FileIO::OpenFile(old);
 	string data_bin = FileIO::OpenFile(dat);
 
@@ -249,27 +270,6 @@ int Branch::Revert(int n) {
 	}
 
 	this->Commmiter(path + this->id.str() + ".old", path + this->id.str() + ".dat", REVERT, "Revert", this->history[this->history.size() - 1].title + " ~ " + this->history[this->history.size() - n - 1].title);
-
-	if(filesystem::is_directory(*this->target_path)) {
-		filesystem::remove_all(*this->target_path);
-
-		CkZip zip;
-		zip.OpenZip((path + this->id.str() + ".dat").c_str());
-		zip.Unzip(this->target_path->c_str());
-		zip.CloseZip();
-	}
-	else {
-		filesystem::remove(*this->target_path);
-
-		string save = *this->target_path;
-		while (save.back() != '\\') save.pop_back();
-		//path.pop_back();
-
-		CkZip zip;
-		zip.OpenZip((path + this->id.str() + ".dat").c_str());
-		zip.Unzip(save.c_str());
-		zip.CloseZip();
-	}
 	this->meta.LoadMetadata(this->history_path + "\\" + this->history.back().id.str() + ".metadata", this->target_path);
 	return 0;
 }

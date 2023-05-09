@@ -114,7 +114,7 @@ std::vector<FileLog> Metadata::GetChange() {
 		for (int j = 0; j < prev.size(); j++) {
 			if (this->current_data[i].path == prev[j].path) {
 				mod = true;
-				if (this->current_data[i].file_size == prev[j].file_size || this->current_data[i].last_write_time == prev[j].last_write_time) {
+				if (this->current_data[i].file_size == prev[j].file_size && this->current_data[i].last_write_time == prev[j].last_write_time) {
 					add = false;
 					break;
 				}

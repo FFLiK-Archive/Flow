@@ -1,14 +1,20 @@
 ﻿  Scanning sources for module dependencies...
+  Branch.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(40,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(157,20): warning C4018: '<': signed/unsigned mismatch
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(269,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(288,39): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(289,48): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
   Flow.cpp
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(159,20): warning C4018: '<': signed/unsigned mismatch
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(264,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(265,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(314,140): warning C4552: '+': result of expression not used
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(332,159): warning C4552: '+': result of expression not used
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(336,159): warning C4552: '+': result of expression not used
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  2 of 4204 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  6 of 4204 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    29 functions had inline decision re-evaluated but remain unchanged
+    38 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Release\Flow.exe
