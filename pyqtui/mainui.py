@@ -20,9 +20,9 @@ class Ui_MainWindow(QMainWindow):
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
 
-        self.storage_dialog = commitnamedialog.CommitDialog()
-        self.bmenu = branchactionmenu.branch_menu()
-        self.hmenu = historyactionmenu.history_menu()
+        self.storage_dialog = commitnamedialog.CommitDialog(self)
+        self.bmenu = branchactionmenu.branch_menu(self)
+        self.hmenu = historyactionmenu.history_menu(self)
 
         # self.br = "err"
         # self.hs = "err"
@@ -226,27 +226,22 @@ class Ui_MainWindow(QMainWindow):
     def BranchListClicked(self, item):
         print(item.text())
         self.bmenu.show()
-
+        self.setEnabled(False)
 
     def HistoryListClicked(self, item):
-        ###########################
-        ###########################
-        print(item.text())
+        index = self.HistoryList.currentRow()
+        self.hmenu.SetIndex(index)
         self.hmenu.show()
+        self.setEnabled(False)
 
     def CommitButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
         print("Progress Saved!")
         self.storage_dialog.show()
+        self.setEnabled(False)
+
 
     def RefreshButtonClicked(self):
-        ###########################
         self.SetChangeLog()
-        ###########################
         print("Refreshing!")
 
     # def NewSubBranchButtonClicked(self):
@@ -254,7 +249,3 @@ class Ui_MainWindow(QMainWindow):
     #
     # def MergeButtonClicked(self):
     #     print("MergeButtonClicked")
-
-
-
-

@@ -14,8 +14,6 @@ class Ui_ChooseDialog(QMainWindow):
 
         self.third_window = mainui.Ui_MainWindow()
 
-
-
         self.resize(300, 400)
         self.verticalLayoutWidget = QWidget()
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
@@ -66,6 +64,7 @@ class Ui_ChooseDialog(QMainWindow):
         ###########################
         print("File Button clicked!")
         if proc.returncode == 0:
+            self.third_window.SetUIData()
             self.third_window.show()
             self.hide()
 
@@ -77,10 +76,6 @@ class Ui_ChooseDialog(QMainWindow):
         ###########################
         print("Folder Button clicked!")
         if proc.returncode == 0:
+            self.third_window.SetUIData()
             self.third_window.show()
             self.hide()
-
-
-
-
-
