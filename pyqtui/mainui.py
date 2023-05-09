@@ -198,6 +198,7 @@ class Ui_MainWindow(QMainWindow):
         for i in range(0, len(flow.branch_list)):
             if flow.branch_list[i][flow.BRANCH_ID] == data[0][0]:
                 self.BranchList.item(i).setSelected(True)
+                flow.activated_branch = i
                 break
 
     def SetHistoryList(self):

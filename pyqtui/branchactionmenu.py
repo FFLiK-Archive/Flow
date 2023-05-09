@@ -10,6 +10,8 @@ from branchselection import *
 
 import mainui
 
+import flow
+
 class branch_menu(QMainWindow):
     def __init__(self, parent):
         super(branch_menu, self).__init__()
@@ -18,7 +20,7 @@ class branch_menu(QMainWindow):
 
         self.parent:mainui.Ui_MainWindow = parent
 
-        self.bselection = branchselection.branch_selection()
+        self.bselection = branchselection.branch_selection(self.parent)
 
         self.centralwidget = QWidget()
 
@@ -60,15 +62,9 @@ class branch_menu(QMainWindow):
         self.RenameButton.clicked.connect(self.RenameButtonClicked)
         self.verticalLayout.addWidget(self.RenameButton)
 
-
-
-
         self.setCentralWidget(self.verticalLayoutWidget)
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
-
-    def hideEvent(self, event):
-        self.parent.setEnabled(True)
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
@@ -80,14 +76,12 @@ class branch_menu(QMainWindow):
         self.RenameButton.setText(_translate("MainWindow", "Rename"))
 
     def NewSubBranchButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("NewSubBranchButtonClicked")
-        self.fuckyeah.show()
+        flow.command(["create_sub_branch", ""])
+        #self.fuckyeah.show()
+        self.parent.SetUIData()
         self.hide()
+        self.parent.setEnabled(True)
+
     def MergeButtonClicked(self):
         ###########################
         ###########################
@@ -97,24 +91,19 @@ class branch_menu(QMainWindow):
         print("MergeButtonClicked")
         self.bselection.show()
         self.hide()
+
     def ReplaceButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("ReplaceButtonClicked")
+        self.bselection.SetBranch()
+        self.bselection.SetCommand("replace")
         self.bselection.show()
         self.hide()
+
     def DeleteButtonClicked(self):
-        ###########################
-        ###########################
-        # ADD ADDITIONAL CODE HERE!#
-        ###########################
-        ###########################
-        print("DeleteButtonClicked")
-        self.fuckyeah.show()
+        ret = flow.command(["delete_branch"])
+        #self.fuckyeah.show()
+        self.parent.SetUIData()
         self.hide()
+        self.parent.setEnabled(True)
 
     def RenameButtonClicked(self):
         name, done1 = QInputDialog.getText(
@@ -123,9 +112,12 @@ class branch_menu(QMainWindow):
         if done1:
             self.label.setText('Progress Saved Successfully\nName: '+str(name))
 
-        print("RenameButtonClicked")
-        self.fuckyeah.show()
+        ret = flow.command(["change_name", str(name)])
+        #print("RenameButtonClicked")
+        #self.fuckyeah.show()
+        self.parent.SetUIData()
         self.hide()
+        self.parent.setEnabled(True)
 
 
 if __name__ == '__main__':
