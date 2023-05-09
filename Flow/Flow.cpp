@@ -93,7 +93,7 @@ int Flow::LoadFlow() {
 	Log::Debug("Flow", "LoadFlow");
 	string flow_path = FileIO::OpenFlowFile();
 	if (flow_path.empty())
-		return 1;
+		exit(1);
 	this->LoadWithPath(flow_path);
 	return 0;
 }
@@ -364,7 +364,7 @@ int Flow::DeleteBranch() {
 
 int Flow::ActivateBranch(BranchID &branch) {
 	if (branch == this->activated_branch_id) {
-		return 0;
+		return 1;
 	}
 	this->GetActivatedBranch()->SaveCache();
 	this->activated_branch_id = branch;

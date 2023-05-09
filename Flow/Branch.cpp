@@ -37,7 +37,7 @@ int Branch::Reverter(int index) {
 }
 
 int Branch::PrintHistory() {
-	for (int i = 0; i < this->history.size(); i++) {
+	for (int i = this->history.size() - 1; i >= 0; i--) {
 		Log::Flow(this->history[i].title, this->history[i].description, this->history[i].time);
 	}
 	return 0;
@@ -336,6 +336,10 @@ int Branch::Delete(int n) {
 		while (path.back() != '\\')
 			path.pop_back();
 		filesystem::remove(path + this->id.str() + ".dat");
+		CkZip zip;
+		zip.NewZip((path + this->id.str() + ".dat").c_str());
+		zip.put_OemCodePage(65001);
+		zip.WriteZipAndClose();
 		this->meta.SetEmpty(this->target_path);
 	}
 	else if(n == 0) {

@@ -6,7 +6,7 @@
 class Log {
 private:
 	template<typename T, typename... Ts> static void Print(T arg, Ts... args) {
-		std::cout << arg << " ";
+		std::cout << arg << std::endl;
 		Log::Print(args...);
 	}
 
@@ -36,7 +36,9 @@ public:
 	}
 
 	template<typename... Ts> static void Flow(Ts... args) {
+		#if DEBUG_BUILD
 		std::cout << "[Flow] ";
+		#endif
 		if (sizeof...(args)) Log::Print(args...);
 		else std::cout << std::endl;
 	}

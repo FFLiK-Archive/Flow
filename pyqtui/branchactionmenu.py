@@ -8,13 +8,15 @@ import happyhappyhappy
 import branchselection
 from branchselection import *
 
-
+import mainui
 
 class branch_menu(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent):
         super(branch_menu, self).__init__()
 
         self.fuckyeah = happyhappyhappy.happy()
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.bselection = branchselection.branch_selection()
 
@@ -64,6 +66,9 @@ class branch_menu(QMainWindow):
         self.setCentralWidget(self.verticalLayoutWidget)
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
+
+    def hideEvent(self, event):
+        self.parent.setEnabled(True)
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
