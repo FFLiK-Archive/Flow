@@ -48,8 +48,8 @@
 #define DEBUG_BUILD true
 #define RELEASE_BUILD false
 #else
-#define DEBUG false
-#define RELEASE true
+#define DEBUG_BUILD false
+#define RELEASE_BUILD true
 #endif
 
 using Time = time_t;

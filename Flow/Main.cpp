@@ -20,6 +20,11 @@ int main(int argc, char* argv[]) {
 	Flow flow;
 	string cmd = input.front();
 
+	if (cmd == "version") {
+		Log::Flow(FlowVersion);
+		return 0;
+	}
+
 	//Open Flow
 	if (cmd == "create") {
 		if (arg(1) == "folder") flow.CreateFlow(FLOW_FOLDER_STORAGE);

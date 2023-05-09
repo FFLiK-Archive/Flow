@@ -36,7 +36,9 @@ public:
 	}
 
 	template<typename... Ts> static void Flow(Ts... args) {
+		#if DEBUG_BUILD
 		std::cout << "[Flow] ";
+		#endif
 		if (sizeof...(args)) Log::Print(args...);
 		else std::cout << std::endl;
 	}

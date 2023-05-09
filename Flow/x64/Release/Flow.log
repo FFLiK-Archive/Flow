@@ -4,18 +4,59 @@ D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(136,20): warning C40
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(248,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(288,39): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(289,48): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  FileIO.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\FileIO.cpp(20,23): warning C4996: 'getenv': This function or variable may be unsafe. Consider using _dupenv_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\xstring(2859,53): warning C4244: 'argument': conversion from 'wchar_t' to 'const _Elem', possible loss of data
+          with
+          [
+              _Elem=char
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\xstring(2718,1): message : see reference to function template instantiation 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct_from_iter<wchar_t*,wchar_t*,_Size_type>(_Iter,const _Sent,_Size)' being compiled
+          with
+          [
+              _Size_type=unsigned __int64,
+              _Iter=wchar_t *,
+              _Sent=wchar_t *,
+              _Size=unsigned __int64
+          ]
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\xstring(2718,37): message : see reference to function template instantiation 'void std::basic_string<char,std::char_traits<char>,std::allocator<char>>::_Construct_from_iter<wchar_t*,wchar_t*,_Size_type>(_Iter,const _Sent,_Size)' being compiled
+          with
+          [
+              _Size_type=unsigned __int64,
+              _Iter=wchar_t *,
+              _Sent=wchar_t *,
+              _Size=unsigned __int64
+          ]
+D:\Development\ProgrammingProject\Tool\Flow\Flow\FileIO.cpp(91): message : see reference to function template instantiation 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)' being compiled
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
+D:\Development\ProgrammingProject\Tool\Flow\Flow\FileIO.cpp(91,12): message : see reference to function template instantiation 'std::basic_string<char,std::char_traits<char>,std::allocator<char>>::basic_string<std::_String_iterator<std::_String_val<std::_Simple_types<_Elem>>>,0>(_Iter,_Iter,const _Alloc &)' being compiled
+          with
+          [
+              _Elem=wchar_t,
+              _Iter=std::_String_iterator<std::_String_val<std::_Simple_types<wchar_t>>>,
+              _Alloc=std::allocator<char>
+          ]
   Flow.cpp
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(159,20): warning C4018: '<': signed/unsigned mismatch
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(264,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(265,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(314,140): warning C4552: '+': result of expression not used
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(337,159): warning C4552: '+': result of expression not used
+  History.cpp
+  Log.cpp
   Main.cpp
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(32,9): warning C4101: 'f': unreferenced local variable
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(37,9): warning C4101: 'f': unreferenced local variable
+  Metadata.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Metadata.cpp(75,20): warning C4018: '<': signed/unsigned mismatch
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  5 of 4203 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    21 functions had inline decision re-evaluated but remain unchanged
+  16 of 4204 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    6 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Release\Flow.exe
