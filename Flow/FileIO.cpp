@@ -131,3 +131,7 @@ int FileIO::SaveFile(std::string path, Json::Value &value) {
 	writer->write(value, &outputFileStream);
 	return 0;
 }
+
+int FileIO::SpecializedMsgBox_SelectNotFoundFileOrFolder() {
+	return MessageBox(NULL, L"Cannot find target path to store \nPlease select the new target path", L"Flow", MB_OKCANCEL | MB_SYSTEMMODAL);
+}

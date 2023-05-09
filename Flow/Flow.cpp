@@ -107,7 +107,6 @@ int Flow::SaveFlow() {
 	Json::Value flow;
 	flow["FlowID"] = this->id.str();
 	flow["Name"] = this->name;
-	flow["TargetPath"] = this->target_path;
 	flow["StorageType"] = this->storage_type;
 	flow["ActivatedBranchID"] = this->activated_branch_id.str();
 	for (int i = 0; i < this->branch_id_list.size(); i++) {
@@ -125,7 +124,36 @@ int Flow::LoadWithPath(std::string flow_path) {
 	Json::Value flow = FileIO::GetJsonFile(this->file_path);
 	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
 	this->name = flow["Name"].asString();
-	this->target_path = flow["TargetPath"].asString();
+	this->target_path = flow_path + this->name;
+	string origin_path, prev_name;
+	if (!filesystem::exists(this->target_path)) {
+		cout << "\a";
+		switch (FileIO::SpecializedMsgBox_SelectNotFoundFileOrFolder()) {
+		case 1:
+			switch (this->storage_type) {
+			case FLOW_FILE_STORAGE:
+				origin_path = FileIO::OpenFileName();
+				break;
+			case FLOW_FOLDER_STORAGE:
+				origin_path = FileIO::OpenFolderName();
+				break;
+			}
+			this->target_path = origin_path;
+			prev_name = this->name;
+			this->name = "";
+			while (origin_path.back() != '\\') {
+				this->name = origin_path.back() + this->name;
+				origin_path.pop_back();
+			}
+			filesystem::rename(origin_path + prev_name + ".flow", origin_path + this->name + ".flow");
+			filesystem::rename(origin_path + prev_name + ".flowdata", origin_path + this->name + ".flowdata");
+			this->file_path = origin_path + this->name + ".flow";
+			break;
+		default:
+			exit(1);
+			break;
+		}
+	}
 	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
 	this->activated_branch_id = UUIDv4::UUID::fromStrFactory(flow["ActivatedBranchID"].asString().c_str());
 	for (int i = 0; i < flow["BranchList"].size(); i++) {
@@ -142,6 +170,10 @@ std::string Flow::GetFlowPath() {
 	return this->file_path;
 }
 
+std::string Flow::GetName() {
+	return this->name;
+}
+
 Branch* Flow::operator[](BranchID &id) {
 	if (this->id == NULL_ID) {
 		Log::Error(L"Flow is empty - Fatal");
@@ -151,6 +183,10 @@ Branch* Flow::operator[](BranchID &id) {
 }
 
 int Flow::CreateSubBranch(std::string name) {
+	if (this->activated_branch_id == NULL_ID) {
+		Log::Error(L"Activated Branch does not exist - Fatal");
+		return 1;
+	}
 	Log::Debug("Flow", "CreateSubBranch");
 	Branch sub_branch;
 	string header_path = this->target_path;

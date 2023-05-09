@@ -30,4 +30,6 @@ public:
 
 	//Save File as JSON
 	static int SaveFile(std::string path, Json::Value &value);
+
+	static int SpecializedMsgBox_SelectNotFoundFileOrFolder();
 };

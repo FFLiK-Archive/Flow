@@ -36,6 +36,7 @@ public:
 
 	int LoadWithPath(std::string flow_path);
 	std::string GetFlowPath();
+	std::string GetName();
 
 	Branch* operator[](BranchID& id); // Get Branch with id
 
