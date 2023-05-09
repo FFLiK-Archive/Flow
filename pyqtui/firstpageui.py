@@ -52,18 +52,26 @@ class Ui_Dialog(QMainWindow):
         self.OpenButton.setText(QCoreApplication.translate("Dialog", u"Open", None))
         self.NewButton.setText(QCoreApplication.translate("Dialog", u"New", None))
 
-
-
     # retranslateUi
 
     def NewButtonClicked(self):
         # Actions to do when the new button is clicked
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
         print("New Button clicked!")
         self.second_window.show()
         self.hide()
 
     def OpenButtonClicked(self):
         # Actions to do when the Open button is clicked
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
         print("Open Button clicked!")
         self.second_window.show()
         self.hide()
