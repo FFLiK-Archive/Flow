@@ -60,12 +60,22 @@ class Ui_ChooseDialog(QMainWindow):
 
     def FileButtonClicked(self):
         # Actions to do when the file button is clicked
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
         print("File Button clicked!")
         self.third_window.show()
         self.hide()
 
     def FolderButtonClicked(self):
         # Actions to do when the folder button is clicked
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
         print("Folder Button clicked!")
         self.third_window.show()
         self.hide()

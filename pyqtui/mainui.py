@@ -3,13 +3,30 @@ from PyQt6.QtCore import *
 from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 
-from mainui import *
+import branchactionmenu
+import branchselection
+import commitnamedialog
+import historyactionmenu
+import historyselection
 from firstpageui import *
 from filetypeselecter import *
+from commitnamedialog import *
+from branchactionmenu import *
+from historyactionmenu import *
+
+
 
 class Ui_MainWindow(QMainWindow):
+
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
+
+        self.storage_dialog = commitnamedialog.CommitDialog()
+        self.bmenu = branchactionmenu.branch_menu()
+        self.hmenu = historyactionmenu.history_menu()
+
+        # self.br = "err"
+        # self.hs = "err"
         self.NewSubBranchButtonBool = False
         self.centralwidget = QWidget()
         self.centralwidget.setObjectName(u"centralwidget")
@@ -48,33 +65,33 @@ class Ui_MainWindow(QMainWindow):
 
         self.verticalLayout_2.addWidget(self.BranchList)
 
-        self.NewSubBranchButton = QPushButton(self.centralwidget)
-        self.NewSubBranchButton.setObjectName(u"NewSubBranchButton")
-        self.NewSubBranchButton.setCheckable(False)
-        self.NewSubBranchButton.setFlat(False)
-        self.NewSubBranchButton.clicked.connect(self.NewSubBranchButtonClicked)
+        # self.NewSubBranchButton = QPushButton(self.centralwidget)
+        # self.NewSubBranchButton.setObjectName(u"NewSubBranchButton")
+        # self.NewSubBranchButton.setCheckable(False)
+        # self.NewSubBranchButton.setFlat(False)
+        # self.NewSubBranchButton.clicked.connect(self.NewSubBranchButtonClicked)
+        #
+        # self.verticalLayout_2.addWidget(self.NewSubBranchButton)
 
-        self.verticalLayout_2.addWidget(self.NewSubBranchButton)
-
-        self.horizontalLayout_3 = QHBoxLayout()
-        self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
-        self.MergeButton = QPushButton(self.centralwidget)
-        self.MergeButton.setObjectName(u"MergeButton")
-        self.MergeButton.clicked.connect(self.MergeButtonClicked)
-
-        self.horizontalLayout_3.addWidget(self.MergeButton)
-
-        self.ReplaceButton = QPushButton(self.centralwidget)
-        self.ReplaceButton.setObjectName(u"ReplaceButton")
-
-        self.horizontalLayout_3.addWidget(self.ReplaceButton)
-
-        self.verticalLayout_2.addLayout(self.horizontalLayout_3)
-
-        self.DeleteButton = QPushButton(self.centralwidget)
-        self.DeleteButton.setObjectName(u"DeleteButton")
-
-        self.verticalLayout_2.addWidget(self.DeleteButton)
+        # self.horizontalLayout_3 = QHBoxLayout()
+        # self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
+        # self.MergeButton = QPushButton(self.centralwidget)
+        # self.MergeButton.setObjectName(u"MergeButton")
+        # self.MergeButton.clicked.connect(self.MergeButtonClicked)
+        #
+        # self.horizontalLayout_3.addWidget(self.MergeButton)
+        #
+        # self.ReplaceButton = QPushButton(self.centralwidget)
+        # self.ReplaceButton.setObjectName(u"ReplaceButton")
+        #
+        # self.horizontalLayout_3.addWidget(self.ReplaceButton)
+        #
+        # self.verticalLayout_2.addLayout(self.horizontalLayout_3)
+        #
+        # self.DeleteButton = QPushButton(self.centralwidget)
+        # self.DeleteButton.setObjectName(u"DeleteButton")
+        #
+        # self.verticalLayout_2.addWidget(self.DeleteButton)
 
         self.horizontalLayout.addLayout(self.verticalLayout_2)
 
@@ -98,6 +115,7 @@ class Ui_MainWindow(QMainWindow):
 
         self.CommitButton = QPushButton(self.centralwidget)
         self.CommitButton.setObjectName(u"CommitButton")
+        self.CommitButton.clicked.connect(self.CommitButtonClicked)
 
         self.verticalLayout_3.addWidget(self.CommitButton)
 
@@ -120,6 +138,12 @@ class Ui_MainWindow(QMainWindow):
 
         self.verticalLayout_4.addWidget(self.ChangeLogList)
 
+        self.RefreshButton = QPushButton(self.centralwidget)
+        self.RefreshButton.setObjectName(u"RefreshButton")
+        self.RefreshButton.clicked.connect(self.RefreshButtonClicked)
+
+        self.verticalLayout_4.addWidget(self.RefreshButton)
+
         self.horizontalLayout.addLayout(self.verticalLayout_4)
 
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -132,7 +156,6 @@ class Ui_MainWindow(QMainWindow):
         self.horizontalLayout_9.addLayout(self.verticalLayout)
 
         self.setCentralWidget(self.centralwidget)
-        #self.setLayout(self.centralwidget)
         self.menubar = QMenuBar()
         self.menubar.setObjectName(u"menubar")
         self.menubar.setGeometry(QRect(0, 0, 1168, 37))
@@ -153,35 +176,60 @@ class Ui_MainWindow(QMainWindow):
         self.Logo.setText(QCoreApplication.translate("MainWindow", u"Flow", None))
         self.ProjectNameLabel.setText(QCoreApplication.translate("MainWindow", u"Project Name", None))
         self.BranchLabel.setText(QCoreApplication.translate("MainWindow", u"Branch", None))
-        self.NewSubBranchButton.setText(QCoreApplication.translate("MainWindow", u"New Sub Branch", None))
-        self.MergeButton.setText(QCoreApplication.translate("MainWindow", u"Merge", None))
-        self.ReplaceButton.setText(QCoreApplication.translate("MainWindow", u"Replace", None))
-        self.DeleteButton.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
+        # self.NewSubBranchButton.setText(QCoreApplication.translate("MainWindow", u"New Sub Branch", None))
+        # self.MergeButton.setText(QCoreApplication.translate("MainWindow", u"Merge", None))
+        # self.ReplaceButton.setText(QCoreApplication.translate("MainWindow", u"Replace", None))
+        # self.DeleteButton.setText(QCoreApplication.translate("MainWindow", u"Delete", None))
         self.HistoryLabel.setText(QCoreApplication.translate("MainWindow", u"History", None))
         self.CommitButton.setText(QCoreApplication.translate("MainWindow", u"Save Progress", None))
         self.ChangeLogLabel.setText(QCoreApplication.translate("MainWindow", u"Change Log", None))
+        self.RefreshButton.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
-
-        print("no")
     # retranslateUi
 
     def BranchListClicked(self, item):
-        QMessageBox.information(self, "ListWidget", "You clicked: " + item.text())
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
+        print(item.text())
+        # self.br = item
+        self.bmenu.show()
+
 
     def HistoryListClicked(self, item):
-        QMessageBox.information(self, "ListWidget", "You clicked: " + item.text())
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
+        print(item.text())
+        self.hmenu.show()
 
-    def NewSubBranchButtonClicked(self):
-        print("NewSubBranchButtonClicked")
+    def CommitButtonClicked(self):
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
+        print("Progress Saved!")
+        self.storage_dialog.show()
 
-    def MergeButtonClicked(self):
-        print("MergeButtonClicked")
+    def RefreshButtonClicked(self):
+        ###########################
+        ###########################
+        # ADD ADDITIONAL CODE HERE!#
+        ###########################
+        ###########################
+        print("Refreshing!")
+
+    # def NewSubBranchButtonClicked(self):
+    #     print("NewSubBranchButtonClicked")
+    #
+    # def MergeButtonClicked(self):
+    #     print("MergeButtonClicked")
 
 
 
 
-
-class BranchSelectionWindow(QMainWindow):
-    def __init__(self):
-        super(BranchSelectionWindow, self).__init__()
-        pass
