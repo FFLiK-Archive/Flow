@@ -12,6 +12,10 @@ import flow
 class conflictDialog(QMainWindow):
     def __init__(self, parent):
         super(conflictDialog, self).__init__()
+        #with open(
+        #        file="./style.txt", mode="r"
+        #) as f:
+        #    self.setStyleSheet(f.read())
 
         self.centralwidget = QWidget()
         self.fuckyeah = happyhappyhappy.happy()

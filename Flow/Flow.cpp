@@ -431,9 +431,9 @@ int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
 
 	CkZip zip;
 
-	string merge_dat = merge_dat_path + "\\merge.dat";
+	string merge_dat = header_path + this->name + ".flowdata\\" + ".merge_tmp\\merge.dat";
 	zip.NewZip(merge_dat.c_str());
-	string target_path = merge_dat_path + "\\" + this->name;
+	string target_path = merge_dat_path;
 	zip.put_OemCodePage(65001);
 	if (filesystem::is_directory(target_path)) {
 		zip.AppendFiles((target_path + "\\*").c_str(), true);
@@ -443,7 +443,9 @@ int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
 	}
 	zip.WriteZipAndClose();
 
-	this->branch_table[target_branch].Commmiter(target_dat, merge_dat, REPLACE, "Replace", "From \"" + this->GetActivatedBranch()->GetName()) + "\" Branch";
+	this->branch_table[target_branch].Commmiter(target_dat, merge_dat, REPLACE, "Merge", "From \"" + this->GetActivatedBranch()->GetName()) + "\" Branch";
+	filesystem::copy(merge_dat, target_dat);
+	this->GetActivatedBranch()->Activate();
 	filesystem::remove_all(header_path + this->name + ".flowdata\\" + ".merge_tmp");
 	return 0;
 }
@@ -467,6 +469,7 @@ int Flow::Replace(BranchID &target_branch) {
 	string origin_dat = header_path + this->name + ".flowdata\\" + this->GetActivatedBranch()->GetBranchID().str();
 	this->branch_table[target_branch].Commmiter(target_dat + ".dat", origin_dat + ".dat", REPLACE, "Replace", "From \"" + this->GetActivatedBranch()->GetName()) + "\" Branch";
 	filesystem::copy(origin_dat + ".dat", target_dat + ".dat");
+	this->GetActivatedBranch()->Activate();
 	return 0;
 }
 

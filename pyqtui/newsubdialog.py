@@ -10,6 +10,10 @@ import flow
 class newsubDialog(QMainWindow):
     def __init__(self, parent):
         super(newsubDialog, self).__init__()
+        #with open(
+        #        file="./style.txt", mode="r"
+        #) as f:
+        #    self.setStyleSheet(f.read())
 
         self.centralwidget = QWidget()
 

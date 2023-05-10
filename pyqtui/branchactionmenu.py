@@ -17,6 +17,10 @@ import flow
 class branch_menu(QMainWindow):
     def __init__(self, parent_):
         super(branch_menu, self).__init__()
+        #with open(
+        #        file="./style.txt", mode="r"
+        #) as f:
+        #    self.setStyleSheet(f.read())
 
         self.fuckyeah = happyhappyhappy.happy()
 

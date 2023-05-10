@@ -19,6 +19,10 @@ import flow
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
+        #with open(
+        #        file="./style.txt", mode="r"
+        #) as f:
+        #    self.setStyleSheet(f.read())
 
         self.storage_dialog = commitnamedialog.CommitDialog(self)
         self.bmenu = branchactionmenu.branch_menu(self)
@@ -179,6 +183,9 @@ class Ui_MainWindow(QMainWindow):
         self.RefreshButton.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
         self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
     # retranslateUi
+    def hideEvent(self, event):
+        #quit(0)
+        pass
 
     # setting UI values
     def SetUIData(self):
@@ -191,7 +198,14 @@ class Ui_MainWindow(QMainWindow):
         flow.branch_list, ret = flow.command(["get_branch"], 4)
         if ret: return
         for i in range(len(flow.branch_list)):
-            self.BranchList.addItem(flow.branch_list[i][1])
+            dat = flow.branch_list[i][1] + "\n> "
+            for j in range(len(flow.branch_list)):
+                if flow.branch_list[j][flow.BRANCH_ID] == flow.branch_list[i][flow.BRANCH_ORIGIN_ID]:
+                    dat += flow.branch_list[j][flow.BRANCH_NAME]
+                    break
+            else:
+                dat += "(Main Branch)"
+            self.BranchList.addItem(dat)
 
         data, ret = flow.command(["get_activated_branch"], 1)
         if ret: return
@@ -206,7 +220,7 @@ class Ui_MainWindow(QMainWindow):
         flow.history_list, ret = flow.command(['get_history'], 3)
         if ret: return
         for i in range(0, len(flow.history_list)):
-            self.HistoryList.addItem(flow.history_list[i][0])
+            self.HistoryList.addItem(flow.history_list[i][0] + "\n> " + flow.history_list[i][1])
     
     def SetChangeLog(self):
         self.ChangeLogList.clear()

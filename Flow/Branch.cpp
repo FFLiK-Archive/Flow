@@ -284,8 +284,8 @@ int Branch::Delete(int n) {
 		return 1;
 	}
 
-	if (this->history.size() - n > 0 && n > 0) {
-		int index = this->history.size() - n;
+	if (this->history.size() - 2 - n >= 0) {
+		int index = this->history.size() - 2 - n;
 		int prev_index = this->history.size() - 1 - n;
 		
 		//1. Delta Merge

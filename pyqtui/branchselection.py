@@ -15,6 +15,10 @@ import subprocess
 class branch_selection(QMainWindow):
     def __init__(self, parent):
         super(branch_selection, self).__init__()
+        #with open(
+        #        file="./style.txt", mode="r"
+        #) as f:
+        #    self.setStyleSheet(f.read())
 
         self.fuckyeah = happyhappyhappy.happy()
         self.cd = conflictdialog.conflictDialog(parent)
