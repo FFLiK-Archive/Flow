@@ -61,8 +61,9 @@ std::string FileIO::OpenFileName() {
 	return selection.front();
 }
 
+#if WIN_BUILD
 static int CALLBACK BrowseFolderCallback(
-	HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
+HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
 	if (uMsg == BFFM_INITIALIZED) {
 		LPCTSTR path = reinterpret_cast<LPCTSTR>(lpData);
@@ -70,6 +71,7 @@ static int CALLBACK BrowseFolderCallback(
 	}
 	return 0;
 }
+#endif
 
 std::string FileIO::OpenFolderName() {
 	#if WIN_BUILD
