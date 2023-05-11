@@ -1,0 +1,25 @@
+{
+	"Metadata" : 
+	[
+		{
+			"Path" : "\\Folder\\Test.hwp",
+			"Size" : 25088,
+			"Time" : 1683695278
+		},
+		{
+			"Path" : "\\Logo.png",
+			"Size" : 3759,
+			"Time" : 1683691134
+		},
+		{
+			"Path" : "\\Text1.txt",
+			"Size" : 8,
+			"Time" : 1683693516
+		},
+		{
+			"Path" : "\\Text2.txt",
+			"Size" : 11,
+			"Time" : 1683691054
+		}
+	]
+}

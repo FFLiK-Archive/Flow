@@ -41,7 +41,7 @@ class newsubDialog(QMainWindow):
         self.verticalLayout.addWidget(self.pushButton)
 
 
-
+        self.name = ""
 
         self.setCentralWidget(self.verticalLayoutWidget)
         self.retranslateUi(self)
@@ -62,6 +62,10 @@ class newsubDialog(QMainWindow):
         _translate = QCoreApplication.translate
 
         if self.bool:
+            flow.command(["create_sub_branch", self.name])
+            self.parent.SetUIData()
+            self.hide()
+            self.parent.setEnabled(True)
             self.bool = False
             self.label.setText("Please enter a name for the branch.")
 
@@ -74,11 +78,8 @@ class newsubDialog(QMainWindow):
             if done1:
                 self.label.setText('New Branch Added Successfully\nName: '
                                    + str(name))
+            self.name = str(name)
                 
-            flow.command(["create_sub_branch", str(name)])
-            self.parent.SetUIData()
-            self.hide()
-            self.parent.setEnabled(True)
 
 
 

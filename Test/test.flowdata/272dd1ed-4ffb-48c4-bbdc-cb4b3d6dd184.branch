@@ -1,0 +1,49 @@
+{
+	"BranchID" : "272dd1ed-4ffb-48c4-bbdc-cb4b3d6dd184",
+	"History" : 
+	[
+		{
+			"Description" : "sadlkfjlaksdf",
+			"HistoryID" : "98a6dd08-b25d-4e14-9468-72d0f7188e0f",
+			"Size" : 22,
+			"Time" : 1683695344,
+			"Title" : "Commit",
+			"Type" : 0
+		},
+		{
+			"Description" : "From \"Sub Branch",
+			"HistoryID" : "527e360a-a935-433f-8d9f-61ce4a4f9ce5",
+			"Size" : 7814,
+			"Time" : 1683695596,
+			"Title" : "Replace",
+			"Type" : 2
+		},
+		{
+			"Description" : "Replace ~ Replace",
+			"HistoryID" : "dd8de697-ba88-4188-9755-c15985569840",
+			"Size" : 54643,
+			"Time" : 1683695617,
+			"Title" : "Revert",
+			"Type" : 1
+		},
+		{
+			"Description" : "asdf",
+			"HistoryID" : "2606066c-30b4-445f-917b-2a0ddde3f580",
+			"Size" : 54643,
+			"Time" : 1683695677,
+			"Title" : "Commit",
+			"Type" : 0
+		},
+		{
+			"Description" : "Commit ~ Revert",
+			"HistoryID" : "2f32273b-7235-456c-a320-d470c8ff7165",
+			"Size" : 54647,
+			"Time" : 1683695692,
+			"Title" : "Revert",
+			"Type" : 1
+		}
+	],
+	"LastCommitTime" : 1683695692,
+	"Name" : "Main Branch",
+	"Origin" : "00000000-0000-0000-0000-000000000000"
+}

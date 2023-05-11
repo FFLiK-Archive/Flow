@@ -284,8 +284,8 @@ int Branch::Delete(int n) {
 		return 1;
 	}
 
-	if (this->history.size() - 2 - n >= 0) {
-		int index = this->history.size() - 2 - n;
+	if ((int)this->history.size() - n > 0 && n > 0) {
+		int index = this->history.size() - n;
 		int prev_index = this->history.size() - 1 - n;
 		
 		//1. Delta Merge
@@ -325,7 +325,6 @@ int Branch::Delete(int n) {
 		//2. Size Update
 		this->history[index].size = this->history[prev_index].size;
 	}
-
 	History delete_target = this->history[this->history.size() - 1 - n];
 	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".history");
 	filesystem::remove(this->history_path + "\\" + delete_target.id.str() + ".metadata");

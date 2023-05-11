@@ -181,7 +181,7 @@ class Ui_MainWindow(QMainWindow):
         self.CommitButton.setText(QCoreApplication.translate("MainWindow", u"Save Progress", None))
         self.ChangeLogLabel.setText(QCoreApplication.translate("MainWindow", u"Change Log", None))
         self.RefreshButton.setText(QCoreApplication.translate("MainWindow", u"Refresh", None))
-        self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
+        #self.StatusLabel.setText(QCoreApplication.translate("MainWindow", u"Status...", None))
     # retranslateUi
     def hideEvent(self, event):
         #quit(0)
@@ -192,6 +192,9 @@ class Ui_MainWindow(QMainWindow):
         self.SetBranchList()
         self.SetChangeLog()
         self.SetHistoryList()
+        name, ret = flow.command(["get_name"], 1)
+        self.ProjectNameLabel.setText(QCoreApplication.translate("MainWindow", name[0][0], None))
+
 
     def SetBranchList(self):
         self.BranchList.clear()
