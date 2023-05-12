@@ -7,6 +7,8 @@ from mainui import *
 from firstpageui import *
 from filetypeselecter import *
 
+
+
 if __name__ == '__main__':
     # Create the QApplication
     app = QApplication(sys.argv)
