@@ -15,11 +15,11 @@ class history_menu(QMainWindow):
     def __init__(self, parent):
         super(history_menu, self).__init__()
 
-        self.fuckyeah = happyhappyhappy.happy()
+        self.fuckyeah = happyhappyhappy.happy(parent)
 
         self.parent:mainui.Ui_MainWindow = parent
 
-        self.hselection = historyselection.history_selection()
+        self.hselection = historyselection.history_selection(parent)
 
         self.centralwidget = QWidget()
 
@@ -50,7 +50,11 @@ class history_menu(QMainWindow):
         self.index = -1
 
     def hideEvent(self, event):
+        self.bool = False
         self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
 
     def SetIndex(self, index):
         self.index = index
@@ -64,21 +68,21 @@ class history_menu(QMainWindow):
     def RevertButtonClicked(self):
         if self.index != -1:
             flow.command(["revert", str(self.index)])
-        #self.fuckyeah.show()
         self.parent.SetUIData()
         self.hide()
+        self.fuckyeah.show()
 
     def DeleteButtonClicked(self):
         if self.index != -1:
             flow.command(["delete", str(self.index)])
-        #self.fuckyeah.show()
         self.parent.SetUIData()
         self.hide()
+        self.fuckyeah.show()
 
 if __name__ == '__main__':
     # Create the QApplication
     app = QApplication(sys.argv)
-    window = history_menu()
+    window = history_menu(None)
     window.show()
 
     sys.exit(app.exec())

@@ -18,9 +18,16 @@ class conflictDialog(QMainWindow):
         #    self.setStyleSheet(f.read())
 
         self.centralwidget = QWidget()
-        self.fuckyeah = happyhappyhappy.happy()
+        self.fuckyeah = happyhappyhappy.happy(parent)
 
         self.parent:mainui.Ui_MainWindow = parent
+
+    def hideEvent(self, event):
+        self.bool = False
+        self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
@@ -116,15 +123,14 @@ class conflictDialog(QMainWindow):
             dat.append(str(i))
         print(["merge_2", self.branch_id] + dat)
         flow.command(["merge_2", self.branch_id] + dat)
-        self.parent.setEnabled(True)
-        #self.fuckyeah.show()
         self.hide()
+        self.fuckyeah.show()
 
 
 if __name__ == '__main__':
     # Create the QApplication
     app = QApplication(sys.argv)
-    window = conflictDialog()
+    window = conflictDialog(None)
     window.show()
 
     sys.exit(app.exec())

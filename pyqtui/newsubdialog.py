@@ -47,10 +47,18 @@ class newsubDialog(QMainWindow):
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
+    def hideEvent(self, event):
+        self.bool = False
+        self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
+
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.pushButton.setText(_translate("MainWindow", "Proceed"))
+        self.bool = False
 
     def takeinputs(self):
         ###########################
@@ -65,13 +73,17 @@ class newsubDialog(QMainWindow):
             flow.command(["create_sub_branch", self.name])
             self.parent.SetUIData()
             self.hide()
-            self.parent.setEnabled(True)
-            self.bool = False
-            self.label.setText("Please enter a name for the branch.")
+            self.retranslateUi(self)
 
         else:
-            name, done1 = QInputDialog.getText(
-                self, 'Input Dialog', 'Enter name:')
+            name = None
+            while not name:
+                name, done1 = QInputDialog.getText(
+                self, 'Input Dialog', 'Enter New Name:')
+                if not done1:
+                    self.hide()
+                    self.retranslateUi(self)
+                    return
 
             self.bool = True
             self.pushButton.setText(_translate("MainWindow", "Done"))

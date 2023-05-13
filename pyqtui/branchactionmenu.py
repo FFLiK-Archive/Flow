@@ -15,16 +15,16 @@ import mainui
 import flow
 
 class branch_menu(QMainWindow):
-    def __init__(self, parent_):
+    def __init__(self, parent):
         super(branch_menu, self).__init__()
         #with open(
         #        file="./style.txt", mode="r"
         #) as f:
         #    self.setStyleSheet(f.read())
 
-        self.fuckyeah = happyhappyhappy.happy()
+        self.fuckyeah = happyhappyhappy.happy(parent)
 
-        self.parent:mainui.Ui_MainWindow = parent_
+        self.parent:mainui.Ui_MainWindow = parent
         self.r = newsubdialog.newsubDialog(self.parent)
 
         self.bselection = branchselection.branch_selection(self.parent)
@@ -73,6 +73,13 @@ class branch_menu(QMainWindow):
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
+    def hideEvent(self, event):
+        self.bool = False
+        self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
+
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -83,50 +90,53 @@ class branch_menu(QMainWindow):
         self.RenameButton.setText(_translate("MainWindow", "Rename"))
 
     def NewSubBranchButtonClicked(self):
-        self.r.show()
         #self.fuckyeah.show()
         self.hide()
+        self.r.show()
 
 
     def MergeButtonClicked(self):
-        self.bselection.SetBranch()
-        self.bselection.SetCommand("merge")
-        self.bselection.show()
-        self.hide()
+        if len(flow.branch_list) > 1:
+            self.bselection.SetBranch()
+            self.bselection.SetCommand("merge")
+            self.hide()
+            self.bselection.show()
 
     def ReplaceButtonClicked(self):
         if len(flow.branch_list) > 1:
             self.bselection.SetBranch()
             self.bselection.SetCommand("replace")
-            self.bselection.show()
             self.hide()
+            self.bselection.show()
 
     def DeleteButtonClicked(self):
         ret = flow.command(["delete_branch"])
         #self.fuckyeah.show()
         self.parent.SetUIData()
         self.hide()
-        self.parent.setEnabled(True)
 
     def RenameButtonClicked(self):
-        name, done1 = QInputDialog.getText(
+        name = None
+        while not name:
+            name, done1 = QInputDialog.getText(
             self, 'Input Dialog', 'Enter New Name:')
+            if not done1:
+                self.hide()
+                return
 
         if done1:
             self.label.setText('Progress Saved Successfully\nName: '+str(name))
-
-        ret = flow.command(["change_name", str(name)])
+            ret = flow.command(["change_name", str(name)])
+            
         #print("RenameButtonClicked")
-        #self.fuckyeah.show()
         self.parent.SetUIData()
         self.hide()
-        self.parent.setEnabled(True)
-
+        self.fuckyeah.show()
 
 if __name__ == '__main__':
     # Create the QApplication
     app = QApplication(sys.argv)
-    window = branch_menu()
+    window = branch_menu(None)
     window.show()
 
     sys.exit(app.exec())

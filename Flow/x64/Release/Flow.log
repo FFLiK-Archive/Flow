@@ -4,16 +4,16 @@ D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(159,20): warning C4018
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(265,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(266,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
 D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(315,140): warning C4552: '+': result of expression not used
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(355,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(356,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(402,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(403,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(450,138): warning C4552: '+': result of expression not used
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(474,159): warning C4552: '+': result of expression not used
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(359,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(360,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(406,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(407,66): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(454,138): warning C4552: '+': result of expression not used
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Flow.cpp(478,159): warning C4552: '+': result of expression not used
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  16 of 4228 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+  2 of 4228 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    138 functions had inline decision re-evaluated but remain unchanged
+    36 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Release\Flow.exe

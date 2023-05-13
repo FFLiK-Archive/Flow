@@ -20,7 +20,7 @@ class branch_selection(QMainWindow):
         #) as f:
         #    self.setStyleSheet(f.read())
 
-        self.fuckyeah = happyhappyhappy.happy()
+        self.fuckyeah = happyhappyhappy.happy(parent)
         self.cd = conflictdialog.conflictDialog(parent)
 
         self.parent:mainui.Ui_MainWindow = parent
@@ -56,6 +56,13 @@ class branch_selection(QMainWindow):
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
+    def hideEvent(self, event):
+        self.bool = False
+        self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
+
     def SetBranch(self):
         self.BranchList.clear()
         self.cur_branch.clear()
@@ -81,19 +88,18 @@ class branch_selection(QMainWindow):
         if self.cmd == "replace":
             flow.command(["replace", self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID]])
             self.parent.setEnabled(True)
+            self.hide()
         elif self.cmd == "merge":
             change_log, ret = flow.command(["merge_1", self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID]], 2)
             self.cd.set_change(change_log)
             self.cd.SetID(self.cur_branch[self.BranchList.currentRow()][flow.BRANCH_ID])
+            self.hide()
             self.cd.show()
-            pass
-        #self.fuckyeah.show()
-        self.hide()
 
 if __name__ == '__main__':
     # Create the QApplication
     app = QApplication(sys.argv)
-    window = branch_selection()
+    window = branch_selection(None)
     window.show()
 
     sys.exit(app.exec())

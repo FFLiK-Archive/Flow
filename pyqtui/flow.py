@@ -12,19 +12,18 @@ activated_branch = 0
 import subprocess
 
 def command(param, split = 0):
-    # param = ["flow"] + param
-    # proc = subprocess.Popen(param, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
-    # proc.wait()
-    # if split:
-    #     raw = str(proc.stdout.read().decode('utf-8'))
-    #     ret = []
-    #     data = raw.split('\r\n')
-    #     while len(data) % split: data.pop()
-    #     for i in range(0, len(data), split):
-    #         sub = []
-    #         for j in range(0, split):
-    #             sub.append(data[i + j])
-    #         ret.append(sub)
-    #     return ret, proc.returncode
-    # return proc.returncode
-    pass
+    param = ["flow"] + param
+    proc = subprocess.Popen(param, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
+    proc.wait()
+    if split:
+        raw = str(proc.stdout.read().decode('utf-8'))
+        ret = []
+        data = raw.split('\r\n')
+        while len(data) % split: data.pop()
+        for i in range(0, len(data), split):
+            sub = []
+            for j in range(0, split):
+                sub.append(data[i + j])
+            ret.append(sub)
+        return ret, proc.returncode
+    return proc.returncode

@@ -244,18 +244,15 @@ class Ui_MainWindow(QMainWindow):
     def BranchListClicked(self, item):
         print(item.text())
         self.bmenu.show()
-        #self.setEnabled(False)
 
     def HistoryListClicked(self, item):
         index = self.HistoryList.currentRow()
         self.hmenu.SetIndex(index)
         self.hmenu.show()
-        #self.setEnabled(False)
 
     def CommitButtonClicked(self):
         print("Progress Saved!")
         self.storage_dialog.show()
-        #self.setEnabled(False)
 
 
     def RefreshButtonClicked(self):

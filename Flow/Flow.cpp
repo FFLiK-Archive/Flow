@@ -333,6 +333,10 @@ int Flow::Merge_1(BranchID& target_branch) {
 		header_path.pop_back();
 	}
 
+	if (filesystem::exists(header_path + this->name + ".flowdata\\" + ".merge_tmp")) {
+		filesystem::remove_all(header_path + this->name + ".flowdata\\" + ".merge_tmp");
+	}
+
 	string target_dat = header_path + this->name + ".flowdata\\" + this->branch_table[target_branch].GetBranchID().str() + ".dat";
 	string origin_dat = header_path + this->name + ".flowdata\\" + this->GetActivatedBranch()->GetBranchID().str() + ".dat";
 	string target_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\target";
