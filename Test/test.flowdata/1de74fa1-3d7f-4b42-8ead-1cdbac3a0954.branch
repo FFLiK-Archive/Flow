@@ -1,0 +1,17 @@
+{
+	"BranchID" : "1de74fa1-3d7f-4b42-8ead-1cdbac3a0954",
+	"History" : 
+	[
+		{
+			"Description" : "asdf",
+			"HistoryID" : "2c37f628-96c1-493a-b3d8-15bb3bca63b6",
+			"Size" : 54643,
+			"Time" : 1683989100,
+			"Title" : "asdfasdf",
+			"Type" : 0
+		}
+	],
+	"LastCommitTime" : 1683989100,
+	"Name" : "Sub Branch",
+	"Origin" : "302a43ea-81cd-4c54-a453-fe11d0a811ca"
+}

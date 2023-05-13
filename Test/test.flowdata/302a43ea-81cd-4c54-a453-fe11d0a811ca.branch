@@ -1,0 +1,25 @@
+{
+	"BranchID" : "302a43ea-81cd-4c54-a453-fe11d0a811ca",
+	"History" : 
+	[
+		{
+			"Description" : "asdf",
+			"HistoryID" : "c4952fad-c444-43a1-ba37-d90c426561b2",
+			"Size" : 22,
+			"Time" : 1683989006,
+			"Title" : "Commit",
+			"Type" : 0
+		},
+		{
+			"Description" : "From \"Sub Branch",
+			"HistoryID" : "9d7f71fe-fa5f-42b4-9377-9a2b20f7e13b",
+			"Size" : 54643,
+			"Time" : 1683990671,
+			"Title" : "Merge",
+			"Type" : 2
+		}
+	],
+	"LastCommitTime" : 1683990671,
+	"Name" : "Main",
+	"Origin" : "00000000-0000-0000-0000-000000000000"
+}

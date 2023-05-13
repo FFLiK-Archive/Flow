@@ -402,8 +402,6 @@ int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
 	FileSearch(target_dat_path, target_files, target_dat_path.size());
 	FileSearch(origin_dat_path, origin_files, origin_dat_path.size());
 
-	cout << "?";
-
 	vector<pair<string, string>> total_files;
 	for (int i = 0; i < origin_files.size(); i++) {
 		total_files.push_back(make_pair(origin_files[i], "origin"));
@@ -419,8 +417,14 @@ int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
 	}
 	sort(total_files.begin(), total_files.end());
 
-
 	for (int i = 0; i < total_files.size(); i++) {
+		string dir = merge_dat_path + "\\" + total_files[i].first;
+		while (dir.back() != '\\') {
+			dir.pop_back();
+		}
+		if (!filesystem::exists(dir)) {
+			filesystem::create_directories(dir);
+		}
 		if (input[i] == 1) {
 			filesystem::copy(origin_dat_path + "\\" + total_files[i].first, merge_dat_path + "\\" + total_files[i].first, filesystem::copy_options::overwrite_existing);
 		}
