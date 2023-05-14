@@ -1,4 +1,4 @@
-#include "Log.h"
+﻿#include "Log.h"
 #include "Config.h"
 #if WIN_BUILD
 #include <Windows.h>

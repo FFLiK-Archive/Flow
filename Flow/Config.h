@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 // Build Type Values
 #define Flow_Auto 0
@@ -18,7 +18,7 @@
 #define FlowBuildMode Flow_Release
 
 // Version Information
-#define FlowVersion "v 1.0"
+#define FlowVersion "v 1.0.1"
 
 // ===============================
 

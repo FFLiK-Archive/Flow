@@ -4,16 +4,28 @@
 #include "Flow.h"
 #include "FileIO.h"
 #include "Log.h"
+#if WIN_BUILD
+#include <Windows.h>
+#endif
 using namespace std;
 
 #define arg(x) (argc > x ? input[x] : "")
 
-int main(int argc, char* argv[]) {
-	vector<string> input;
-	for (int i = 1; i < argc; i++) {
-		input.push_back(argv[i]);
-	}
+int wmain(int argc, wchar_t* argv[]) {
+	#if WIN_BUILD
+	SetConsoleOutputCP(CP_UTF8);
+	SetConsoleCP(CP_UTF8);
+	#endif
 
+	vector<string> input;
+	std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+	for (int i = 1; i < argc; i++) {
+		int utf8len = WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, nullptr, 0, nullptr, nullptr);
+		std::vector<char> utf8buf(utf8len);
+		WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, utf8buf.data(), utf8len, nullptr, nullptr);
+		input.emplace_back(utf8buf.data());
+	}
+	
 	if (input.empty())
 		return 0;
 	
@@ -118,23 +130,23 @@ int main(int argc, char* argv[]) {
 /*
 	[Command Table]
 	
-	flow create file (or folder) #flow ¸¸µé±â
+	flow create file (or folder) #flow ë§Œë“¤ê¸°
 
-	flow open #flow ¿­±â
+	flow open #flow ì—´ê¸°
 
-	flow create_sub_branch [name] #sub branch ¸¸µé±â
+	flow create_sub_branch [name] #sub branch ë§Œë“¤ê¸°
 
-	flow merge [branch id] #branch id¿¡ ÇØ´çÇÏ´Â branch¿¡ activated branch merge
+	flow merge [branch id] #branch idì— í•´ë‹¹í•˜ëŠ” branchì— activated branch merge
 	>> [path string] origin (or target or duplicate)
 	>> [path string] origin (or target or duplicate)
 	>> ...
-	input : list of 0 or 1 or 2 (0Àº ³ÖÁö ¾ÊÀ½, 1Àº origin ¹Ý¿µ, 2´Â target ¹Ý¿µ, À§ Ãâ·Â°ª °³¼ö¸¸Å­ÀÇ element¸¦ °¡Áö´Â ¼ö¿­)
+	input : list of 0 or 1 or 2 (0ì€ ë„£ì§€ ì•ŠìŒ, 1ì€ origin ë°˜ì˜, 2ëŠ” target ë°˜ì˜, ìœ„ ì¶œë ¥ê°’ ê°œìˆ˜ë§Œí¼ì˜ elementë¥¼ ê°€ì§€ëŠ” ìˆ˜ì—´)
 
-	flow replace [branch id] #branch id¿¡ ÇØ´çÇÏ´Â branch¸¦ activated branch·Î replace
+	flow replace [branch id] #branch idì— í•´ë‹¹í•˜ëŠ” branchë¥¼ activated branchë¡œ replace
 
-	flow delete_branch #activated branch »èÁ¦
+	flow delete_branch #activated branch ì‚­ì œ
 
-	flow activate_branch [branch id] #branch id¿¡ ÇØ´çÇÏ´Â branch È°¼ºÈ­
+	flow activate_branch [branch id] #branch idì— í•´ë‹¹í•˜ëŠ” branch í™œì„±í™”
 
 	flow get_branch
 	>> [branch id] [name] [origin branch id] [last commit time]
@@ -144,21 +156,21 @@ int main(int argc, char* argv[]) {
 	flow get_activated_branch
 	>> [activated branch id]
 
-	flow change_name [branch id] [new_name] #ºê·£Ä¡ ÀÌ¸§ ¹Ù²Ù±â
+	flow change_name [branch id] [new_name] #ë¸Œëžœì¹˜ ì´ë¦„ ë°”ê¾¸ê¸°
 
-	flow check_changed #ºê·£Ä¡¿¡ º¯°æ»çÇ×ÀÌ ÀÖ´ÂÁö È®ÀÎ
-	>> 0 or 1 (0ÀÌ¸é ¹Ù²îÁö ¾ÊÀ½, 1ÀÌ¸é ¹Ù²ñ)
+	flow check_changed #ë¸Œëžœì¹˜ì— ë³€ê²½ì‚¬í•­ì´ ìžˆëŠ”ì§€ í™•ì¸
+	>> 0 or 1 (0ì´ë©´ ë°”ë€Œì§€ ì•ŠìŒ, 1ì´ë©´ ë°”ë€œ)
 
 	flow get_change_log
 	>> [path] added or deleted or modified
 	>> [path] added or deleted or modified
 	>> ...
 
-	flow commit [title] [description] #Ä¿¹Ô
+	flow commit [title] [description] #ì»¤ë°‹
 
-	flow revert [n] #n¹øÂ° È÷½ºÅä¸®·Î revert (0ºÎÅÍ ½ÃÀÛ)
+	flow revert [n] #në²ˆì§¸ ížˆìŠ¤í† ë¦¬ë¡œ revert (0ë¶€í„° ì‹œìž‘)
 
-	flow delete [n] #n¹øÂ° È÷½ºÅä¸® »èÁ¦ (0ºÎÅÍ ½ÃÀÛ)
+	flow delete [n] #në²ˆì§¸ ížˆìŠ¤í† ë¦¬ ì‚­ì œ (0ë¶€í„° ì‹œìž‘)
 
 	flow get_history
 	>> [title] [description] [commit time]

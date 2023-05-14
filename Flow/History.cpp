@@ -1,4 +1,4 @@
-#include "History.h"
+﻿#include "History.h"
 #include "FileIO.h"
 #include "UUID.h"
 #include "Log.h"

@@ -1,6 +1,7 @@
-#pragma once
+﻿#pragma once
 #include <string>
 #include <vector>
+#include <codecvt>
 #include "json/json.h"
 #include "Config.h"
 #define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
