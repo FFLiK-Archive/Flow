@@ -1,4 +1,4 @@
-#include "Metadata.h"
+ï»¿#include "Metadata.h"
 #include "FileIO.h"
 #include <filesystem>
 #include "Log.h"
@@ -9,12 +9,12 @@ void Metadata::Search(string path) {
 		return;
 	}
 	if (!filesystem::is_directory(path)) {
-		auto modifyTime = filesystem::last_write_time(path); // ÆÄÀÏÀÇ ¼öÁ¤ ½Ã°£
+		auto modifyTime = filesystem::last_write_time(path); // íŒŒì¼ì˜ ìˆ˜ì • ì‹œê°„
 		auto systemTime = std::chrono::clock_cast<std::chrono::system_clock>(modifyTime);
 		Time time = std::chrono::system_clock::to_time_t(systemTime);
 		unsigned long long int filesize = filesystem::file_size(path);
 		Data d;
-		path.erase(path.begin(), path.begin() + this->target_path->size());
+		path.erase(path.begin(), path.begin() + this->target_path->size());	
 		d.path = path;
 		d.last_write_time = time;
 		d.file_size = filesize;
@@ -25,15 +25,18 @@ void Metadata::Search(string path) {
 	while (itr != filesystem::end(itr)) {
 		const filesystem::directory_entry& entry = *itr;
 		if (entry.is_directory()) {
-			this->Search(entry.path().string());
+			auto u8str = entry.path().u8string();
+			auto p = string(u8str.begin(), u8str.end());
+			this->Search(p);
 		}
 		else {
-			auto modifyTime = filesystem::last_write_time(entry.path()); // ÆÄÀÏÀÇ ¼öÁ¤ ½Ã°£
+			auto modifyTime = filesystem::last_write_time(entry.path()); // íŒŒì¼ì˜ ìˆ˜ì • ì‹œê°„
 			auto systemTime = std::chrono::clock_cast<std::chrono::system_clock>(modifyTime);
 			Time time = std::chrono::system_clock::to_time_t(systemTime);
 			unsigned long long int filesize = filesystem::file_size(entry.path());
 			Data d;	
-			d.path = entry.path().string();
+			auto u8str = entry.path().u8string();
+			d.path = string(u8str.begin(), u8str.end());
 			d.path.erase(d.path.begin(), d.path.begin() + this->target_path->size());
 			d.last_write_time = time;
 			d.file_size = filesize;

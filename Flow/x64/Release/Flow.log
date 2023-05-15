@@ -1,14 +1,51 @@
 ﻿  Scanning sources for module dependencies...
-  Branch.cpp
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(40,2): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(157,20): warning C4018: '<': signed/unsigned mismatch
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(269,46): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(288,39): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-D:\Development\ProgrammingProject\Tool\Flow\Flow\Branch.cpp(289,48): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Main.cpp
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(21,28): warning C4996: 'std::codecvt_utf8<wchar_t,1114111,(std::codecvt_mode)0>': warning STL4017: std::wbuffer_convert, std::wstring_convert, and the <codecvt> header (containing std::codecvt_mode, std::codecvt_utf8, std::codecvt_utf16, and std::codecvt_utf8_utf16) are deprecated in C++17. (The std::codecvt class template is NOT deprecated.) The C++ Standard doesn't provide equivalent non-deprecated functionality; consider using MultiByteToWideChar() and WideCharToMultiByte() from <Windows.h> instead. You can define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING or _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS to suppress this warning.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\codecvt(35,1): message : see declaration of 'std::codecvt_utf8'
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(21,7): warning C4996: 'std::wstring_convert<std::codecvt_utf8<wchar_t,1114111,(std::codecvt_mode)0>,wchar_t,std::allocator<wchar_t>,std::allocator<char>>': warning STL4017: std::wbuffer_convert, std::wstring_convert, and the <codecvt> header (containing std::codecvt_mode, std::codecvt_utf8, std::codecvt_utf16, and std::codecvt_utf8_utf16) are deprecated in C++17. (The std::codecvt class template is NOT deprecated.) The C++ Standard doesn't provide equivalent non-deprecated functionality; consider using MultiByteToWideChar() and WideCharToMultiByte() from <Windows.h> instead. You can define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING or _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS to suppress this warning.
+C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\include\xlocbuf(304,1): message : see declaration of 'std::wstring_convert'
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(44,54): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(44,54): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(45,57): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(45,57): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(48,28): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(48,28): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(54,33): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(54,33): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(63,31): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(63,31): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(72,54): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(72,54): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(80,35): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(80,35): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(84,25): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(84,25): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(88,27): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(88,27): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(96,27): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(96,27): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(100,27): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(100,27): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(103,32): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(103,32): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(107,34): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(107,34): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(111,36): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(111,36): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(116,48): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(116,48): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(119,48): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(119,48): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(122,48): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(122,48): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(125,27): warning C4805: '|=': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(125,27): warning C4805: '|': unsafe mix of type 'bool' and type 'int' in operation
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(21,51): warning C4996: 'std::wstring_convert<std::codecvt_utf8<wchar_t,1114111,(std::codecvt_mode)0>,wchar_t,std::allocator<wchar_t>,std::allocator<char>>::wstring_convert': warning STL4017: std::wbuffer_convert, std::wstring_convert, and the <codecvt> header (containing std::codecvt_mode, std::codecvt_utf8, std::codecvt_utf16, and std::codecvt_utf8_utf16) are deprecated in C++17. (The std::codecvt class template is NOT deprecated.) The C++ Standard doesn't provide equivalent non-deprecated functionality; consider using MultiByteToWideChar() and WideCharToMultiByte() from <Windows.h> instead. You can define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING or _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS to suppress this warning.
+D:\Development\ProgrammingProject\Tool\Flow\Flow\Main.cpp(51,9): warning C4101: 'f': unreferenced local variable
 LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library
   Generating code
-  1 of 4228 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  1 of 4334 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    83 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   Flow.vcxproj -> D:\Development\ProgrammingProject\Tool\Flow\x64\Release\Flow.exe

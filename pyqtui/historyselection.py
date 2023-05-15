@@ -5,14 +5,18 @@ from PyQt6.QtGui import *
 from PyQt6.QtWidgets import *
 import happyhappyhappy
 
+import mainui
+
 
 class history_selection(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent):
         super(history_selection, self).__init__()
 
-        self.fuckyeah = happyhappyhappy.happy()
+        self.fuckyeah = happyhappyhappy.happy(parent)
 
         self.centralwidget = QWidget()
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.resize(300, 400)
         self.verticalLayoutWidget = QWidget()
@@ -36,12 +40,16 @@ class history_selection(QMainWindow):
 
         self.verticalLayout.addWidget(self.historyList)
 
-
-
         self.setCentralWidget(self.verticalLayoutWidget)
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
+    def hideEvent(self, event):
+        self.bool = False
+        self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
@@ -54,8 +62,8 @@ class history_selection(QMainWindow):
         ###########################
         ###########################
         print(item.text())
-        self.fuckyeah.show()
         self.hide()
+        self.fuckyeah.show()
 
 if __name__ == '__main__':
     # Create the QApplication

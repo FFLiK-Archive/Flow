@@ -1,4 +1,4 @@
-#include "FileIO.h"
+﻿#include "FileIO.h"
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -128,6 +128,7 @@ int FileIO::SaveFile(std::string path, std::string value) {
 
 int FileIO::SaveFile(std::string path, Json::Value &value) {
 	Json::StreamWriterBuilder builder;
+	builder.settings_["emitUTF8"] = true;
 	std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
 	std::ofstream outputFileStream(path);
 	writer->write(value, &outputFileStream);

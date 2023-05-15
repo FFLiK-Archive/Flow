@@ -6,15 +6,19 @@ from PyQt6.QtWidgets import *
 import happyhappyhappy
 import conflictdialog
 
+import mainui
+
 
 class branch_selection(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent):
         super(branch_selection, self).__init__()
 
-        self.fuckyeah = happyhappyhappy.happy()
-        self.cd = conflictdialog.conflictDialog()
+        self.fuckyeah = happyhappyhappy.happy(parent)
+        self.cd = conflictdialog.conflictDialog(parent)
 
         self.centralwidget = QWidget()
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.resize(300, 400)
         self.verticalLayoutWidget = QWidget()
@@ -44,6 +48,13 @@ class branch_selection(QMainWindow):
         self.retranslateUi(self)
         QMetaObject.connectSlotsByName(self)
 
+    def hideEvent(self, event):
+        self.bool = False
+        self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
+
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
@@ -56,13 +67,13 @@ class branch_selection(QMainWindow):
         ###########################
         ###########################
         print(item.text())
-        self.fuckyeah.show()
         self.hide()
+        self.fuckyeah.show()
 
 if __name__ == '__main__':
     # Create the QApplication
     app = QApplication(sys.argv)
-    window = branch_selection()
+    window = branch_selection(None)
     window.show()
 
     sys.exit(app.exec())

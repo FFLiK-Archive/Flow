@@ -47,6 +47,9 @@ class CommitDialog(QMainWindow):
         self.bool = False
         self.label.setText("Please enter a summary and \ndescription for progress storage.")
         self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
         
 
     def retranslateUi(self, MainWindow):
@@ -68,9 +71,14 @@ class CommitDialog(QMainWindow):
             self.parent.SetUIData()
             self.hide()
         else:
-            self.name, done1 = QInputDialog.getText(
-                self, 'Input Dialog', 'Enter Name:')
-
+            self.name = None
+            while not self.name:
+                self.name, done1 = QInputDialog.getText(
+                    self, 'Input Dialog', 'Enter Name:')
+                if not done1:
+                    self.hide()
+                    return
+                
             self.description, done2 = QInputDialog.getText(
                 self, 'Input Dialog', 'Enter Description')
 

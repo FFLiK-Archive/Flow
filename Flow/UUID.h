@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 /*
 MIT License
 Copyright (c) 2018 Xavier "Crashoz" Launey

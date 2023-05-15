@@ -6,13 +6,15 @@ from PyQt6.QtWidgets import *
 import branchselection
 from branchselection import *
 
-
+import mainui
 
 class happy(QMainWindow):
-    def __init__(self):
+    def __init__(self, parent):
         super(happy, self).__init__()
 
         self.centralwidget = QWidget()
+
+        self.parent:mainui.Ui_MainWindow = parent
 
         self.resize(300, 400)
         self.verticalLayoutWidget = QWidget()
@@ -45,10 +47,17 @@ class happy(QMainWindow):
         print("happydonebuttonClicked")
         self.hide()
 
+    def hideEvent(self, event):
+        self.bool = False
+        self.parent.setEnabled(True)
+
+    def showEvent(self, event):
+        self.parent.setEnabled(False)
+
 if __name__ == '__main__':
     # Create the QApplication
     app = QApplication(sys.argv)
-    window = happy()
+    window = happy(None)
     window.show()
 
     sys.exit(app.exec())
