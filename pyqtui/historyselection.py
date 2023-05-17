@@ -11,6 +11,10 @@ import mainui
 class history_selection(QMainWindow):
     def __init__(self, parent):
         super(history_selection, self).__init__()
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
 
         self.fuckyeah = happyhappyhappy.happy(parent)
 
@@ -33,9 +37,6 @@ class history_selection(QMainWindow):
 
         self.historyList = QListWidget(self.centralwidget)
         self.historyList.setObjectName(u"historyList")
-        self.historyList.addItem("history1")
-        self.historyList.addItem("history2")
-        self.historyList.addItem("history3")
         self.historyList.itemClicked.connect(self.historyListClicked)
 
         self.verticalLayout.addWidget(self.historyList)
@@ -53,7 +54,7 @@ class history_selection(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
 
     def historyListClicked(self,item):
         ###########################

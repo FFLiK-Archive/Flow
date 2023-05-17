@@ -6,6 +6,8 @@
 #include "Log.h"
 using namespace std;
 
+#define U8(x) (filesystem::path(filesystem::u8path(x)))
+
 void Flow::Deleter(BranchID &id) {
 	auto del_i_iter = find(this->branch_id_list.begin(), this->branch_id_list.end(), id);
 	if (del_i_iter == this->branch_id_list.end()) {
@@ -70,14 +72,13 @@ int Flow::CreateFlow(FlowStorageType type) {
 	this->file_path = header_path + this->name + ".flow";
 	this->storage_type = type;
 	this->id = uuidGenerator.getUUID();
-	filesystem::create_directory(header_path + this->name + ".flowdata");
+	filesystem::create_directory(filesystem::path(filesystem::u8path(header_path + this->name + ".flowdata")));
 	Branch main_branch;
 	BranchID nullid = NULL_ID;
 	main_branch.CreateBranch(header_path + this->name + ".flowdata\\", "Main", nullid, &this->target_path);
 	this->branch_id_list.push_back(main_branch.GetBranchID());
 	this->branch_table[main_branch.GetBranchID()] = main_branch;
 	this->activated_branch_id = main_branch.GetBranchID();
-
 	CkZip zip;
 	zip.NewZip((header_path + this->name + ".flowdata\\" + main_branch.GetBranchID().str() + ".dat").c_str());
 	zip.put_OemCodePage(65001);
@@ -121,12 +122,12 @@ int Flow::LoadWithPath(std::string flow_path) {
 	this->file_path = flow_path;
 	while (flow_path.back() != '\\')
 		flow_path.pop_back();
-	Json::Value flow = FileIO::GetJsonFile(this->file_path);
+	Json::Value flow = FileIO::GetJsonFile(U8(this->file_path).string());
 	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
 	this->name = flow["Name"].asString();
 	this->target_path = flow_path + this->name;
 	string origin_path, prev_name;
-	if (!filesystem::exists(this->target_path)) {
+	if (!filesystem::exists(U8(this->target_path))) {
 		cout << "\a";
 		switch (FileIO::SpecializedMsgBox_SelectNotFoundFileOrFolder()) {
 		case 1:
@@ -145,8 +146,8 @@ int Flow::LoadWithPath(std::string flow_path) {
 				this->name = origin_path.back() + this->name;
 				origin_path.pop_back();
 			}
-			filesystem::rename(origin_path + prev_name + ".flow", origin_path + this->name + ".flow");
-			filesystem::rename(origin_path + prev_name + ".flowdata", origin_path + this->name + ".flowdata");
+			filesystem::rename(U8(origin_path + prev_name + ".flow"), U8(origin_path + this->name + ".flow"));
+			filesystem::rename(U8(origin_path + prev_name + ".flowdata"), U8(origin_path + this->name + ".flowdata"));
 			this->file_path = origin_path + this->name + ".flow";
 			break;
 		default:
@@ -205,22 +206,26 @@ int Flow::CreateSubBranch(std::string name) {
 }
 
 void FileSearch(string path, vector<string> &files, int remove_size) {
-	if (!filesystem::exists(path)) {
+	filesystem::path p = filesystem::path(filesystem::u8path(path));
+	if (!filesystem::exists(p)) {
 		return;
 	}
-	if (!filesystem::is_directory(path)) {
+	if (!filesystem::is_directory(p)) {
 		path = path.substr(remove_size);
 		files.push_back(path);
 		return;
 	}
-	filesystem::directory_iterator itr(path);
+	filesystem::directory_iterator itr(p);
 	while (itr != filesystem::end(itr)) {
 		const filesystem::directory_entry& entry = *itr;
 		if (entry.is_directory()) {
-			FileSearch(entry.path().string(), files, remove_size);
+			auto u8str = entry.path().u8string();
+			string p = string(u8str.begin(), u8str.end());
+			FileSearch(p, files, remove_size);
 		}
 		else {
-			path = entry.path().string();
+			auto u8str = entry.path().u8string();
+			path = string(u8str.begin(), u8str.end());
 			path.erase(path.begin(), path.begin() + remove_size);
 			files.push_back(path);
 		}
@@ -333,8 +338,8 @@ int Flow::Merge_1(BranchID& target_branch) {
 		header_path.pop_back();
 	}
 
-	if (filesystem::exists(header_path + this->name + ".flowdata\\" + ".merge_tmp")) {
-		filesystem::remove_all(header_path + this->name + ".flowdata\\" + ".merge_tmp");
+	if (filesystem::exists(U8(header_path + this->name + ".flowdata\\" + ".merge_tmp"))) {
+		filesystem::remove_all(U8(header_path + this->name + ".flowdata\\" + ".merge_tmp"));
 	}
 
 	string target_dat = header_path + this->name + ".flowdata\\" + this->branch_table[target_branch].GetBranchID().str() + ".dat";
@@ -343,9 +348,9 @@ int Flow::Merge_1(BranchID& target_branch) {
 	string origin_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\origin";
 	string merge_dat_path = header_path + this->name + ".flowdata\\" + ".merge_tmp\\merge";
 
-	filesystem::create_directories(target_dat_path);
-	filesystem::create_directories(origin_dat_path);
-	filesystem::create_directories(merge_dat_path);
+	filesystem::create_directories(U8(target_dat_path));
+	filesystem::create_directories(U8(origin_dat_path));
+	filesystem::create_directories(U8(merge_dat_path));
 	CkZip zip;
 	zip.OpenZip(target_dat.c_str());
 	zip.Unzip(target_dat_path.c_str());
@@ -426,14 +431,14 @@ int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
 		while (dir.back() != '\\') {
 			dir.pop_back();
 		}
-		if (!filesystem::exists(dir)) {
-			filesystem::create_directories(dir);
+		if (!filesystem::exists(U8(dir))) {
+			filesystem::create_directories(U8(dir));
 		}
 		if (input[i] == 1) {
-			filesystem::copy(origin_dat_path + "\\" + total_files[i].first, merge_dat_path + "\\" + total_files[i].first, filesystem::copy_options::overwrite_existing);
+			filesystem::copy(U8(origin_dat_path + "\\" + total_files[i].first), U8(merge_dat_path + "\\" + total_files[i].first), filesystem::copy_options::overwrite_existing);
 		}
 		else if (input[i] == 2) {
-			filesystem::copy(target_dat_path + "\\" + total_files[i].first, merge_dat_path + "\\" + total_files[i].first, filesystem::copy_options::overwrite_existing);
+			filesystem::copy(U8(target_dat_path + "\\" + total_files[i].first), U8(merge_dat_path + "\\" + total_files[i].first), filesystem::copy_options::overwrite_existing);
 		}
 	}
 
@@ -443,7 +448,7 @@ int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
 	zip.NewZip(merge_dat.c_str());
 	string target_path = merge_dat_path;
 	zip.put_OemCodePage(65001);
-	if (filesystem::is_directory(target_path)) {
+	if (filesystem::is_directory(U8(target_path))) {
 		zip.AppendFiles((target_path + "\\*").c_str(), true);
 	}
 	else {
@@ -452,9 +457,9 @@ int Flow::Merge_2(BranchID& target_branch, std::vector<int> input) {
 	zip.WriteZipAndClose();
 
 	this->branch_table[target_branch].Commmiter(target_dat, merge_dat, REPLACE, "Merge", "From \"" + this->GetActivatedBranch()->GetName()) + "\" Branch";
-	filesystem::copy(merge_dat, target_dat);
+	filesystem::copy(U8(merge_dat), U8(target_dat));
 	this->GetActivatedBranch()->Activate();
-	filesystem::remove_all(header_path + this->name + ".flowdata\\" + ".merge_tmp");
+	filesystem::remove_all(U8(header_path + this->name + ".flowdata\\" + ".merge_tmp"));
 	return 0;
 }
 
@@ -476,7 +481,7 @@ int Flow::Replace(BranchID &target_branch) {
 	string target_dat = header_path + this->name + ".flowdata\\" + this->branch_table[target_branch].GetBranchID().str();
 	string origin_dat = header_path + this->name + ".flowdata\\" + this->GetActivatedBranch()->GetBranchID().str();
 	this->branch_table[target_branch].Commmiter(target_dat + ".dat", origin_dat + ".dat", REPLACE, "Replace", "From \"" + this->GetActivatedBranch()->GetName()) + "\" Branch";
-	filesystem::copy(origin_dat + ".dat", target_dat + ".dat");
+	filesystem::copy(U8(origin_dat + ".dat"), U8(target_dat + ".dat"));
 	this->GetActivatedBranch()->Activate();
 	return 0;
 }

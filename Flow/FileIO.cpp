@@ -6,6 +6,7 @@
 #include "Config.h"
 #include "Log.h"
 #include "FileIO.h"
+#include <filesystem>
 #include "ProtableFileDialogs.h" //For Open Files with Multiplatforms
 
 using namespace std;
@@ -130,7 +131,7 @@ int FileIO::SaveFile(std::string path, Json::Value &value) {
 	Json::StreamWriterBuilder builder;
 	builder.settings_["emitUTF8"] = true;
 	std::unique_ptr<Json::StreamWriter> writer(builder.newStreamWriter());
-	std::ofstream outputFileStream(path);
+	std::ofstream outputFileStream(filesystem::path(filesystem::u8path(path)).string());
 	writer->write(value, &outputFileStream);
 	return 0;
 }

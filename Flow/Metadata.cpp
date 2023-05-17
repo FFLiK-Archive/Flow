@@ -5,14 +5,15 @@
 using namespace std;
 
 void Metadata::Search(string path) {
-	if (!filesystem::exists(path)) {
+	filesystem::path p = filesystem::path(filesystem::u8path(path));
+	if (!filesystem::exists(p)) {
 		return;
 	}
-	if (!filesystem::is_directory(path)) {
-		auto modifyTime = filesystem::last_write_time(path); // 파일의 수정 시간
+	if (!filesystem::is_directory(p)) {
+		auto modifyTime = filesystem::last_write_time(p); // 파일의 수정 시간
 		auto systemTime = std::chrono::clock_cast<std::chrono::system_clock>(modifyTime);
 		Time time = std::chrono::system_clock::to_time_t(systemTime);
-		unsigned long long int filesize = filesystem::file_size(path);
+		unsigned long long int filesize = filesystem::file_size(p);
 		Data d;
 		path.erase(path.begin(), path.begin() + this->target_path->size());	
 		d.path = path;
@@ -21,13 +22,13 @@ void Metadata::Search(string path) {
 		this->current_data.push_back(d);
 		return;
 	}
-	filesystem::directory_iterator itr(path);
+	filesystem::directory_iterator itr(p);
 	while (itr != filesystem::end(itr)) {
 		const filesystem::directory_entry& entry = *itr;
 		if (entry.is_directory()) {
 			auto u8str = entry.path().u8string();
-			auto p = string(u8str.begin(), u8str.end());
-			this->Search(p);
+			auto p_ = string(u8str.begin(), u8str.end());
+			this->Search(p_);
 		}
 		else {
 			auto modifyTime = filesystem::last_write_time(entry.path()); // 파일의 수정 시간

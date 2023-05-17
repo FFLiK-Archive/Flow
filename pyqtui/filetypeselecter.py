@@ -11,6 +11,10 @@ import subprocess
 class Ui_ChooseDialog(QMainWindow):
     def __init__(self):
         super(Ui_ChooseDialog, self).__init__()
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
 
         self.third_window = mainui.Ui_MainWindow()
 
@@ -50,7 +54,7 @@ class Ui_ChooseDialog(QMainWindow):
     # setupUi
 
     def retranslateUi(self, ChooseDialogue):
-        ChooseDialogue.setWindowTitle(QCoreApplication.translate("ChooseDialogue", u"Dialog", None))
+        ChooseDialogue.setWindowTitle(QCoreApplication.translate("ChooseDialogue", u"Flow", None))
         self.label.setText(QCoreApplication.translate("ChooseDialogue", u"Choose the type of your project.", None))
         self.FolderButton.setText(QCoreApplication.translate("ChooseDialogue", u"Folder", None))
         self.FileButton.setText(QCoreApplication.translate("ChooseDialogue", u"File", None))

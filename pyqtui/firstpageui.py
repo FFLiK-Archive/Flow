@@ -11,6 +11,10 @@ import flow
 class Ui_Dialog(QMainWindow):
     def __init__(self):
         super(Ui_Dialog, self).__init__()
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
 
         self.second_window = filetypeselecter.Ui_ChooseDialog()
 
@@ -21,8 +25,13 @@ class Ui_Dialog(QMainWindow):
         self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+
         self.logo = QLabel(self.verticalLayoutWidget)
         self.logo.setObjectName(u"logo")
+        pixmap = QPixmap('logo.png')
+        pixmap = pixmap.scaled(200,200, transformMode = Qt.TransformationMode.SmoothTransformation)
+        self.logo.setPixmap(pixmap)
+        self.logo.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.verticalLayout.addWidget(self.logo)
 
@@ -43,14 +52,15 @@ class Ui_Dialog(QMainWindow):
 
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.setCentralWidget(self.verticalLayoutWidget)
+
         self.retranslateUi(self)
 
         QMetaObject.connectSlotsByName(self)
 
     # setupUi
     def retranslateUi(self, Dialog):
-        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
-        self.logo.setText(QCoreApplication.translate("Dialog", u"Flow", None))
+        Dialog.setWindowTitle(QCoreApplication.translate("Dialog", u"Flow", None))
+        # self.logo.setText(QCoreApplication.translate("Dialog", u"Flow", None))
         self.OpenButton.setText(QCoreApplication.translate("Dialog", u"Open", None))
         self.NewButton.setText(QCoreApplication.translate("Dialog", u"New", None))
 

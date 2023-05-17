@@ -132,7 +132,7 @@ int Branch::CreateBranch(std::string branch_path, std::string name, BranchID &or
 
 	this->history_path = branch_path + this->id.str() + ".history";
 	
-	filesystem::create_directory(this->history_path);
+	filesystem::create_directory(filesystem::path(filesystem::u8path(this->history_path)));
 	
 	FileIO::SaveFile(this->file_path, branch);
 

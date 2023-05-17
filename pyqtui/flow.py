@@ -13,6 +13,8 @@ import subprocess
 
 def command(param, split = 0):
     param = ["flow"] + param
+    startupinfo = subprocess.STARTUPINFO()
+    startupinfo.dwFlags |= subprocess.STARTF_USESHOWWINDOW
     proc = subprocess.Popen(param, stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     proc.wait()
     if split:

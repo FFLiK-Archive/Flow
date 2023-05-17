@@ -19,6 +19,10 @@ import flow
 class Ui_MainWindow(QMainWindow):
     def __init__(self):
         super(Ui_MainWindow, self).__init__()
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
         #with open(
         #        file="./style.txt", mode="r"
         #) as f:
@@ -40,6 +44,9 @@ class Ui_MainWindow(QMainWindow):
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.Logo = QLabel(self.centralwidget)
         self.Logo.setObjectName(u"Logo")
+        pixmap = QPixmap('logo.png')
+        pixmap = pixmap.scaled(50,50, transformMode = Qt.TransformationMode.SmoothTransformation)
+        self.Logo.setPixmap(pixmap)
 
         self.verticalLayout.addWidget(self.Logo)
 
@@ -169,8 +176,8 @@ class Ui_MainWindow(QMainWindow):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-        self.Logo.setText(QCoreApplication.translate("MainWindow", u"Flow", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"Flow", None))
+        # self.Logo.setText(QCoreApplication.translate("MainWindow", u"Flow", None))
         self.ProjectNameLabel.setText(QCoreApplication.translate("MainWindow", u"Project Name", None))
         self.BranchLabel.setText(QCoreApplication.translate("MainWindow", u"Branch", None))
         # self.NewSubBranchButton.setText(QCoreApplication.translate("MainWindow", u"New Sub Branch", None))

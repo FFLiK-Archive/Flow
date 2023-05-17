@@ -12,10 +12,10 @@ import flow
 class conflictDialog(QMainWindow):
     def __init__(self, parent):
         super(conflictDialog, self).__init__()
-        #with open(
-        #        file="./style.txt", mode="r"
-        #) as f:
-        #    self.setStyleSheet(f.read())
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
 
         self.centralwidget = QWidget()
         self.fuckyeah = happyhappyhappy.happy(parent)
@@ -31,7 +31,7 @@ class conflictDialog(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
 
     def set_change(self, log):
         self.select_data = [0] * len(log)
@@ -66,7 +66,7 @@ class conflictDialog(QMainWindow):
                 self.originButton = QPushButton(self.centralwidget)
                 self.originButton.setObjectName(str(i))
                 self.originButton.clicked.connect(lambda: self.originButtonClicked())
-                self.originButton.setText(_translate("MainWindow", "Original"))
+                self.originButton.setText(_translate("MainWindow", "Origin"))
                 self.horizontalLayout.addWidget(self.originButton)
             
             if log[i][1] == "target" or log[i][1] == "duplicate":
@@ -97,7 +97,7 @@ class conflictDialog(QMainWindow):
     def originButtonClicked(self):
         u = self.sender()
         self.select_data[int(u.objectName())] = 1
-        print("original button clicked " + u.objectName())
+        print("origin button clicked " + u.objectName())
 
         pass
 

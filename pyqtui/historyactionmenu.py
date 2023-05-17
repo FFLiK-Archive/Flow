@@ -14,6 +14,10 @@ import flow
 class history_menu(QMainWindow):
     def __init__(self, parent):
         super(history_menu, self).__init__()
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
 
         self.fuckyeah = happyhappyhappy.happy(parent)
 
@@ -61,7 +65,7 @@ class history_menu(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
         self.RevertButton.setText(_translate("MainWindow", "Revert"))
         self.DeleteButton.setText(_translate("MainWindow", "Delete"))
 

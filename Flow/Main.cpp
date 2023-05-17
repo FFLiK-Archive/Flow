@@ -50,7 +50,7 @@ int wmain(int argc, wchar_t* argv[]) {
 	else {
 		FILE* f;
 		string cur_flow_path = FileIO::OpenFile("flow.cur");
-		if (filesystem::exists(cur_flow_path)) {
+		if (filesystem::exists(filesystem::path(filesystem::u8path(cur_flow_path)))) {
 			flow_ret |= flow.LoadWithPath(cur_flow_path);
 		}
 	}

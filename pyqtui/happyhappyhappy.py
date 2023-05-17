@@ -11,6 +11,10 @@ import mainui
 class happy(QMainWindow):
     def __init__(self, parent):
         super(happy, self).__init__()
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
 
         self.centralwidget = QWidget()
 
@@ -40,7 +44,7 @@ class happy(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
         self.doneButton.setText(_translate("MainWindow", "Done"))
 
     def Clicked(self):

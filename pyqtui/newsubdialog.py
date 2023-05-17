@@ -10,10 +10,10 @@ import flow
 class newsubDialog(QMainWindow):
     def __init__(self, parent):
         super(newsubDialog, self).__init__()
-        #with open(
-        #        file="./style.txt", mode="r"
-        #) as f:
-        #    self.setStyleSheet(f.read())
+        with open(
+                file="./style.txt", mode="r"
+        ) as f:
+            self.setStyleSheet(f.read())
 
         self.centralwidget = QWidget()
 
@@ -56,7 +56,7 @@ class newsubDialog(QMainWindow):
 
     def retranslateUi(self, MainWindow):
         _translate = QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Flow"))
         self.pushButton.setText(_translate("MainWindow", "Proceed"))
         self.bool = False
 
