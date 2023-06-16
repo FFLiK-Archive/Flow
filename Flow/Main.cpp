@@ -35,6 +35,8 @@ int wmain(int argc, wchar_t* argv[]) {
 	//}
 	//flow.GetActivatedBranch()->Commit("Test", "TEst");
 
+	//flow.LoadFlow();
+
 	if (input.empty())
 		return 0;
 
