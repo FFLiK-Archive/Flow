@@ -22,30 +22,34 @@
 1. **Flow 생성**                  
 New 버튼을 클릭한 후 원하는 폴더 혹은 파일을 선택하면, 자동으로 Flow가 생성되며 버전 관리 시스템이 설정됩니다. .flow 파일에는 기본적인 Flow 시스템
 정보가 저장되고, .flowdata 폴더에는 각종 브랜치와 히스토리 정보, 메타 데이터 등이 저장됩니다. 따라서 파일 혹은 폴더를 통째로 옮기려면 .flow와
-.flowdata를 함께 옮겨주어야합니다. 대신, 모든 경로는 .flow에 대한 상대경로로 결정되기에 위치 변경은 매우 자유롭습니다.
-2. **Flow 열기**                  
+.flowdata를 함께 옮겨주어야합니다. 대신, 모든 경로는 .flow에 대한 상대경로로 결정되기에 위치 변경은 매우 자유롭습니다.                  
+                  
+3. **Flow 열기**                  
 만약 기존 Flow를 열어야 한다면 Open 버튼을 눌러서 .flow파일을 열 수 있습니다. .flow 파일의 정보를 바탕으로 .flowdata를 탐색하여 자동으로 Flow
-데이터를 로딩합니다.
-3. **변경 내역 확인하기**                        
+데이터를 로딩합니다.                  
+                  
+5. **변경 내역 확인하기**                        
 Change Log 창에는 (메인 화면의 우측 창) 추적 중인 파일 혹은 폴더의 변경
 사항을 표시해줍니다. 상대 경로와 함께 Added, Deleted, Modified 정보가
 표시됩니다. History 별 기록된 Metadata와 현재 Metadata 중 파일 크기와
 최종 수정 시간을 대조하여 변경 내역을 추적합니다. Refresh 버튼을 누르면
-실시간으로 Chnage Log를 작성하여 화면에 보여줍니다.
-4. **History 관리하기**                  
+실시간으로 Chnage Log를 작성하여 화면에 보여줍니다.                  
+                  
+7. **History 관리하기**                  
 변경 사항이 있는 경우에만 History를 작성할 수 있습니다. Save Progress 버튼을 누르면, 현재 파일 혹은 폴더의 작업 상황을 History로 저장합니다. History
 에는 필수적으로 Title이 포함되며, 간단한 Description을 추가할 수 있습니다. 특정 Histroy를 삭제하려면 더블 클릭 후 Delete 버튼을 누르면 Histroy가
 삭제되며, 특정 Histroy 상황으로 돌아가려면 더블 클릭 후 Revert 버튼을 눌러서 되돌릴 수 있습니다. (단, 되돌리면 되돌린 값이 새로운 History로 자동 저장
 되기에 기존 History가 삭제되지 않습니다. 하지만 Revert를 진행하면 저장하지 않은 수정 사항은 삭제되기에 주의해야 합니다.) History는 압축한 두 데이터를
-xor연산 시켜서 차이 값을 구하고, 이를 압축하여 저장 하므로 매우 작은 크기로 변경 사항이 기록됩니다. (평균 압축률 : 80% 이상)
-5. **Branch 관리하기**                  
+xor연산 시켜서 차이 값을 구하고, 이를 압축하여 저장 하므로 매우 작은 크기로 변경 사항이 기록됩니다. (평균 압축률 : 80% 이상)                  
+                  
+9. **Branch 관리하기**                  
 Flow를 생성하면 자동으로 Main Branch가 생성됩니다. 만약 새로운 시도를 위해 새로운 작업 환경이 필요하다면 Sub Branch를 만들어 작업할 수 있습니다.
 또한, 특정 Branch의 이름을 변경하거나, 삭제하는 것 역시 가능합니다. Branch에 대한 작업은 Branch를 더블 클릭하면 뜨는 창에서 수행할 수 있으며,
 Branch를 클릭하면 Branch가 변경됩니다. Branch가 변경되면 작업 환경이 자동으로 변경됩니다. (기존 수정 데이터를 유지되니 걱정하지 않으셔도 됩니다.)
 Branch를 합치기 위해서는 Merge 혹은 Replace를 활용할 수 있습니다. Replace는 Origin Branch의 최종 결과를 Target Branch에 덮어 씌우고
 새로운 History를 제작함으로써 Branch를 합칩니다. Merge는 Origin Branch와 Target Branch 데이터를 비교하여 파일 단위로 둘 중 어느 파일을
 활용할지, 혹은 아예 넣지 말지 선택하여 좀 더 유연하게 Branch를 합칠 수 있습니다. Merge와 Replace 모두 합친 결과는 Target Branch에 새로운 Histroy
-형태로 기록됩니다.
+형태로 기록됩니다.                  
 
 ## DETAILS 
 > :: 개발 세부 디테일
