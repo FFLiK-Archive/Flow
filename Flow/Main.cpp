@@ -25,12 +25,21 @@ int wmain(int argc, wchar_t* argv[]) {
 		WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, utf8buf.data(), utf8len, nullptr, nullptr);
 		input.emplace_back(utf8buf.data());
 	}
-	
+
+	Flow flow;
+	//flow.CreateFlow(FLOW_FOLDER_STORAGE);
+	//FILE* f;
+	//string cur_flow_path = FileIO::OpenFile("flow.cur");
+	//if (filesystem::exists(filesystem::path(filesystem::u8path(cur_flow_path)))) {
+	//	flow.LoadWithPath(cur_flow_path);
+	//}
+	//flow.GetActivatedBranch()->Commit("Test", "TEst");
+
 	if (input.empty())
 		return 0;
-	
-	Flow flow;
+
 	string cmd = input.front();
+
 
 	bool flow_ret = false;
 

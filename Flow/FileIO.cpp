@@ -25,18 +25,18 @@ std::string FileIO::Location(std::string name, std::string pos) {
 	}
 }
 
-Json::Value FileIO::GetJsonFile(std::string location) {
-	Log::Debug("FileIO", "GetJsonFile", "Location : ", location);
+Json::Value FileIO::GetJsonFile(std::string path) {
+	Log::Debug("FileIO", "GetJsonFile", "Path : ", path);
 	Json::Value root;
 	Json::CharReaderBuilder reader;
-	ifstream is(location, ifstream::binary);
+	ifstream is(filesystem::path(filesystem::u8path(path)).string(), ifstream::binary);
 	string errorMessage;
 	auto bret = Json::parseFromStream(reader, is, &root, &errorMessage);
 
 	if (bret == false) {
-		Log::Error(L"Error to parse JSON file - Fatal");
 		Log::DebugFree("Error to parse JSON file !!!");
 		Log::DebugFree("Details :", errorMessage);
+		Log::Error(L"Error to parse JSON file - Fatal");
 	}
 
 	return root;
@@ -49,6 +49,11 @@ std::string FileIO::OpenFlowFile() {
 		return "";
 	}
 	Log::Debug("FileIO", "OpenFlowFile", "File : ", selection.front());
+	for (int i = 0; i < selection.front().size(); i++) {
+		if (selection.front()[i] < 0) {
+			Log::Error(L"Root path should contain only ASCII characters. - Fatal");
+		}
+	}
 	return selection.front();
 }
 
@@ -59,6 +64,11 @@ std::string FileIO::OpenFileName() {
 		return "";
 	}
 	Log::Debug("FileIO", "OpenFileName", "File : ", selection.front());
+	for (int i = 0; i < selection.front().size(); i++) {
+		if (selection.front()[i] < 0) {
+			Log::Error(L"Root path should contain only ASCII characters. - Fatal");
+		}
+	}
 	return selection.front();
 }
 
@@ -74,7 +84,16 @@ HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 }
 #endif
 
+char* ConvertTCharToChar(const TCHAR* tcharString, UINT codePage)
+{
+	int charCount = WideCharToMultiByte(codePage, 0, tcharString, -1, NULL, 0, NULL, NULL);
+	char* charString = new char[charCount];
+	WideCharToMultiByte(codePage, 0, tcharString, -1, charString, charCount, NULL, NULL);
+	return charString;
+}
+
 std::string FileIO::OpenFolderName() {
+
 	#if WIN_BUILD
 	BROWSEINFO   bi;
 	LPITEMIDLIST  idl;
@@ -89,9 +108,15 @@ std::string FileIO::OpenFolderName() {
 	if (idl) {
 		SHGetPathFromIDList(idl, szPathname);
 	}
-	wstring conv(szPathname);
 
-	string ret(conv.begin(), conv.end());
+	string ret = ConvertTCharToChar(szPathname, CP_UTF8);
+
+	for (int i = 0; i < ret.size(); i++) {
+		if (ret[i] < 0) {
+			Log::Error(L"Root path should contain only ASCII characters. - Fatal");
+		}
+	}
+
 	if (ret.empty()) {
 		Log::Debug("FileIO", "OpenFileName", "Connot open file - Not selected");
 		return "";

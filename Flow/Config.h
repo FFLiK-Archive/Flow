@@ -18,7 +18,7 @@
 #define FlowBuildMode Flow_Release
 
 // Version Information
-#define FlowVersion "v 1.0.1"
+#define FlowVersion "v 1.1.0"
 
 // ===============================
 

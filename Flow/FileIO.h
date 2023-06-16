@@ -12,7 +12,7 @@ public:
 	static std::string Location(std::string name, std::string pos = "");
 	
 	//Json File Parsing
-	static Json::Value GetJsonFile(std::string location);
+	static Json::Value GetJsonFile(std::string path);
 
 	//Open Flow File and Get Absolute Path as string
 	static std::string OpenFlowFile();

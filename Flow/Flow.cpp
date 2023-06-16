@@ -126,6 +126,7 @@ int Flow::LoadWithPath(std::string flow_path) {
 	this->id = UUIDv4::UUID::fromStrFactory(flow["FlowID"].asString().c_str());
 	this->name = flow["Name"].asString();
 	this->target_path = flow_path + this->name;
+	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
 	string origin_path, prev_name;
 	if (!filesystem::exists(U8(this->target_path))) {
 		cout << "\a";
@@ -155,7 +156,6 @@ int Flow::LoadWithPath(std::string flow_path) {
 			break;
 		}
 	}
-	this->storage_type = static_cast<FlowStorageType>(flow["StorageType"].asInt());
 	this->activated_branch_id = UUIDv4::UUID::fromStrFactory(flow["ActivatedBranchID"].asString().c_str());
 	for (int i = 0; i < flow["BranchList"].size(); i++) {
 		BranchID id = UUIDv4::UUID::fromStrFactory(flow["BranchList"][i].asString().c_str());

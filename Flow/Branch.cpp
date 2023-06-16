@@ -6,6 +6,9 @@
 #include <CkZip.h>
 using namespace std;
 
+#define U8(x) (filesystem::path(filesystem::u8path(x)))
+
+
 int Branch::Reverter(int index) {
 	History his = this->history[index];
 	string path = this->history_path + "\\" + his.id.str() + ".history";
@@ -44,24 +47,24 @@ int Branch::PrintHistory() {
 }
 
 int Branch::Commmiter(string old, string dat, HistoryType type, string title, string description) {
-	if (filesystem::is_directory(*this->target_path)) {
-		filesystem::remove_all(*this->target_path);
+	if (filesystem::is_directory(U8(*this->target_path))) {
+		filesystem::remove_all(U8(*this->target_path));
 
 		CkZip zip;
-		zip.OpenZip(dat.c_str());
-		zip.Unzip(this->target_path->c_str());
+		zip.OpenZip(U8(dat).string().c_str());
+		zip.Unzip(U8(*(this->target_path)).string().c_str());
 		zip.CloseZip();
 	}
 	else {
-		filesystem::remove(*this->target_path);
+		filesystem::remove(U8(*this->target_path));
 
 		string save = *this->target_path;
 		while (save.back() != '\\') save.pop_back();
 		//path.pop_back();
 
 		CkZip zip;
-		zip.OpenZip(dat.c_str());
-		zip.Unzip(save.c_str());
+		zip.OpenZip(U8(dat).string().c_str());
+		zip.Unzip(U8(save).string().c_str());
 		zip.CloseZip();
 	}
 	
@@ -233,15 +236,15 @@ int Branch::Commit(std::string title, std::string description) {
 	while (path.back() != '\\')
 		path.pop_back();
 
-	filesystem::rename(path + this->id.str()  + ".dat", path + this->id.str() + ".old");
+	filesystem::rename(U8(path + this->id.str()  + ".dat"), U8(path + this->id.str() + ".old"));
 
-	zip.NewZip((path + this->id.str() + ".dat").c_str());
+	zip.NewZip(U8(path + this->id.str() + ".dat").string().c_str());
 	zip.put_OemCodePage(65001);
-	if (filesystem::is_directory(*this->target_path)) {
-		zip.AppendFiles((*(this->target_path) + "\\*").c_str(), true);
+	if (filesystem::is_directory(U8(*this->target_path))) {
+		zip.AppendFiles(U8(*(this->target_path) + "\\*").string().c_str(), true);
 	}
 	else {
-		zip.AppendFiles((*(this->target_path)).c_str(), true);
+		zip.AppendFiles(U8(*(this->target_path)).string().c_str(), true);
 	}
 	zip.WriteZipAndClose();
 
