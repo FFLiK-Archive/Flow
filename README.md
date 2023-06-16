@@ -70,7 +70,7 @@ Flow는 사용자 친화적으로 파일의 버전 관리를 매우 편리하게
    
 - - -
       
-### License : GPL 2.0
+### License : GPL 3.0
 
 ### Copyright (C) 2023 CLiF and Name95014
 
