@@ -2,7 +2,7 @@
 
 ### Flow :: 파일 버전 관리 시스템
 
-<img src="Icon/logo.png" width="20%" height="20%">
+<img src="Icon/logo.png" width="25%" height="25%">
 
 이 프로젝트는 2023학년도 KSA 자료구조 프로젝트를 위해 진행되었습니다.      
 
