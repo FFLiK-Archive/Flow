@@ -3,3 +3,4 @@
 *.html linguist-detectable=false
 *.toc linguist-detectable=false
 *.nsi linguist-detectable=false
+*.py linguist-detectable=true
