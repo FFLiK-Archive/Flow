@@ -5,3 +5,4 @@
 *.nsi linguist-detectable=false
 
 *.h linguist-language=cpp
+*.py linguist-language=python
